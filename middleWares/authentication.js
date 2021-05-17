@@ -1,5 +1,6 @@
+require('dotenv').config();
 const MongoClient = require('mongodb').MongoClient;
-const url = "mongodb://localhost:27017/";
+const url = `mongodb+srv://sio:${process.env.MONGO_SECRET}@cluster0.4wwye.mongodb.net/delivery?retryWrites=true&w=majority`;
 
 const userData = async ()=> {
     const db = await MongoClient.connect(url, {useUnifiedTopology: true});
