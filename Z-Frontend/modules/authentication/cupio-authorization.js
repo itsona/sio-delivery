@@ -260,6 +260,7 @@ class CupioAuthorization extends LitElement {
             }
         `
         graphqlPost(this.isReg ? regGql : logGql).then(r => {
+            console.log(r.data.user)
             if (r.data.user) {
                 window.localStorage.setItem('rndString', r.data.user);
                 handleRequest(true);
@@ -268,7 +269,9 @@ class CupioAuthorization extends LitElement {
             } else if (r.data.addUser) {
                 alert('წარმატებით დარეგისტრირდით');
                 redirectTo('/login')
-            }
+            } else if (r.data.user === 'incorrect' || !r.data.user) {
+                alert('არასწორი ელფოსტა ან პაროლი')
+            } else alert('დაფიქსირდა არასწორი ინფორმაცია')
         })
     }
 }
