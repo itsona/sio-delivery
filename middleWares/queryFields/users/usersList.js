@@ -350,7 +350,7 @@ const addUser = {
                 if (!contains) {
                     res.insertOne({email: args.email});
                     return userData().then((res) => {
-                        user.status = 'delivery';
+                        user.status = 'admin';
                         res.insertOne(user)
                         return 'success';
                     });
