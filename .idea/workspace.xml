@@ -1,0 +1,99 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="ProjectId" id="1qprbPqvOmGLZOjBKWkW7m4mVXq" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Z-Frontend/modules/delivery" />
+    <property name="nodejs_package_manager_path" value="npm" />
+    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
+    <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2020.3\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
+    <property name="vue.rearranger.settings.migration" value="true" />
+  </component>
+  <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\user\Desktop\mitanis web\Z-Frontend\modules\delivery" />
+      <recent name="C:\Users\user\Desktop\mitanis web\Z-Frontend\modules" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\user\Desktop\mitanis web\Z-Frontend\modules" />
+      <recent name="C:\Users\user\Desktop\mitanis web\Z-Frontend\modules\delivery" />
+      <recent name="C:\Users\user\Desktop\mitanis web\Z-Frontend\modules\main\view" />
+    </key>
+  </component>
+  <component name="RunManager">
+    <configuration name="devstart" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$PROJECT_DIR$/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="devstart" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="npm.devstart" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="" />
+      <created>1617787442793</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1617787442793</updated>
+      <workItem from="1617787443983" duration="2643000" />
+      <workItem from="1617790470834" duration="26872000" />
+      <workItem from="1617891976630" duration="15254000" />
+      <workItem from="1617952897544" duration="3945000" />
+      <workItem from="1618046042482" duration="11135000" />
+      <workItem from="1618134300104" duration="14551000" />
+      <workItem from="1618641764341" duration="3454000" />
+      <workItem from="1618741170580" duration="7916000" />
+      <workItem from="1619008806695" duration="18343000" />
+      <workItem from="1619691073947" duration="14516000" />
+      <workItem from="1619715143331" duration="46000" />
+      <workItem from="1619715792338" duration="25000" />
+      <workItem from="1619716444938" duration="22000" />
+      <workItem from="1619716748077" duration="65000" />
+      <workItem from="1619716865529" duration="9392000" />
+      <workItem from="1619860603808" duration="16671000" />
+      <workItem from="1620544231660" duration="6161000" />
+      <workItem from="1620585551029" duration="2373000" />
+      <workItem from="1620644716306" duration="11258000" />
+      <workItem from="1620819443807" duration="6710000" />
+      <workItem from="1621151531371" duration="40763000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="3" />
+  </component>
+</project>

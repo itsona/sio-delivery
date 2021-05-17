@@ -1,0 +1,36 @@
+{
+  "name": "dailydeals",
+  "version": "1.0.0",
+  "description": "Start new project",
+  "main": "index.js",
+  "scripts": {
+    "devstart": "nodemon server.js"
+  },
+  "author": "iakob mirotadze",
+  "license": "ISC",
+  "dependencies": {
+    "@vaadin/router": "^1.7.2",
+    "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "express-graphql": "^0.9.0",
+    "express-session": "^1.17.1",
+    "graphql": "^15.2.0",
+    "gridfs-stream": "^1.1.1",
+    "jsonwebtoken": "^8.5.1",
+    "lit-element": "^2.3.1",
+    "method-override": "^3.0.0",
+    "mongodb": "^3.5.9",
+    "mongoose": "^5.10.8",
+    "multer": "^1.4.2",
+    "multer-gridfs-storage": "^4.2.0",
+    "nodemailer": "^6.4.14",
+    "polymer-cli": "^1.9.11"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.4",
+    "webpack-dev-server": "^3.11.0"
+  }
+}
