@@ -243,7 +243,10 @@ class CupioCompanyRegistration extends LitElement {
               }
             }
         `
-        graphqlPost(gql).then(r => this.info = r.data.userInfo)
+        graphqlPost(gql).then(r => {
+            this.info = r.data.userInfo;
+            if(!this.info) window.localStorage.removeItem('rndString');
+        }).catch(()=> window.localStorage.removeItem('rndString'))
     }
 
     authentication() {
