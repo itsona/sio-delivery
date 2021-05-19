@@ -347,6 +347,9 @@ const openSearch = () => {
             phone: "text",
             price: "text",
             id: "text",
+        },
+        {
+            name: "sioIndex",
         })
     })
 }
