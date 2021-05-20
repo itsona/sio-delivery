@@ -70,7 +70,6 @@ const dataList = {
         toDate: {type: GraphQLString},
     },
     resolve: (parent, args, response) => {
-        openSearch();
         return pageData().then(async (res) => {
                 const token = response.headers.token;
                 let query = {};
