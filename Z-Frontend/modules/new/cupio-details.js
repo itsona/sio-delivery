@@ -400,7 +400,7 @@ class CupioDetails extends LitElement {
                     phone: "${this.values.phone || ''}"
                     takeDate: "${this.values.takeDate}"
                     deliveryDate: "${this.values.deliveryDate}"
-                    cash: ${this.values.cash || ''}
+                    ${this.values.cash ? `cash: ${this.values.cash}`:''}
                 )
             }
         `
