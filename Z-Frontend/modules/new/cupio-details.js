@@ -184,21 +184,6 @@ class CupioDetails extends LitElement {
                                     @value-changed="${(event) => this.setValue(event, item)}"></cupio-input>
                         `
                 )}
-                <div class="check-box">
-                    <input
-                            type="checkbox"
-                            id="payed"
-                            name="payed"
-                            @change="${(event) => this.showPay = event.currentTarget.checked}">
-                    <label for="payed" class="check-label"> ქეშით გადახდა</label>
-                </div>
-                ${this.showPay ? html`
-                    <cupio-input
-                            class="input"
-                            name="pay"
-                            place-holder="შეიყვანეთ თანხა * "
-                            value=""
-                            @value-changed="${(event)=> this.setValue(event, 'cash')}"></cupio-input>` : ''}
                 <label>აღების სავარაუდო თარიღი</label>
                 <cupio-input
                         class="input"
@@ -400,7 +385,6 @@ class CupioDetails extends LitElement {
                     phone: "${this.values.phone || ''}"
                     takeDate: "${this.values.takeDate}"
                     deliveryDate: "${this.values.deliveryDate}"
-                    ${this.values.cash ? `cash: ${this.values.cash}`:''}
                 )
             }
         `
