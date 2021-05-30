@@ -354,7 +354,7 @@ class CupioDrawer extends LitElement {
               )
             }`
 
-        graphqlPost(gql).then()
+        graphqlPost(gql).then(()=> window.location.reload())
             .catch(r=> console.warn(r));
     }
 
