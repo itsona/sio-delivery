@@ -96,35 +96,23 @@ const dataList = {
                 }
                 if (args.fromDate) {
                     if (args.status === 'ასაღები') {
-                        query.takeDate = {
-                            $gte: args.fromDate,
-                        }
+                        query.takeDate['$gte'] = args.fromDate;
                     } else {
-                        query.deliveryDate = {
-                            $gte: args.fromDate,
-                        }
+                        query.deliveryDate['$gte'] = args.fromDate;
                     }
                 }
                 if (args.toDate) {
                     if (args.status === 'ასაღები') {
-                        query.takeDate = {
-                            $lte: args.toDate,
-                        }
+                        query.takeDate['$lte'] = args.toDate;
                     } else {
-                        query.deliveryDate = {
-                            $lte: args.toDate,
-                        }
+                        query.deliveryDate['$lte'] = args.toDate;
                     }
                 }
                 if (args.from) {
-                    query.price = {
-                        $gte: args.from,
-                    }
+                    query.price['$gte'] = args.from;
                 }
                 if (args.to) {
-                    query.price = {
-                        $lte: args.to,
-                    }
+                    query.price['$lte'] = args.to;
                 }
 
                 if (args.status) {
@@ -260,7 +248,9 @@ const cancelOrder = {
                 await res.deleteOne(query).then(() => {
                     sendNotificationToClient(args.client, 'removed');
                     return true
-                }).catch(()=> {return false})
+                }).catch(() => {
+                    return false
+                })
             });
         }
 
@@ -354,7 +344,7 @@ const addData = {
                     data.client = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).email;
                     data.clientName = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).name;
                 }
-                if(args.cash){
+                if (args.cash) {
                     data.description = `(ქეშად ასაღები ${args.cash}₾) ${data.description}`;
                 }
                 return res.insertOne(data).then(() => {
@@ -481,26 +471,26 @@ const getDetails = {
 
 const dayReport = {
     type: GraphQLString,
-    resolve: async (parent, args,response ) => {
+    resolve: async (parent, args, response) => {
         const token = response.headers.token;
-        if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin')return '';
+        if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return '';
 
         const res = await pageData();
-            const query= {registerDate: getNewDate()}
-            let length = 0;
-            let income = 0;
-            await res.find(query).toArray()
-                .then((data) => {
-                    length = data.length;
-                })
-        const payedQuery= {payDate: getNewDate()}
+        const query = {registerDate: getNewDate()}
+        let length = 0;
+        let income = 0;
+        await res.find(query).toArray()
+            .then((data) => {
+                length = data.length;
+            })
+        const payedQuery = {payDate: getNewDate()}
 
         await res.find(payedQuery).toArray()
-                .then((data)=> {
-                    data.forEach((item)=> {
-                        income +=item.price;
-                    })
+            .then((data) => {
+                data.forEach((item) => {
+                    income += item.price;
                 })
+            })
         const str = `დღის განმავლობაში შემოსულია ${length} შეკვეთა, გადახდილია ${income}₾`
         return str;
     }
