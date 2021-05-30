@@ -292,7 +292,7 @@ class CupioDetails extends LitElement {
     init() {
         this.values = {city: 'თბილისი'};
         this.values.takeDate = this.getDate(1);
-        this.values.deliveryDate = this.getDate(2);
+        this.values.deliveryDate = this.getDate(1);
         this.values.service = 'სტანდარტი';
     }
 
