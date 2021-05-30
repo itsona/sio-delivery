@@ -96,22 +96,28 @@ const dataList = {
                 }
                 if (args.fromDate) {
                     if (args.status === 'ასაღები') {
+                        if(!query.takeDate)query.takeDate = {}
                         query.takeDate['$gte'] = args.fromDate;
                     } else {
+                        if(!query.deliveryDate)query.deliveryDate = {}
                         query.deliveryDate['$gte'] = args.fromDate;
                     }
                 }
                 if (args.toDate) {
                     if (args.status === 'ასაღები') {
+                        if(!query.takeDate)query.takeDate = {}
                         query.takeDate['$lte'] = args.toDate;
                     } else {
+                        if(!query.deliveryDate)query.deliveryDate = {}
                         query.deliveryDate['$lte'] = args.toDate;
                     }
                 }
                 if (args.from) {
+                    if(!query.price)query.price = {}
                     query.price['$gte'] = args.from;
                 }
                 if (args.to) {
+                    if(!query.price)query.price = {}
                     query.price['$lte'] = args.to;
                 }
 
