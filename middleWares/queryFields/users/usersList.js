@@ -23,7 +23,7 @@ const UserType = new GraphQLObjectType({
         name: {type: GraphQLNonNull(GraphQLString)},
         email: {type: GraphQLNonNull(GraphQLString)},
         password: {type: GraphQLNonNull(GraphQLString)},
-        budget: {type: GraphQLInt},
+        budget: {type: GraphQLFloat},
         address: {type: GraphQLString},
         phone: {type: GraphQLString},
         rates: {type: SystemRate},
@@ -52,7 +52,6 @@ const SystemRate = new GraphQLObjectType({
         delivery: {type: GraphQLFloat},
         normalRate: {type: GraphQLFloat},
         expressRate: {type: GraphQLFloat},
-        superExpressRate: {type: GraphQLFloat},
     })
 })
 const usersList = {
@@ -75,7 +74,7 @@ const usersDetails = {
         const query = {
             status: args.status,
         }
-        return userData().then((res) => {
+        return userData().then(async(res) => {
             return res.find(query).toArray();
         })
     }
@@ -106,7 +105,7 @@ const setBudget = {
     type: GraphQLBoolean,
     description: 'List of All users',
     args: {
-        budget: {type: GraphQLInt},
+        budget: {type: GraphQLFloat},
         client: {type: GraphQLString},
     },
     resolve: async (parent, args, request) => {
@@ -117,8 +116,7 @@ const setBudget = {
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
         return userData().then(async (res) => {
             const budget = await res.findOne(query, {projection: {_id: 0, budget: 1}})
-
-            await res.updateOne(query, {$set: {budget: budget.budget + args.budget}});
+            await res.updateOne(query, {$set: {budget: parseFloat(budget.budget) + parseFloat(args.budget)}});
             return true;
         })
         return false
@@ -133,7 +131,6 @@ const setRates = {
         takeRate: {type: GraphQLString},
         normalRate: {type: GraphQLString},
         expressRate: {type: GraphQLString},
-        superExpressRate: {type: GraphQLString},
         client: {type: GraphQLString},
     },
     resolve: async (parent, args, request) => {
@@ -347,7 +344,6 @@ const addUser = {
         user.rates = Config.rates;
         user.budget = 0;
         return emailData().then((res) => {
-            res.drop();
             return res.countDocuments({email: args.email}).then(contains => {
                 if (!contains) {
                     res.insertOne({email: args.email});
@@ -373,7 +369,6 @@ const modifyUser = {
         delivery: {type: GraphQLFloat},
         normalRate: {type: GraphQLFloat},
         expressRate: {type: GraphQLFloat},
-        superExpressRate: {type: GraphQLFloat},
         address: {type: GraphQLString},
         phone: {type: GraphQLString},
         status: {type: GraphQLString},
@@ -389,13 +384,11 @@ const modifyUser = {
                         delivery: args.delivery,
                         normalRate: args.normalRate,
                         expressRate: args.expressRate,
-                        superExpressRate: args.superExpressRate,
                     }
                     delete args.takeRate;
                     delete args.delivery;
                     delete args.normalRate;
                     delete args.expressRate;
-                    delete args.superExpressRate;
                     await res.updateOne({email: args.email}, {$set: args})
                     return 'success';
                 }

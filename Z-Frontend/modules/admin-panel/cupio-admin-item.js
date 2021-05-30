@@ -179,7 +179,7 @@ class CupioAdminItem extends LitElement {
     setBudget(event) {
         const gql = `
             mutation{
-                setBudget(client: "${this.item.email}", budget: ${parseInt(event.detail)})
+                setBudget(client: "${this.item.email}", budget: ${parseFloat(event.detail)})
             }
         `
         graphqlPost(gql).then(({data: {setBudget}}) => {
@@ -195,7 +195,6 @@ class CupioAdminItem extends LitElement {
     }
 
     saveRates() {
-        console.log(this.values);
         let valuesString = '';
         Object.keys(this.values).forEach((key) => {
             const oneItem = `${key}: "${this.values[key]}",`

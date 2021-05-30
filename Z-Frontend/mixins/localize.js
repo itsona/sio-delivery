@@ -44,8 +44,6 @@ export const localize = (key)=> {
             return 'სტანდ.';
         case 'expressRate':
             return 'ექსპრესი';
-        case 'superExpressRate':
-            return 'სუპ. ექს.';
         default:
             return key;
     }

@@ -101,6 +101,29 @@ class CupioCompanyRegistration extends LitElement {
                 align-items: center;
             }
 
+            .link {
+                color: black;
+                font-weight: 600;
+                text-decoration: none;
+                cursor: pointer;
+                transition: color 0.5s;
+                display: flex;
+                padding-bottom: 16px;
+                align-self: baseline;
+            }
+
+            .link:hover {
+                color: gray;
+            }
+
+            .link img {
+                width: 14px;
+                display: flex;
+                align-self: baseline;
+                padding-left: 4px;
+                transform: rotate(180deg);
+            }
+
             @media only screen and (max-width: 800px) {
                 :host {
                     padding: 128px 24px;
@@ -130,7 +153,13 @@ class CupioCompanyRegistration extends LitElement {
     render() {
         return html`
             <div class="container">
+
                 <div class="form">
+
+                    <a class="link" href="/client">
+                        <img src="/Z-Frontend/images/icons/next-svgrepo-com.svg">
+                        უკან დაბრუნება
+                    </a>
                     ${!this.info.status ? html`
                         <span id="status">გასაგრძელებლად გთხოვთ შეავსოთ სავალდებულო (*) ველები</span>
                     ` : ''}
@@ -259,7 +288,7 @@ class CupioCompanyRegistration extends LitElement {
                 password: "${this.info['old password'] || ''}",
                 address: "${this.info.address}",
                 phone: "${this.info.phone}",
-                status: "delivery",
+                status: "${this.info.status || 'client'}",
                 )
             }
         `

@@ -1,5 +1,6 @@
 import {LitElement, html, css} from 'lit-element';
 import './cupio-drawer';
+import {handleRequest} from "../mixins/graphql";
 
 class CupioMainTable extends LitElement {
     //Language=css
@@ -21,6 +22,9 @@ class CupioMainTable extends LitElement {
 
             :host([delivery]) .item[warning]+.drop-down {
                 color: orange;
+            }
+            :host([delivery]) .item[error]+.drop-down {
+                color: red;
             }
 
             :host > span {
@@ -49,6 +53,9 @@ class CupioMainTable extends LitElement {
             .id {
                 font-weight: bold;
             }
+            img {
+                margin-right: 4px;
+            }
         `;
     }
 
@@ -58,18 +65,26 @@ class CupioMainTable extends LitElement {
                 <span class="header">${item}</span>
             `)}
             ${this.items.map((item) => html`${Object.keys(item).map((key) =>
-                    !key.includes('Courier') ? html`
+                    !key.includes('Courier') && key !== 'canceled' && key !== 'payed' ? html`
                         <span class="${key} item"
                               ?warning="${this.isWarning(item)}"
+                              ?error="${this.panel && item.canceled}"
                               @click="${() => this.drawerToggle(item)}"
                               style="color: ${key === 'status' ? this.getStatusColor(item.status) : 'black'}"
                         >
-                            ${item[key]}${key === 'price' ? '₾' : ''}
-                </span>
+                            ${this.delivery && key === 'status' ? this.status : item[key]}
+                            ${key === 'price' ? html`
+                                ₾ ` : ''}
+                        </span>
                     ` : '')}
             ${this.delivery ? html`
                 <span class="drop-down"
-                      @click="${() => this.drawerToggle(item)}">...</span>
+                      @click="${() => this.drawerToggle(item)}">
+                    
+                        ${this.panel && item.payed ? html`
+                            <img class="img" src="/Z-Frontend/images/icons/payed.svg">
+                        `: ''}
+                    ...</span>
             ` : ''}
             `)}
             <cupio-drawer
@@ -94,12 +109,19 @@ class CupioMainTable extends LitElement {
             },
             drawerOpened: {
                 type: Boolean,
+            },
+            status: {
+                type: String,
+            },
+            panel: {
+                type: Boolean,
             }
         };
     }
 
     constructor() {
         super();
+        handleRequest().then(r=> this.panel = r=== 'admin')
     }
 
     getStatusColor(status) {

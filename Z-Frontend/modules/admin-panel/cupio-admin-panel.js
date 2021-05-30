@@ -67,6 +67,11 @@ class CupioAdminPanel extends LitElement {
             .link:hover {
                 color: gray;
             }
+            
+            .links {
+                display: flex;
+                justify-content: space-between;
+            }
 
             .link img {
                 width: 14px;
@@ -94,11 +99,16 @@ class CupioAdminPanel extends LitElement {
             <cupio-logo></cupio-logo>
             
             <div class="container">
-
-                <a class="link" href="/panel">
-                    <img src="/Z-Frontend/images/icons/next-svgrepo-com.svg">
-                    უკან დაბრუნება
-                </a>
+                <div class="links">
+                    <a class="link" href="/panel">
+                        <img src="/Z-Frontend/images/icons/next-svgrepo-com.svg">
+                        უკან დაბრუნება
+                    </a>
+                    <a class="link" href="/new">
+                        შეკვეთის დამატება
+                        <img src="/Z-Frontend/images/icons/add.svg">
+                    </a>
+                </div>
                 <div class="title">
                     <span>კურიერების რაოდენობა (${this.couriers.length})</span>
                 </div>
@@ -159,7 +169,6 @@ class CupioAdminPanel extends LitElement {
                     takeRate` : `
                     normalRate
                     expressRate
-                    superExpressRate
                     `}
                 }
                 email

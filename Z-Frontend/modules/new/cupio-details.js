@@ -2,7 +2,8 @@ import {LitElement, html, css} from 'lit-element';
 import '../../common/cupio-loading';
 import '../../common/cupio-logo';
 import '../../common/cupio-input';
-import {graphqlPost} from "../../mixins/graphql";
+import '../admin-panel/cupio-clients-details';
+import {graphqlPost, handleRequest} from "../../mixins/graphql";
 
 class CupioDetails extends LitElement {
     //Language=css
@@ -120,6 +121,15 @@ class CupioDetails extends LitElement {
                 border-radius: 12px 12px 0 0;
             }
 
+            .check-box {
+                display: flex;
+                align-items: center;
+            }
+
+            .check-label {
+                padding: 0;
+            }
+
             @media only screen and (max-width: 800px) {
                 :host {
                     margin: 128px 24px;
@@ -151,9 +161,16 @@ class CupioDetails extends LitElement {
                     <img src="/Z-Frontend/images/icons/next-svgrepo-com.svg">
                     უკან დაბრუნება
                 </a>
+                ${this.panel ? html`
+                    <cupio-clients-details
+                            .users="${this.users}"
+                            .clients="${this.users}"
+                            .listShow="${this.listShow}"
+                            @click="${this._onClick}"
+                            @client-changed="${this.setClient}"></cupio-clients-details>
+                ` : ''}
                 <select id="service" name="service" @change="${this._handleStatusChange}">
                     <option value="სტანდარტი">სტანდარტი</option>
-                    <option value="სუპერ ექსპრესი">სუპერ ექსპრესი</option>
                     <option value="ექსპრესი">ექსპრესი</option>
                 </select>
                 ${this.regInfo.map((item) =>
@@ -163,15 +180,32 @@ class CupioDetails extends LitElement {
                                     place-holder="${this.getName(item)}"
                                     value="${this.values[item] || ''}"
                                     name="${item}"
+                                    ?disabled="${item === 'city'}"
                                     @value-changed="${(event) => this.setValue(event, item)}"></cupio-input>
                         `
                 )}
+                <div class="check-box">
+                    <input
+                            type="checkbox"
+                            id="payed"
+                            name="payed"
+                            @change="${(event) => this.showPay = event.currentTarget.checked}">
+                    <label for="payed" class="check-label"> ქეშით გადახდა</label>
+                </div>
+                ${this.showPay ? html`
+                    <cupio-input
+                            class="input"
+                            name="pay"
+                            place-holder="შეიყვანეთ თანხა * "
+                            value=""
+                            @value-changed="${(event)=> this.setValue(event, 'cash')}"></cupio-input>` : ''}
                 <label>აღების სავარაუდო თარიღი</label>
                 <cupio-input
                         class="input"
                         name="date"
                         value="${this.values.takeDate}"
                         @value-changed="${(event) => this.setValue(event, 'takeDate')}"></cupio-input>
+
                 <label>ჩაბარების სავარაუდო თარიღი</label>
                 <cupio-input
                         class="input"
@@ -204,15 +238,27 @@ class CupioDetails extends LitElement {
             regInfo: {
                 type: Array,
             },
+            users: {
+                type: Array,
+            },
             values: {
                 type: Object,
             },
             canSend: {
                 type: Boolean,
             },
+            showPay: {
+                type: Boolean,
+            },
             rate: {
                 type: Number,
-            }
+            },
+            panel: {
+                type: Boolean,
+            },
+            listShow: {
+                type: Boolean,
+            },
         };
     }
 
@@ -221,12 +267,21 @@ class CupioDetails extends LitElement {
         this.rate = 5;
         window.scrollTo(0, 0);
         this.regInfo = [
+            'city',
             'takeAddress',
             'deliveryAddress',
             'phone',
+            'deliveryPhone',
             'additional',
         ];
-        this.init()
+        this.init();
+        handleRequest(false).then(r => {
+            this.panel = r === 'admin';
+            this.loadUsers();
+        });
+        document.addEventListener('click', () => {
+            this.listShow = false
+        })
     }
 
     connectedCallback() {
@@ -235,7 +290,7 @@ class CupioDetails extends LitElement {
     }
 
     init() {
-        this.values = {};
+        this.values = {city: 'თბილისი'};
         this.values.takeDate = this.getDate(1);
         this.values.deliveryDate = this.getDate(2);
         this.values.service = 'სტანდარტი';
@@ -250,16 +305,21 @@ class CupioDetails extends LitElement {
         return year + '-' + month + '-' + day;
     }
 
+    _onClick(event) {
+        this.listShow = true
+        event.stopPropagation();
+    }
+
     _handleStatusChange(event) {
         const status = event.target.value;
         this._setRate(status)
         this.values.service = status;
-        if (status === 'სუპერ ექსპრესი' || status === 'ექსპრესი') {
+        if (status === 'ექსპრესი') {
             this.values.takeDate = this.getDate(0);
             this.values.deliveryDate = this.getDate(0);
         } else {
             this.values.takeDate = this.getDate(1);
-            this.values.deliveryDate = this.getDate(2);
+            this.values.deliveryDate = this.getDate(1);
         }
         this.values = {...this.values}
     }
@@ -268,9 +328,6 @@ class CupioDetails extends LitElement {
         switch (status) {
             case 'ექსპრესი':
                 this.rate = this.values.rates.expressRate;
-                break;
-            case 'სუპერ ექსპრესი':
-                this.rate = this.values.rates.superExpressRate;
                 break;
             case 'სტანდარტი':
                 this.rate = this.values.rates.normalRate;
@@ -283,9 +340,11 @@ class CupioDetails extends LitElement {
             case 'phone':
                 return 'საკონტაქტო ნომერი *';
             case 'takeAddress':
-                return 'შეკვეთის აღების მისამართი *';
+                return 'შეკვეთის აღების სრული მისამართი *';
             case 'deliveryAddress':
-                return 'შეკვეთის ჩაბარების მისამართი *';
+                return 'შეკვეთის ჩაბარების სრული მისამართი *';
+            case 'deliveryPhone':
+                return 'შეკვეთის ჩაბარების ტელეფონის ნომერი *';
             case 'additional':
                 return 'დამატებითი ინფორმაცია';
         }
@@ -306,7 +365,6 @@ class CupioDetails extends LitElement {
                 rates{
                     normalRate
                     expressRate
-                    superExpressRate
                 }
             }
         }
@@ -322,17 +380,27 @@ class CupioDetails extends LitElement {
         })
     }
 
+    setClient(e) {
+        this.values.client = e.detail.email;
+        this.values.clientName = e.detail.name;
+    }
+
     authentication() {
         const gql = `
             mutation {
                 addData(
+                ${this.panel ? `
+                    client: "${this.values.client}"
+                    clientName: "${this.values.clientName}"` : ''}
                     takeAddress: "${this.values.takeAddress}"
                     deliveryAddress: "${this.values.deliveryAddress}"
+                    deliveryPhone: "${this.values.deliveryPhone}"
                     service: "${this.values.service}"
                     description: "${this.values.additional || ''}"
                     phone: "${this.values.phone || ''}"
                     takeDate: "${this.values.takeDate}"
                     deliveryDate: "${this.values.deliveryDate}"
+                    cash: ${this.values.cash}
                 )
             }
         `
@@ -342,6 +410,18 @@ class CupioDetails extends LitElement {
         }).catch(() => alert('!!! ხარვეზი იყო თავიდან სცადეთ !!!'))
     }
 
+    loadUsers() {
+        if (!this.panel) return;
+        const gql = `
+                {
+                  usersDetails(status: "client"){
+                    name
+                    email
+                  }
+                }
+        `
+        graphqlPost(gql).then(({data: {usersDetails}}) => this.users = usersDetails);
+    }
 }
 
 customElements.define('cupio-details', CupioDetails);

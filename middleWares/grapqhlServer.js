@@ -16,6 +16,7 @@ const RootQueryType = new GraphQLObjectType({
         data: require('../middleWares/queryFields/data/dataList').dataList,
         getForAccept: require('../middleWares/queryFields/data/dataList').getForAccept,
         getDetails: require('../middleWares/queryFields/data/dataList').getDetails,
+        dayReport: require('../middleWares/queryFields/data/dataList').dayReport,
     })
 })
 
@@ -27,7 +28,7 @@ const RootMutationType = new GraphQLObjectType({
         modifyUser: require('../middleWares/queryFields/users/usersList').modifyUser,
         addData: require('../middleWares/queryFields/data/dataList').addData,
         handleAccept: require('../middleWares/queryFields/data/dataList').handleAccept,
-        removeData: require('../middleWares/queryFields/data/dataList').removeData,
+        cancelOrder: require('../middleWares/queryFields/data/dataList').cancelOrder,
         resetPassword: require('../middleWares/queryFields/users/usersList').resetPassword,
         recoveryPassword: require('../middleWares/queryFields/users/usersList').recoveryPassword,
         setCourier: require('../middleWares/queryFields/users/usersList').setCourier,

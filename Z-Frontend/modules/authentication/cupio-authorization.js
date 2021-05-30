@@ -148,6 +148,7 @@ class CupioAuthorization extends LitElement {
                                         class="input"
                                         place-holder="${this.getName(item)}"
                                         name="${item}"
+                                        value="${item === 'email' && this.email? this.email: ''}"
                                         @value-changed="${(event) => this.setValue(event, item)}"
                                 ></cupio-input>
                             `
@@ -199,12 +200,19 @@ class CupioAuthorization extends LitElement {
             },
             values: {
                 type: Object,
+            },
+            email: {
+                type: String,
             }
         };
     }
 
     constructor() {
         super();
+        this.listener = (event)=> {
+            if(event.key === 'enter' || event.keyCode === 13) this.authentication();
+        }
+        document.addEventListener('keydown', this.listener)
         if (!!localStorage.getItem('rndString')) handleRequest(true)
         this.regInfo = ['name', 'email', 'password', 'repeat password'];
         setTimeout(() => {
@@ -212,12 +220,21 @@ class CupioAuthorization extends LitElement {
             if (!this.isReg) this.regInfo = ['email', 'password']
         }, 50);
         this.values = {};
+        this.email = window.localStorage.getItem('email') || '';
+        this.values.email = this.email;
+
+
+    }
+
+    disconnectedCallback() {
+        super.disconnectedCallback();
+        document.removeEventListener('keydown', this.listener)
     }
 
     getName(item) {
         switch (item) {
             case 'name':
-                return 'სახელი';
+                return 'სახელი, გვარი';
             case 'email':
                 return 'Email';
             case 'password':
@@ -260,10 +277,10 @@ class CupioAuthorization extends LitElement {
             }
         `
         graphqlPost(this.isReg ? regGql : logGql).then(r => {
-            console.log(r.data.user)
             if (r.data.user) {
                 window.localStorage.setItem('rndString', r.data.user);
                 handleRequest(true);
+                window.localStorage.setItem('email', this.values.email)
             } else if (r.data.addUser && r.data.addUser === 'contains') {
                 alert('ელქტრონული ფოსტა უკვე დარეგისტრირებულია')
             } else if (r.data.addUser) {

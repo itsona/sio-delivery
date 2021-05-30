@@ -1,7 +1,32 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="" />
+    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Z-Frontend/images/icons/location.svg" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-clients-details.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Z-Frontend/modules/landing/cupio-landing-action.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Z-Frontend/modules/landing/cupio-landing-footer.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/Z-Frontend/modules/landing/cupio-landing-item.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/common/cupio-drawer.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/common/cupio-drawer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/common/cupio-main-table.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/common/cupio-main-table.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/mixins/graphql.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/mixins/graphql.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/mixins/localize.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/mixins/localize.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-item.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-item.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-panel.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-panel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/authentication/cupio-authorization.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/authentication/cupio-authorization.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/authentication/cupio-company-registration.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/authentication/cupio-company-registration.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/landing/cupio-landing.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/landing/cupio-landing.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/main/common/cupio-main-container.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/main/common/cupio-main-container.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/main/common/cupio-main-left.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/main/common/cupio-main-left.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/new/cupio-details.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/new/cupio-details.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/middleWares/constants.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/constants.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/middleWares/grapqhlServer.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/grapqhlServer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/middleWares/queryFields/data/dataList.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/queryFields/data/dataList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/middleWares/queryFields/users/usersList.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/queryFields/users/usersList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -27,7 +52,7 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/Z-Frontend/modules/delivery" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/Z-Frontend/images/icons" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
     <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2020.3\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
@@ -35,6 +60,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\user\Desktop\mitanis web\Z-Frontend\images\icons" />
       <recent name="C:\Users\user\Desktop\mitanis web\Z-Frontend\modules\delivery" />
       <recent name="C:\Users\user\Desktop\mitanis web\Z-Frontend\modules" />
     </key>
@@ -44,7 +70,7 @@
       <recent name="C:\Users\user\Desktop\mitanis web\Z-Frontend\modules\main\view" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="npm.devstart">
     <configuration name="devstart" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
       <package-json value="$PROJECT_DIR$/package.json" />
       <command value="run" />
@@ -55,9 +81,20 @@
       <envs />
       <method v="2" />
     </configuration>
+    <configuration name="watch" type="js.build_tools.npm" temporary="true" nameIsGenerated="true">
+      <package-json value="$USER_HOME$/nothing/package.json" />
+      <command value="run" />
+      <scripts>
+        <script value="watch" />
+      </scripts>
+      <node-interpreter value="project" />
+      <envs />
+      <method v="2" />
+    </configuration>
     <recent_temporary>
       <list>
         <item itemvalue="npm.devstart" />
+        <item itemvalue="npm.watch" />
       </list>
     </recent_temporary>
   </component>
@@ -90,10 +127,38 @@
       <workItem from="1620644716306" duration="11258000" />
       <workItem from="1620819443807" duration="6710000" />
       <workItem from="1621151531371" duration="50536000" />
+      <workItem from="1621872247083" duration="1272000" />
+      <workItem from="1622221609346" duration="6949000" />
+      <workItem from="1622234643630" duration="8000" />
+      <workItem from="1622264479110" duration="50753000" />
     </task>
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
     <option name="version" value="3" />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="TAB_STATES">
+      <map>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-clients-details.js</url>
+          <line>66</line>
+          <properties lambdaOrdinal="-1" />
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>

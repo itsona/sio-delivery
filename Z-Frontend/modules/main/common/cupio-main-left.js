@@ -330,11 +330,17 @@ class CupioMainLeft extends LitElement {
                         <span>გამამუშავებული თანხა: ${this.budget}₾</span>
                     </div>
                 ` : ''}
+                ${this.panel ? html`
+                    <div class="title">
+                        <span>${this.report}</span>
+                    </div>
+                ` : html``}
             </div>
-            <a class="link bottom" href="tel:593123123">
-                დამატებითი ინფორმაციისთვის დაგვიკავშირდით T: 593 123 123
-            </a>
-
+            ${!this.panel ? html`
+                <a class="link bottom" href="tel:593123123">
+                    დამატებითი ინფორმაციისთვის დაგვიკავშირდით T: 593 123 123
+                </a>
+            ` : ''}
         `
     }
 
@@ -360,7 +366,10 @@ class CupioMainLeft extends LitElement {
             },
             budget: {
                 type: Number,
-            }
+            },
+            report: {
+                type: String,
+            },
         };
     }
 
@@ -368,7 +377,11 @@ class CupioMainLeft extends LitElement {
         super();
         this._alreadySent = false;
         this.loadBudget();
-        handleRequest().then((r) => this.panel = r === 'admin');
+        handleRequest().then((r) => {
+            this.panel = r === 'admin';
+
+            this.loadDayReport();
+        });
         this.searchWord = {};
     }
 
@@ -403,7 +416,7 @@ class CupioMainLeft extends LitElement {
         const query = search.fromDate || search.toDate ?
             `(fromDate: "${search.fromDate || ''}",
                 toDate: "${search.toDate || ''}"
-            )` :'';
+            )` : '';
         const gql = `
             {
                 loadBudget${query}
@@ -425,12 +438,31 @@ class CupioMainLeft extends LitElement {
 
     checkSendInfo(name, value) {
         this._alreadySent = false;
-        if (value !== this.searchWord[name]) this.sendData()
+        if (value !== this.searchWord[name]) this.sendData();
     }
 
     sendData() {
-        if(this.searchWord.fromDate || this.searchWord.toDate) this.loadBudget();
+        if (this.searchWord.fromDate || this.searchWord.toDate) this.loadBudget();
         this.dispatchEvent(new CustomEvent('searched', {detail: this.searchWord}));
+    }
+
+
+    getNewDate() {
+        const date = new Date();
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1);
+        const day = date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate();
+        return year + '-' + month + '-' + day;
+    }
+
+    loadDayReport() {
+        if (!this.panel) return
+        const gql = `
+            {
+                dayReport
+            }
+        `;
+        graphqlPost(gql).then(({data: {dayReport}}) => this.report = dayReport);
     }
 }
 

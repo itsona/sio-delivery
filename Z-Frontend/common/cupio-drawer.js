@@ -102,13 +102,19 @@ class CupioDrawer extends LitElement {
 
             .save {
                 display: flex;
-                align-self: baseline;
+                align-self: center;
                 padding: 12px;
                 background: dodgerblue;
                 margin-top: 12px;
                 border-radius: 12px;
                 color: white;
                 cursor: pointer;
+                margin-bottom: 24px;
+            }
+            
+            .buttons {
+                display: flex;
+                justify-content: space-around;
             }
 
             @media only screen and (max-width: 800px) {
@@ -134,20 +140,6 @@ class CupioDrawer extends LitElement {
                     დეტალები
                 </span>
                 <div class="content">
-                    ${Object.keys(this.item).map((key) => html`
-
-                        ${key !== 'status' ? html`
-                            <div class="item">
-                                <span class="title">${localize(key)}</span>
-                                <cupio-input
-                                        name="key"
-                                        ?disabled="${!this.panel}"
-                                        value="${this.item[key] || ''}"
-                                        @value-changed="${(event) => this.onValueChange(event, key)}"></cupio-input>` : html`
-                        `}
-                        </div>
-                    `)}
-
                     <div class="item">
                         <span class="title">სტატუსი: ${this.item.status}</span>
                         <select
@@ -168,6 +160,7 @@ class CupioDrawer extends LitElement {
                             </option>
                         </select>
                     </div>
+                    ${this.panel? html`
                     <div class="item">
                         <span class="title">კურიერი</span>
                         <select
@@ -184,11 +177,40 @@ class CupioDrawer extends LitElement {
                             `)}
                         </select>
                     </div>
-                    <div
-                            class="save"
-                            @click="${this.save}">
-                        შენახვა
+                    <input 
+                            type="checkbox" 
+                            id="payed" 
+                            name="payed" 
+                            ?checked="${this.item.payed}"
+                            @change="${(event) => this.onValueChange({detail:!this.item.payed}, 'payed')}">
+                    <label for="payed"> გადახდილია</label><br>
+                    `:''}
+                    <div class="buttons">
+                        <div
+                                class="save"
+                                @click="${this.save}">
+                            შენახვა
+                        </div>
+                        ${this.item.status ==='ასაღები' || this.item.status === 'ჩასაბარებელი'
+                                ? html`                        <div
+                                class="save"
+                                @click="${this.cancel}">
+                            შეკვეთის გაუქმება
+                        </div>` :''
+                            }
                     </div>
+                    ${Object.keys(this.item).map((key) => html`
+                        ${key !== 'status' ? html`
+                            <div class="item">
+                                <span class="title">${localize(key)}</span>
+                                <cupio-input
+                                        name="key"
+                                        ?disabled="${!this.panel}"
+                                        value="${this.item[key] || ''}"
+                                        @value-changed="${(event) => this.onValueChange(event, key)}"></cupio-input>` : html`
+                        `}
+                        </div>
+                    `)}
                 </div>
             </div>
         `
@@ -282,9 +304,11 @@ class CupioDrawer extends LitElement {
             {
               getDetails(id:"${this.item.id}"){
                 id
-                takeAddress
                 service
+                takeAddress
                 deliveryAddress
+                phone
+                deliveryPhone
                 client: clientName
                 clientEmail: client
                 status
@@ -294,8 +318,8 @@ class CupioDrawer extends LitElement {
                 takeDate
                 deliveryDate
                 description
-                phone
                 price
+                payed
               }
             }
         `;
@@ -303,6 +327,7 @@ class CupioDrawer extends LitElement {
         graphqlPost(gql).then(({data: {getDetails}}) => {
             this.item = getDetails;
             this.newItem = getDetails;
+            this.newItem.oldPayed = this.item.payed;
         })
     }
 
@@ -313,7 +338,8 @@ class CupioDrawer extends LitElement {
                     takeAddress: "${this.newItem.takeAddress || ''}",
                     service: "${this.newItem.service || ''}",
                     deliveryAddress: "${this.newItem.deliveryAddress || ''}",
-                    client: "${this.newItem.client || ''}",
+                    deliveryPhone: "${this.newItem.deliveryPhone || ''}",
+                    client: "${this.newItem.clientEmail || ''}",
                     status: "${this.newItem.status || ''}",
                     takeCourier: "${this.newItem.takeCourier || ''}",
                     deliveryCourier: "${this.newItem.deliveryCourier || ''}",
@@ -323,10 +349,22 @@ class CupioDrawer extends LitElement {
                     phone: "${this.newItem.phone || ''}",
                     price: ${this.newItem.price || 0},
                     courierChanged: "${this.newCourierSet || ''}",
+                    payed: ${this.newItem.payed || false},
+                    oldPayed: ${this.newItem.oldPayed || false},
               )
             }`
 
-        graphqlPost(gql).then(()=> window.location.reload());
+        graphqlPost(gql).then()
+            .catch(r=> console.warn(r));
+    }
+
+    cancel(){
+        const gql = `
+        mutation {
+            cancelOrder(id: "${this.item.id}", status: "${this.item.status}" client:"${this.item.clientEmail}")
+        }`
+        graphqlPost(gql).then(()=> window.location.reload())
+            .catch(r=> console.warn(r));
     }
 }
 

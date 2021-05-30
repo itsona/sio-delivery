@@ -41,7 +41,7 @@ class CupioMainContainer extends LitElement {
             }
 
             .table {
-                grid-template-columns: 96px 96px 96px 2fr 2fr 2fr auto 1fr;
+                grid-template-columns: auto 96px 96px 2fr 2fr 2fr auto 1fr;
             }
 
             .link {
@@ -139,7 +139,7 @@ class CupioMainContainer extends LitElement {
                     </a>
                 </div>
                 <div class="title delivery">
-                    <span>${this.status || ''} ჩანაწერების რაოდენობა (${this.items.length})</span>
+                    <span>${this.status || ''} ჩანაწერები ნაჩვენებია ${this.items.length}</span>
                 </div>
                 ${this.items.length ? html`
                     <cupio-main-table
@@ -147,6 +147,7 @@ class CupioMainContainer extends LitElement {
                             ?delivery="${this.delivery}"
                             .menu="${this.menu}"
                             .items="${this.items}"
+                            .status="${this.status}"
                     ></cupio-main-table>
 
                 ` : ''}
@@ -217,14 +218,14 @@ class CupioMainContainer extends LitElement {
     constructor() {
         super();
         this.loading = true;
-        this.loadedLength = 3;
+        this.loadedLength = 10;
         this.searchValues = {}
         this.skip = 0;
         this.limit = this.loadedLength;
         this.items = [];
         window.scrollTo(0, 0);
         this.menu = [
-            'დამატების თარიღი',
+            'ID',
             'აღების თარიღი',
             'ჩაბარების თარიღი',
             'აღების მისამართი',
@@ -269,7 +270,7 @@ class CupioMainContainer extends LitElement {
         if (changedProperties.has('searchValues')) {
             this.items = [];
             this.skip = 0;
-            if(Object.keys(this.searchValues).length) this.loadData();
+            if (Object.keys(this.searchValues).length) this.loadData();
         }
     }
 
@@ -279,7 +280,6 @@ class CupioMainContainer extends LitElement {
         if (!this.drawerOpened) this.shadowRoot.querySelector('#drawer').item = item;
         this.drawerOpened = !this.drawerOpened;
     }
-
 
 
     loadBudget() {
@@ -312,7 +312,7 @@ class CupioMainContainer extends LitElement {
                     limit: ${this.limit}
                 )
                 {
-                    registerDate
+                    id
                     takeDate
                     deliveryDate
                     takeAddress
@@ -343,6 +343,9 @@ class CupioMainContainer extends LitElement {
                     phone
                     status
                     takeCourier
+                    canceled
+                    payed
+                    clientName
                 }
             }`
             } else {
@@ -362,9 +365,12 @@ class CupioMainContainer extends LitElement {
                     deliveryDate
                     deliveryAddress
                     description
-                    phone
+                    deliveryPhone
                     status
                     deliveryCourier
+                    canceled
+                    payed
+                    clientName
                 }
             }
         `;
@@ -372,6 +378,11 @@ class CupioMainContainer extends LitElement {
         }
         graphqlPost(gql).then((res) => {
             let data = res.data.data;
+            data.map((item) => {
+                if (this.delivery) item.description = item.clientName + ' - ' + item.description;
+                delete item.clientName;
+                return item;
+            })
             this.items = [...this.items, ...data];
             this.loading = false;
             if (data.length >= this.loadedLength) {
