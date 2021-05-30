@@ -286,7 +286,6 @@ const addData = {
         courierChanged: {type: GraphQLString},
         payed: {type: GraphQLBoolean},
         oldPayed: {type: GraphQLBoolean},
-        cash: {type: GraphQLFloat}
     },
     resolve: (parent, args, response) => {
         const token = response.headers.token;
@@ -349,9 +348,6 @@ const addData = {
                 if (!args.client) {
                     data.client = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).email;
                     data.clientName = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).name;
-                }
-                if (args.cash) {
-                    data.description = `(ქეშად ასაღები ${args.cash}₾) ${data.description}`;
                 }
                 return res.insertOne(data).then(() => {
                     sendNotificationToAdmin(data);

@@ -325,9 +325,9 @@ class CupioDetails extends LitElement {
             case 'phone':
                 return 'საკონტაქტო ნომერი *';
             case 'takeAddress':
-                return 'შეკვეთის აღების სრული მისამართი *';
+                return 'შეკვეთის აღების სრული მისამართი * (უბანი, ქუჩა, ნომერი)';
             case 'deliveryAddress':
-                return 'შეკვეთის ჩაბარების სრული მისამართი *';
+                return 'შეკვეთის ჩაბარების სრული მისამართი * (უბანი, ქუჩა, ნომერი)';
             case 'deliveryPhone':
                 return 'შეკვეთის ჩაბარების ტელეფონის ნომერი *';
             case 'additional':
