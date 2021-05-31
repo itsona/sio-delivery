@@ -379,7 +379,6 @@ class CupioDetails extends LitElement {
                 return;
             }
         }
-        return
         const gql = `
             mutation {
                 addData(
