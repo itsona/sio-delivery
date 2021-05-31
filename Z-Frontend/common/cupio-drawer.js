@@ -147,17 +147,21 @@ class CupioDrawer extends LitElement {
                                 @input="${(event) => this.onValueChange({detail: event.target.value}, 'status')}">
                             <option
                                     ?selected="${this.item.status === 'ჩასაბარებელი'}"
-                                    value="აღებული">აღებული
+                                    value="აღებული">
+                                ${this.item.status === 'ჩასაბარებელი' ? 'ჩასაბარებელი': 'აღებული'}
                             </option>
-                            <option
-                                    ?selected="${this.item.status === 'ასაღები'}"
-                                    value="ასაღები">ასაღები
-                            </option>
-                            <option
+                            ${this.item.status === 'ასაღები' ? html`
+                                <option
+                                        selected
+                                        value="ასაღები">ასაღები
+                                </option>
+                             `: html`
+                                <option
 
-                                    ?selected="${this.item.status === 'ჩაბარებული'}"
-                                    value="ჩაბარებული">ჩაბარებული
-                            </option>
+                                        ?selected="${this.item.status === 'ჩაბარებული'}"
+                                        value="ჩაბარებული">ჩაბარებული
+                                </option>`}
+                            
                         </select>
                     </div>
                     ${this.panel? html`
@@ -325,13 +329,16 @@ class CupioDrawer extends LitElement {
         `;
 
         graphqlPost(gql).then(({data: {getDetails}}) => {
-            this.item = getDetails;
+            this.item = {...getDetails, status: this.item.status};
             this.newItem = getDetails;
             this.newItem.oldPayed = this.item.payed;
         })
     }
 
     save() {
+        if(this.cantSave) return;
+        this.cantSave = true;
+        console.log('daemata')
         const gql = `mutation{
               addData(
                     id: "${this.newItem.id || ''}",
@@ -354,14 +361,20 @@ class CupioDrawer extends LitElement {
               )
             }`
 
-        graphqlPost(gql).then(()=> window.location.reload())
-            .catch(r=> console.warn(r));
+        graphqlPost(gql).then(()=> {
+            window.location.reload();
+        })
+            .catch(r=> console.warn(r) );
     }
 
     cancel(){
         const gql = `
         mutation {
-            cancelOrder(id: "${this.item.id}", status: "${this.item.status}" client:"${this.item.clientEmail}")
+            cancelOrder(id: "${this.item.id}",
+             status: "${this.item.status}",
+              client:"${this.item.clientEmail}",
+              price: ${this.item.price}
+              )
         }`
         graphqlPost(gql).then(()=> window.location.reload())
             .catch(r=> console.warn(r));

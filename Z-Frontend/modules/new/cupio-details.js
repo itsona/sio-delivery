@@ -344,7 +344,7 @@ class CupioDetails extends LitElement {
     loadData() {
         const gql = `
         {
-            userInfo{
+            userInfo(${this.panel? `email: "${this.values.client}"`: ''}){
                 address
                 phone
                 rates{
@@ -368,9 +368,18 @@ class CupioDetails extends LitElement {
     setClient(e) {
         this.values.client = e.detail.email;
         this.values.clientName = e.detail.name;
+        this.loadData();
     }
 
     authentication() {
+        if(this.values.service === 'ექსპრესი'){
+            const dt = new Date();
+            if(dt.getHours() >=13){
+                alert('ექსპრეს შეკვეთის დამატება შესაძლებელია მხოლოდ დღის 1 საათამდე');
+                return;
+            }
+        }
+        return
         const gql = `
             mutation {
                 addData(

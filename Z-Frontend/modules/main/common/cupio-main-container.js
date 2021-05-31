@@ -41,7 +41,7 @@ class CupioMainContainer extends LitElement {
             }
 
             .table {
-                grid-template-columns: auto 96px 96px 2fr 2fr 2fr auto 1fr;
+                grid-template-columns: auto 96px 96px 2fr 2fr 2fr auto 1fr  auto;
             }
 
             .link {
@@ -233,6 +233,7 @@ class CupioMainContainer extends LitElement {
             'დამატებითი ინფორმაცია',
             'ფასი',
             'სტატუსი',
+            ''
         ];
         this.loadBudget();
     }
@@ -320,6 +321,7 @@ class CupioMainContainer extends LitElement {
                     description
                     price
                     status
+                    payed
                 }
             }
         `;

@@ -58,8 +58,10 @@ const usersList = {
     type: GraphQLList(UserType),
     description: 'List of All users',
     resolve: async (parent, args, request) => {
-        return userData().then((res) => {
-            return res.find({}).toArray();
+        return userData().then(async({res,db}) => {
+            const data = await res.find({}).toArray();
+            db.close();
+            return data;
         })
     }
 }
@@ -74,8 +76,10 @@ const usersDetails = {
         const query = {
             status: args.status,
         }
-        return userData().then(async(res) => {
-            return res.find(query).toArray();
+        return userData().then(async({res,db}) => {
+            const data = await res.find(query).toArray();
+            db.close();
+            return data;
         })
     }
 }
@@ -93,8 +97,9 @@ const setCourier = {
         }
         const status = args.courier ? 'delivery' : 'client';
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
-        return userData().then(async (res) => {
-            await res.updateOne(query, {$set: {status: status}});
+        return userData().then(async ({res,db}) => {
+            await res.updateOne(query, {$set: {status: status}},{safe: true});
+            db.close()
             return true;
         })
         return false
@@ -114,9 +119,12 @@ const setBudget = {
             email: args.client,
         }
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
-        return userData().then(async (res) => {
+        return userData().then(async ({res,db}) => {
             const budget = await res.findOne(query, {projection: {_id: 0, budget: 1}})
-            await res.updateOne(query, {$set: {budget: parseFloat(budget.budget) + parseFloat(args.budget)}});
+            await res.updateOne(query,
+                {$set: {budget: parseFloat(budget.budget) + parseFloat(args.budget)}},
+                {safe: true});
+            db.close()
             return true;
         })
         return false
@@ -139,11 +147,12 @@ const setRates = {
             email: args.client,
         }
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
-        return userData().then(async (res) => {
+        return userData().then(async ({res,db}) => {
             const user = await res.findOne(query, {projection: {_id: 0, rates: 1}})
             const rates = user.rates;
             delete args.client;
-            await res.updateOne(query, {$set: {rates: {...rates, ...args}}});
+            await res.updateOne(query, {$set: {rates: {...rates, ...args}}}, {safe: true});
+            db.close();
             return true;
         })
         return false
@@ -159,10 +168,11 @@ const singleUser = {
         password: {type: GraphQLString}
     },
     resolve: (parent, args, request) => {
-        return userData().then((res) => {
+        return userData().then(async ({res,db}) => {
             args.email = args.email.toLowerCase();
             async function getUser() {
                 let user = await res.findOne({email: args.email, password: args.password});
+                db.close();
                 if (user != null) {
                     return jwt.sign({
                         id: user._id,
@@ -185,7 +195,7 @@ const resetPassword = {
         email: {type: GraphQLNonNull(GraphQLString)}
     },
     resolve: (parent, args) => {
-        return emailData().then((res) => {
+        return emailData().then(({res,db}) => {
             return res.countDocuments({email: args.email}).then(contains => {
                 if (contains) {
                     let transporter = nodemailer.createTransport({
@@ -246,11 +256,21 @@ text-decoration: none;
 const userInfo = {
     type: UserType,
     description: 'A Single user info',
+    args: {
+        email: {type: GraphQLString}
+    },
     resolve: (parent, args, request) => {
+        const query = {};
         const token = request.headers.token;
-        return userData().then((res) => {
+        if(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin' ){
+            query['_id'] = ObjectId(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).id)
+        }else {
+            query.email = args.email;
+        }
+        return userData().then(({res,db}) => {
             async function getUser() {
-                let user = await res.findOne({_id: ObjectId(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).id)});
+                let user = await res.findOne({});
+                db.close();
                 if (user != null) {
                     return user;
                 }
@@ -271,9 +291,10 @@ const loadBudget = {
     },
     resolve: (parent, args, request) => {
         const token = request.headers.token;
-        return userData().then((res) => {
+        return userData().then(({res,db}) => {
             async function getUser() {
                 let user = await res.findOne({_id: ObjectId(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).id)});
+                db.close();
                 if (user != null) {
                     if(args.fromDate || args.toDate){
                         const budgetList = user.budgetList.filter((item)=> {
@@ -307,10 +328,12 @@ const recoveryPassword = {
     },
     resolve: (parent, args, request) => {
         const token = request.headers.token;
-        return userData().then((res) => {
+        return userData().then(({res,db}) => {
             async function getUser() {
                 let user = await res.updateOne({email: jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).email},
-                    {$set: {password: args.password}});
+                    {$set: {password: args.password}},
+                    {safe:true});
+                    db.close();
                 if (user != null) {
                     return user;
                 }
@@ -343,12 +366,13 @@ const addUser = {
         delete user.passwordRepeat;
         user.rates = Config.rates;
         user.budget = 0;
-        return emailData().then((res) => {
+        return emailData().then(({res,db}) => {
             return res.countDocuments({email: args.email}).then(contains => {
                 if (!contains) {
-                    res.insertOne({email: args.email});
-                    return userData().then((res) => {
-                        res.insertOne(user)
+                    res.insertOne({email: args.email}, {safe: true}).then(()=> db.close());
+                    return userData().then(({res,db}) => {
+                        res.insertOne(user, {safe: true})
+                        db.close();
                         return 'success';
                     });
                 } else return 'contains';
@@ -376,7 +400,7 @@ const modifyUser = {
     resolve: (parent, args, request) => {
         if (!args.email || !args.name || !args.address || !args.phone) return 'nonNUll'
         const token = request.headers.token;
-        return userData().then((res) => {
+        return userData().then(({res,db}) => {
             async function updateUser() {
                 if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'admin') {
                     args.rates = {
@@ -389,12 +413,14 @@ const modifyUser = {
                     delete args.delivery;
                     delete args.normalRate;
                     delete args.expressRate;
-                    await res.updateOne({email: args.email}, {$set: args})
+                    await res.updateOne({email: args.email}, {$set: args}, {safe: true})
+                    db.close();
                     return 'success';
                 }
                 const user = await res.findOne({_id: ObjectId(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).id)});
                 if (args.password && args.newPassword) {
                     if (user.password !== args.password) {
+                        db.close();
                         return 'incorrect';
                     }
                     args.password = args.newPassword;
@@ -405,7 +431,10 @@ const modifyUser = {
                 else args.status = user.status;
                 args.rates = user.rates || Config.rates;
                 args.budget = user.budget;
-                await res.updateOne({_id: ObjectId(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).id)}, {$set: args})
+                await res.updateOne({_id: ObjectId(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).id)},
+                    {$set: args},
+                    {safe: true})
+                db.close();
                 return 'success'
             }
 

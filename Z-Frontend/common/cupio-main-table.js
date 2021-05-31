@@ -20,10 +20,11 @@ class CupioMainTable extends LitElement {
                 cursor: pointer;
             }
 
-            :host([delivery]) .item[warning]+.drop-down {
+            :host([delivery]) .item[warning] + .drop-down {
                 color: orange;
             }
-            :host([delivery]) .item[error]+.drop-down {
+
+            :host([delivery]) .item[error] + .drop-down {
                 color: red;
             }
 
@@ -53,6 +54,7 @@ class CupioMainTable extends LitElement {
             .id {
                 font-weight: bold;
             }
+
             img {
                 margin-right: 4px;
             }
@@ -83,9 +85,13 @@ class CupioMainTable extends LitElement {
                     
                         ${this.panel && item.payed ? html`
                             <img class="img" src="/Z-Frontend/images/icons/payed.svg">
-                        `: ''}
+                        ` : ''}
                     ...</span>
-            ` : ''}
+            ` : item.payed ? html`
+                <span>
+                    <img class="img item" src="/Z-Frontend/images/icons/payed.svg">
+                    </span>
+            ` : html`<span></span>`}
             `)}
             <cupio-drawer
                     id="drawer"
@@ -121,7 +127,7 @@ class CupioMainTable extends LitElement {
 
     constructor() {
         super();
-        handleRequest().then(r=> this.panel = r=== 'admin')
+        handleRequest().then(r => this.panel = r === 'admin')
     }
 
     getStatusColor(status) {

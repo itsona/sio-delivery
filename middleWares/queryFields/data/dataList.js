@@ -45,18 +45,16 @@ const getForAccept = {
     description: 'List of All data',
 
     resolve: (parent, args, response) => {
-        return pageData().then((res) => {
+        return pageData().then(async ({res,db}) => {
             const token = response.headers.token;
             const courier = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).email;
-            return res.find({
+            const data = await res.find({
                 accepted: false, $or: [
                     {status: 'ასაღები', takeCourier: courier},
                     {status: 'აღებული', deliveryCourier: courier}]
-            })
-                .toArray()
-                .then((data) => {
-                    return data;
-                })
+            }).toArray()
+            db.close();
+            return data;
         })
     }
 }
@@ -75,7 +73,7 @@ const dataList = {
         toDate: {type: GraphQLString},
     },
     resolve: (parent, args, response) => {
-        return pageData().then(async (res) => {
+        return pageData().then(async ({res,db}) => {
                 const token = response.headers.token;
                 let query = {};
                 if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin'
@@ -90,34 +88,44 @@ const dataList = {
                     // return res.find(query, {$text: {$search: args.searchWord}}).toArray().then((e) => {
                     //     return e;
                     // })
-                    query['$text'] = {
-                        $search: args.searchWord
-                    }
+                    query["$or"] = [
+                        {takeAddress: {'$regex': args.searchWord}},
+                        {deliveryAddress: {'$regex': args.searchWord}},
+                        {status: {'$regex': args.searchWord}},
+                        {takeCourier: {'$regex': args.searchWord}},
+                        {deliveryCourier: {'$regex': args.searchWord}},
+                        {takeDate: {'$regex': args.searchWord}},
+                        {deliveryDate: {'$regex': args.searchWord}},
+                        {description: {'$regex': args.searchWord}},
+                        {phone: {'$regex': args.searchWord}},
+                        {deliveryPhone: {'$regex': args.searchWord}},
+                        {id: {'$regex': args.searchWord}},
+                    ]
                 }
                 if (args.fromDate) {
                     if (args.status === 'ასაღები') {
-                        if(!query.takeDate)query.takeDate = {}
+                        if (!query.takeDate) query.takeDate = {}
                         query.takeDate['$gte'] = args.fromDate;
                     } else {
-                        if(!query.deliveryDate)query.deliveryDate = {}
+                        if (!query.deliveryDate) query.deliveryDate = {}
                         query.deliveryDate['$gte'] = args.fromDate;
                     }
                 }
                 if (args.toDate) {
                     if (args.status === 'ასაღები') {
-                        if(!query.takeDate)query.takeDate = {}
+                        if (!query.takeDate) query.takeDate = {}
                         query.takeDate['$lte'] = args.toDate;
                     } else {
-                        if(!query.deliveryDate)query.deliveryDate = {}
+                        if (!query.deliveryDate) query.deliveryDate = {}
                         query.deliveryDate['$lte'] = args.toDate;
                     }
                 }
                 if (args.from) {
-                    if(!query.price)query.price = {}
+                    if (!query.price) query.price = {}
                     query.price['$gte'] = args.from;
                 }
                 if (args.to) {
-                    if(!query.price)query.price = {}
+                    if (!query.price) query.price = {}
                     query.price['$lte'] = args.to;
                 }
 
@@ -137,7 +145,7 @@ const dataList = {
                     } else query.status = args.status;
                 }
                 if (args.status === 'ჩასაბარებელი') {
-                    return res.aggregate([
+                    let data = await res.aggregate([
                         {$match: {...query, status: 'აღებული'}},
                         {
                             $project: {
@@ -171,20 +179,24 @@ const dataList = {
                                 clientName: 1,
                                 payed: 1,
                             }
-                        }
-                    ]).toArray().then(r => {
-                        return r;
-                    })
+                        },
+                        {$sort: {deliveryAddress: 1}}
+                    ]).toArray()
+                    db.close();
+                    return data;
                 }
+                const sortQuery = {}
                 if (args.status === 'ასაღები') {
-                    return res.find(query).skip(args.skip || 0).limit(args.limit || 20).toArray().then((e) => {
-                        return e
-                    })
+                    sortQuery.takeAddress = 1;
                 } else {
-                    return res.find(query).sort({_id: -1}).skip(args.skip || 0).limit(args.limit || 20).toArray().then((e) => {
-                        return e
-                    })
+                    sortQuery['_id'] = -1;
+                    sortQuery.deliveryAddress = 1;
                 }
+                const data = await res.find(query).sort(sortQuery).skip(args.skip || 0).limit(args.limit || 20)
+                    .toArray()
+                    db.close();
+                    return data;
+
             }
         )
     }
@@ -199,7 +211,7 @@ const handleAccept = {
         accepted: {type: GraphQLBoolean},
         status: {type: GraphQLString},
     },
-    resolve: (parent, args, response) => {
+    resolve: async (parent, args, response) => {
         const token = response.headers.token;
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'delivery') {
             const updated = {accepted: args.accepted};
@@ -212,7 +224,8 @@ const handleAccept = {
                 // sendNotificationToAdmin();
             }
 
-            return pageData().then((res) => res.updateOne({id: args.id}, {$set: updated}).then(() => {
+            return  pageData().then(({res, db}) => res.updateOne({id: args.id}, {$set: updated},{safe: true}).then(() => {
+                db.close();
                 return true
             }));
         }
@@ -226,9 +239,10 @@ const cancelOrder = {
     args: {
         id: {type: GraphQLString},
         client: {type: GraphQLString},
+        price: {type: GraphQLFloat},
         status: {type: GraphQLString},
     },
-    resolve: (parent, args, response) => {
+    resolve: async (parent, args, response) => {
         const token = response.headers.token;
         const query = {id: args.id}
         const data = {}
@@ -244,15 +258,18 @@ const cancelOrder = {
                 data.deliveryCourier = '';
             }
             data.accepted = false;
-            return pageData().then((res) => res.updateOne(query, {$set: data}).then(() => {
+            return pageData().then(({res,db}) => res.updateOne(query, {$set: data},{safe:true}).then(() => {
                 sendNotificationToAdmin();
+                db.close();
                 return true
             }));
         }
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'admin') {
-            return pageData().then(async (res) => {
-                await res.deleteOne(query).then(() => {
+            return pageData().then(async ({res,db}) => {
+                await res.deleteOne(query,{safe: true}).then(() => {
                     sendNotificationToClient(args.client, 'removed');
+                    db.close();
+                    handlePay(args, 'plus')
                     return true
                 }).catch(() => {
                     return false
@@ -290,7 +307,7 @@ const addData = {
     resolve: (parent, args, response) => {
         const token = response.headers.token;
         let data = args;
-        return pageData().then((res) => {
+        return pageData().then(({res,db}) => {
             let id = '';
             return res.find().toArray().then(async (arr) => {
                 if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'admin' && args.id) {
@@ -308,7 +325,8 @@ const addData = {
                         await handlePay(args, 'minus');
                     }
                     // res.findOne({email: jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).email}).then((r) => console.log(r))
-                    return res.updateOne({id: args.id}, {$set: data}).then(() => {
+                    return res.updateOne({id: args.id}, {$set: data}, {safe: true}).then(() => {
+                        db.close();
                         return true;
                     });
                 }
@@ -326,22 +344,32 @@ const addData = {
                         sendNotificationToClient(args.client, 'ჩაბარებული')
                         handleBudget(args);
                     }
-                    return res.updateOne({id: args.id}, {$set: data}).then(() => {
+                    return res.updateOne({id: args.id}, {$set: data},{safe: true}).then(() => {
+                        db.close();
                         return true;
                     });
                 }
-                if (args.id) return false;
+                if (args.id) {
+                    db.close();
+                    return false;
+                }
+                if(args.service ==='ექსპრესი') {
+                    db.close();
+                    const dt = new Date();
+                    if(dt.getHours() < 13) return false;
+                }
                 data.registerDate = getNewDate();
                 id = Math.random().toString(10).substring(12);
                 data.id = id;
                 data.status = 'ასაღები';
-                const user = await userData().then(async (res) => {
+                const user = await userData().then(async ({res,db}) => {
                     const user = await res.findOne({
                             _id: ObjectId(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).id)
                         },
                         {
                             projection: {_id: 0, rates: 1}
                         });
+                    db.close();
                     return user;
                 })
                 data.price = getRate(args.service, user.rates);
@@ -349,11 +377,15 @@ const addData = {
                     data.client = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).email;
                     data.clientName = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).name;
                 }
-                return res.insertOne(data).then(() => {
+                return res.insertOne(data, {safe: true}).then(() => {
                     sendNotificationToAdmin(data);
                     handlePay(data, 'minus')
+                    db.close();
                     return true;
-                }).catch(() => false);
+                }).catch(() => {
+                    db.close();
+                    return false;
+                });
             });
         })
     }
@@ -363,22 +395,22 @@ const handleBudget = async (args) => {
     const rate = args.status === 'აღებული' ? 'takeRate' : 'delivery';
     const courierType = args.status === 'აღებული' ? 'takeCourier' : 'deliveryCourier';
     let item = {};
-    await pageData().then(async (data) => {
+    await pageData().then(async ({res: data,db}) => {
         item = await data.findOne({id: args.id});
         data.updateOne({id: args.id}, {
             $set: {
                 counted: true,
-            }
-        })
+            },
+        },{safe:true}).then(()=> db.close())
     })
     if (item.counted) return;
-    await userData().then(async (res) => {
+    await userData().then(async ({res,db}) => {
         const user = await res.findOne({email: item[courierType]})
         const budgetList = user.budgetList || [];
         const newRate = user.rates[rate];
         const obj = {date: getNewDate(), budget: newRate, id: args.id, status: args.status};
         budgetList.push(obj);
-        await res.updateOne({email: item[courierType]},
+        res.updateOne({email: item[courierType]},
             {
                 $set:
                     {
@@ -386,24 +418,24 @@ const handleBudget = async (args) => {
                         budget: (parseFloat(user.budget) + parseFloat(newRate)).toFixed(2)
                         // budget: 0,
                     }
-            }
-        )
+            },{safe:true}
+        ).then(()=> db.close())
     })
     if (args.status === 'აღებული') {
-        await userData().then(async (res) => {
+        await userData().then(async ({res,db}) => {
             const user = await res.findOne({email: item.client})
-            await res.updateOne({email: item.client}, {
+            res.updateOne({email: item.client}, {
                 $set: {
                     budget: (parseFloat(user.budget) - parseFloat(item.price)).toFixed(2)
                 }
-            })
+            },{safe: true}).then(()=> db.close())
         })
     }
 
 }
 
 const handlePay = async (args, type) => {
-    await userData().then(async (res) => {
+    await userData().then(async ({res,db}) => {
         const user = await res.findOne({email: args.client})
         let newVal = 0;
         if (type === 'minus') {
@@ -411,11 +443,11 @@ const handlePay = async (args, type) => {
         } else {
             newVal = parseFloat(user.budget) + parseFloat(args.price)
         }
-        await res.updateOne({email: args.client}, {
+        res.updateOne({email: args.client}, {
             $set: {
                 budget: (newVal).toFixed(2)
             }
-        })
+        },{safe: true}).then(()=> db.close())
     })
 }
 
@@ -436,28 +468,28 @@ const getNewDate = () => {
     return year + '-' + month + '-' + day;
 }
 
-//
-const openSearch = () => {
-    return pageData().then((res) => {
-        return res.createIndex({
-                takeAddress: "text",
-                deliveryAddress: "text",
-                status: "text",
-                takeCourier: "text",
-                deliveryCourier: "text",
-                takeDate: "text",
-                deliveryDate: "text",
-                description: "text",
-                phone: "text",
-                deliveryPhone: "text",
-                price: "text",
-                id: "text",
-            },
-            {
-                name: "sioIndex",
-            })
-    })
-}
+// //
+// const openSearch = () => {
+//     return pageData().then((res) => {
+//         return res.createIndex({
+//                 takeAddress: "text",
+//                 deliveryAddress: "text",
+//                 status: "text",
+//                 takeCourier: "text",
+//                 deliveryCourier: "text",
+//                 takeDate: "text",
+//                 deliveryDate: "text",
+//                 description: "text",
+//                 phone: "text",
+//                 deliveryPhone: "text",
+//                 price: "text",
+//                 id: "text",
+//             },
+//             {
+//                 name: "sioIndex",
+//             })
+//     })
+// }
 
 const getDetails = {
     type: DataType,
@@ -465,8 +497,10 @@ const getDetails = {
         id: {type: GraphQLNonNull(GraphQLString)}
     },
     resolve: (parent, args) => {
-        return pageData().then(async (res) => {
-            return res.findOne({id: args.id});
+        return pageData().then(async ({res,db}) => {
+            const data = await res.findOne({id: args.id});
+            db.close();
+            return data;
         })
     }
 }
@@ -477,7 +511,7 @@ const dayReport = {
         const token = response.headers.token;
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return '';
 
-        const res = await pageData();
+        const {res,db} = await pageData();
         const query = {registerDate: getNewDate()}
         let length = 0;
         let income = 0;
@@ -494,6 +528,7 @@ const dayReport = {
                 })
             })
         const str = `დღის განმავლობაში შემოსულია ${length} შეკვეთა, გადახდილია ${income}₾`
+        db.close();
         return str;
     }
 }
