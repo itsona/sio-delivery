@@ -187,7 +187,7 @@ class CupioLanding extends LitElement {
                     </div>
                     <div class="right">
                         <video autoplay muted loop id="background-element">
-                            <source src="https://scontent.ftbs4-1.fna.fbcdn.net/v/t42.1790-4/139361958_217422696741472_3215423416468801845_n.mp4?_nc_cat=111&ccb=1-3&_nc_sid=985c63&efg=eyJ2ZW5jb2RlX3RhZyI6InN2ZV9zZCJ9&_nc_eui2=AeFojn428zZzxnPum9EAmy1bbLbChzYKfuhstsKHNgp-6HYS5XnaBkPPD2_MzgOTsiqWN_jdknXxzXJ8fIgI3M-E&_nc_ohc=PVuVpMvOYSoAX_1c8T4&_nc_ht=scontent.ftbs4-1.fna&oh=29bf513a543f9eaea071663ef24dfdec&oe=60B2B703"
+                            <source src="/Z-Frontend/images/video.mp4"
                                     type="video/mp4">
                         </video>
                     </div>
@@ -201,15 +201,21 @@ class CupioLanding extends LitElement {
                     `)}
                 </div>
                 <div class="long-story">
-                    <h2>არწერის სათაური</h2>
-                    <h4>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                        incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-                        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-                        consequat. Duis aute irure dolor Lorem ipsum dolor sit amet, consectetur adipiscing
-                        elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
-                        Ut enim ad minim veniam,
-                    quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                        Duis aute irure dolor</h4>
+                    <h2>სიო დელივერი</h2>
+                    <h4>სიო დელივერი გთავაზობთ სწრაფ,ხარისხიან და სანდო საკურიერო მომსახურებას,კორპორატიულ და ინდივიდუალურ გზავნილებზე.
+<br><br>
+                        კომპანია სიო თანამშრომლობს როგორც მსხვილ,ასევე მცირე (ონლაინ) მაღაზიებთან.
+<br><br>
+                        ჩვენი უპირატესობა მდგომარეობს შემდეგში:
+                        <br>
+                        ხელმისაწვდომი ტარიფები,
+                        <br>
+                        შეკვეთის გაფორმების გახანგძლივებული საათები (00:00-მდე),
+                        <br>
+                        ამანათის აღების და ჩაბარების სწრაფი,მოქნილი სისტემა (აღება და ჩაბარება ერთ დღეში),
+                        <br>მუდმივი კომუნიკაცია მომხმარებელთან,
+                        <br>გზავნილის უსაფრთხოება და დაცულობა,
+                        <br>ამანათების რაოდენობაზე მინიმალური ზღვარის არქონა.</h4>
                 </div>
 
 
@@ -233,7 +239,7 @@ class CupioLanding extends LitElement {
         setTimeout(() => this.moved = true, 100);
         this.items = [
             {
-                img: 'https://scontent.ftbs4-1.fna.fbcdn.net/v/t1.6435-9/186454816_202008548427509_9140186898719793968_n.jpg?_nc_cat=106&ccb=1-3&_nc_sid=a26aad&_nc_eui2=AeFXQXKDnwGDctdmfbr1D_UUUsGmzDpNUl1SwabMOk1SXcwJWyW3YjJ6X_NR7DA-2Qo5YjMCUBNrg8fkO8o1xC9Z&_nc_ohc=3rgibQRF0ZQAX-zKSm_&_nc_ht=scontent.ftbs4-1.fna&oh=890aa57c7364fe2f1a98243b560a4c5a&oe=60D7987E',
+                img: '/Z-Frontend/images/item1.jpg',
                 descriptions: [
                     '💬 ტერიტორიები, რომლებსაც ვემსახურებით თბილისის მასშტაბს გარეთ',
                     '📍 წყნეთი',
@@ -244,7 +250,7 @@ class CupioLanding extends LitElement {
                 ]
             },
             {
-                img: 'https://scontent.ftbs4-1.fna.fbcdn.net/v/t1.6435-0/p180x540/186549868_201381371823560_201148610162476361_n.jpg?_nc_cat=100&ccb=1-3&_nc_sid=a26aad&_nc_eui2=AeFrzRpDaOyCJwDZlPUKPQlDzRoMPPrg6EHNGgw8-uDoQYvRi-jMV7JMQmCYOtsSPCNW8y4x6fj8GCwPyKJ1QGoP&_nc_ohc=YDlrXrzRHYwAX_LczjP&_nc_ht=scontent.ftbs4-1.fna&tp=6&oh=7883bb9512f7e7f14cf3f65884736c7f&oe=60D88F63',
+                img: '/Z-Frontend/images/item2.jpg',
                 descriptions: [
                     'ექსპრეს ტარიფი',
                     '💬 რას ნიშნავს 6ლარიანი ექსპრესს ტარიფი ჩვენთან?',
@@ -255,7 +261,7 @@ class CupioLanding extends LitElement {
                 ]
             },
             {
-                img: 'https://scontent.ftbs4-1.fna.fbcdn.net/v/t1.6435-9/185945744_197206752241022_7402988348124777860_n.jpg?_nc_cat=111&ccb=1-3&_nc_sid=9267fe&_nc_eui2=AeG7zLURKqy1UwG7x75x0pgDH_aH220olNcf9ofbbSiU12Cuy6HyLZeh1IJ3T4vcdEG8KptmQ_B4gCyO-6DbTO1g&_nc_ohc=4fCX5t6jFr4AX-x1zmz&_nc_ht=scontent.ftbs4-1.fna&oh=43722efb679f9c0a196bfe36a2c3c425&oe=60D693F1',
+                img: '/Z-Frontend/images/item3.jpg',
                 descriptions: [
                     '📦 ამანათები, რომლებიც შეგიძლიათ გაგზავნოთ ჩვენი დახმარებით:',
                     '📍 ტანსაცმელი, ფეხსაცმელი, თავის მოვლის საშუალებები, ჩანთა თუ სხვა აქსესუარები',
