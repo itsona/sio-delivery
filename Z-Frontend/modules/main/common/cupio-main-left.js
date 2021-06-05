@@ -337,8 +337,8 @@ class CupioMainLeft extends LitElement {
                 ` : html``}
             </div>
             ${!this.panel ? html`
-                <a class="link bottom" href="tel:593123123">
-                    დამატებითი ინფორმაციისთვის დაგვიკავშირდით T: 593 123 123
+                <a class="link bottom" href="tel:551004010">
+                    დამატებითი ინფორმაციისთვის დაგვიკავშირდით T: 551 004 010
                 </a>
             ` : ''}
         `

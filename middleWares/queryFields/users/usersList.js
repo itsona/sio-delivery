@@ -172,7 +172,7 @@ const singleUser = {
             args.email = args.email.toLowerCase();
             async function getUser() {
                 let user = await res.findOne({email: args.email, password: args.password});
-                db.close();
+                // db.close();
                 if (user != null) {
                     return jwt.sign({
                         id: user._id,
@@ -262,7 +262,7 @@ const userInfo = {
     resolve: (parent, args, request) => {
         const query = {};
         const token = request.headers.token;
-        if(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin' ){
+        if(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin' || !args.email ){
             query['_id'] = ObjectId(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).id)
         }else {
             query.email = args.email;

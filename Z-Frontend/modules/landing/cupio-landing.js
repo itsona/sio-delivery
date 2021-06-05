@@ -17,10 +17,11 @@ class CupioLanding extends LitElement {
             }
 
             .container {
-                width: 1160px;
-                margin: 32px auto;
+                width: 100%;
+                padding: 80px 64px;
                 display: flex;
                 flex-direction: column;
+                box-sizing: border-box;
             }
 
             .header {
@@ -91,6 +92,7 @@ class CupioLanding extends LitElement {
                 margin: 0 auto;
                 align-items: center;
                 z-index: 1;
+                padding: 0 64px;
             }
 
             .right {
@@ -167,9 +169,9 @@ class CupioLanding extends LitElement {
                     <div class="container header-container">
                         <img class="logo" src="/Z-Frontend/images/logo.png">
                         <div class="system">
-                            <a class="link" href="tel:593123123">
+                            <a class="link" href="tel:551004010">
                                 <img class="call-img" src="/Z-Frontend/images/icons/call.svg">
-                                დაგვიკავშირდით: 593 123 123
+                                დაგვიკავშირდით: 551 004 010
                             </a>
                             <a class="authorization" href="/login">სისტემაში შესვლა</a>
                         </div>

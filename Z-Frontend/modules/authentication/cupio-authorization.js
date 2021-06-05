@@ -32,7 +32,6 @@ class CupioAuthorization extends LitElement {
             .form {
                 display: flex;
                 flex-direction: column;
-                justify-content: center;
                 margin-bottom: 48px;
             }
 
@@ -48,6 +47,11 @@ class CupioAuthorization extends LitElement {
                 border-radius: 12px;
                 color: white;
                 cursor: pointer;
+            }
+            
+            .register[disabled]{
+                opacity: 0.5;
+                pointer-events: none;
             }
 
             .authentication {
@@ -103,6 +107,10 @@ class CupioAuthorization extends LitElement {
                 padding-top: 24px;
                 align-items: flex-start;
             }
+            
+            label{
+                cursor: pointer;
+            }
 
             .additionals > span {
                 display: flex;
@@ -113,6 +121,15 @@ class CupioAuthorization extends LitElement {
                 font-weight: 600;
                 padding: 12px;
                 border-radius: 12px;
+            }
+            
+            .right {
+                display: flex;
+                flex-direction: column;
+                max-height: 100vh;
+                overflow-y: scroll;
+                padding-left: 12px;
+                border-left: 1px solid darkgrey;
             }
 
             #facebook {
@@ -153,9 +170,17 @@ class CupioAuthorization extends LitElement {
                                 ></cupio-input>
                             `
                     )}
+                    <span>
+                    <input
+                            type="checkbox"
+                            id="check"
+                            name="check"
+                            @change="${(event) => this.disabled = !event.currentTarget.checked}">
+                        <label for="check">ვეთანხმები პირობებს</label></span>
                     <div class="authentication">
                         <div
                                 class="register"
+                                ?disabled="${this.disabled}"
                                 @click="${this.authentication}">
                             ${this.isReg ? 'რეგისტრაცია' : 'ავტორიზაცია'}
                         </div>
@@ -164,7 +189,7 @@ class CupioAuthorization extends LitElement {
                                 href="/${this.isReg ? 'login' : 'register'}">
                             ${this.isReg ? 'უკვე მაქვს ანგარიში' : 'რეგისტრაცია'}</a>
                     </div>
-
+                    ${false ? html`
                     <div class="additionals">
                         <span id="facebook">
                             <img src="/Z-Frontend/images/icons/facebook.svg">
@@ -176,8 +201,41 @@ class CupioAuthorization extends LitElement {
                             ავტორიზაცია Gmail-ის გამოყენებით
                         </span>
                     </div>
+                    `:''}
                 </div>
-                <cupio-logo></cupio-logo>
+                <div class="right">
+                    <cupio-logo></cupio-logo>
+                    <span>
+                        <span style="font-weight: bold">საკურიერო მომსახურების პირობები:</span> 
+<br><br>
+შეკვეთის გაფორმების ინსტრუქცია და ვადები: 
+<br><br>
+1.სტანდარტული (ეკონომ) ტარიფით სარგებლობის სურვილის შემთხვევაში,შეკვეთა უნდა გაფორმდეს ამანათის ჩაბარების თარიღის წინა დღეს,არაუგვიანეს 00:00 საათისა.
+<br>2.ექსპრეს ტარიფით სარგებლობის სურვილის შემთხვევაში შეკვეთა უნდა გაფორმდეს მაქსიმუმ  დღის 13:00 საათამდე.
+<br>3.სტანდარტული შეკვეთის შემთხვევაში კურიერი ამანათს აიღებს დღის პირველ ნახევარში (12-13საათამდე) და ჩაბარდება ადრესატს იმავე დღის ბოლომდე.
+<br>4.სტანდარტული (ეკონომ) ტარიფი გაიზრდება ამანათის ჩაბარების საათების მკვეთრი შეზღუდვის შემთხვევაში და იმოქმედებს ექსპრეს ტარიფი. 
+<br><br>
+ამანათის ზომები და შეფუთვა
+<br>
+<br>5.შეკვეთის გაფორმების შემდეგ დაელოდეთ უნიკალურ კოდს, რომელიც აუცილებლად უნდა დაურთოთ ამანათს(დარწმუნდით რომ კოდი არის მყარად მიმაგრებული ამანათზე,რათა არ დაიკარგოს).
+<br>6.დარწმუნდით, რომ ამანათი არის სათანადოდ დალუქული
+<br>(რათა ნივთი შემთხვევით არ დაზიანდეს, დაბინძურდეს ან ამოვარდეს) 
+<br><br>
+<br>ამანათის ზომა და მოცულობა ... 
+<br>
+<br>7.თუ ადრესატი არ პასუხობს მითითებულ ნომერზე,ამანათის ჩაბარების თარიღი გადაიწევს მომდევნო სამუშაო დღისთვის 
+<br><br>
+8.კომპანია იხსნის ვალდებულებას მიღებული პროდუქციის ხარისხზე ან შეუსაბამო ზომებზე და ნივთის უკან დაბრუნებას არ ახორციელებს გამგზავნის თანხმობის გარეშე. 
+<br><br>
+9.კურიერი არ არის ვალდებული დაელოდოს ადრესატს პროდუქციის შეფასების ან მოზომვის მომენტში (რათა კურიერის საქმიანობა არ შეფერხდეს). 
+<br><br>
+ანგარიშწორება 
+<br><br>
+10.საკურიერო მომსახურების ანაზღაურება ხორციელდება საბანკო გადმორიცხვით, სასურველია შეკვეთის გაფორმებისთანავე. 
+<br><br>
+11.დამატებითი დეტალები ან მნიშვნელოვანი ინფორმაცია,ადრესატის ან ამანათის(მაგ:მსხვრევადი,მარტივად დეფორმირებადი) შესახებ,გთხოვთ მიუთითოთ კომენტარის საშუალებით.
+                    </span>
+                </div>
             </div>
 
 
@@ -198,6 +256,9 @@ class CupioAuthorization extends LitElement {
             isReg: {
                 type: Boolean,
             },
+            disabled: {
+                type: Boolean,
+            },
             values: {
                 type: Object,
             },
@@ -209,6 +270,7 @@ class CupioAuthorization extends LitElement {
 
     constructor() {
         super();
+        this.disabled = true;
         this.listener = (event)=> {
             if(event.key === 'enter' || event.keyCode === 13) this.authentication();
         }
@@ -254,6 +316,10 @@ class CupioAuthorization extends LitElement {
     }
 
     authentication() {
+        if(this.disabled) {
+            alert('გაეცანით და დაეთანხმეთ პირობებს')
+            return;
+        }
         if (!this.validateEmail(this.values.email)) {
             alert('შეამოწმეთ ელფოსტის მისამართი')
             return;

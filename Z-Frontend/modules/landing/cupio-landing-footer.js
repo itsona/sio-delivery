@@ -171,9 +171,9 @@ class CupioLandingFooter extends LitElement {
                 </div>
                 <div class="footer-content links">
                     <div class="link-item">
-                        <a href="tel:593123132">
+                        <a href="tel:551004010">
                             <div class="border"><img id="phone" src="/Z-Frontend/images/icons/call.svg"></div>
-                            593 123 132
+                            551 004 010
                         </a>
                     </div>
                     <div class="link-item">
@@ -194,8 +194,10 @@ class CupioLandingFooter extends LitElement {
                     <div class="social-networks">
                         <a class="border" href="https://www.facebook.com/siodelivery" target="_blank">
                             <img src="/Z-Frontend/images/icons/facebook.svg"></a>
-                        <a class="border"><img src="/Z-Frontend/images/icons/instagram-logo.svg"></a>
-                        <a class="border"><img src="/Z-Frontend/images/icons/twitter-logo.svg"></a>
+                        <a class="border"
+                            href="https://www.instagram.com/_sio_delivery/"
+                           target="_blank"
+                        ><img src="/Z-Frontend/images/icons/instagram-logo.svg"></a>
                     </div>
                 </div>
             </div>
