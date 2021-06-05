@@ -10,7 +10,7 @@ class CupioAuthorization extends LitElement {
         // language=CSS
         return css`
             :host {
-                padding: 128px;
+                padding: 64px;
                 display: flex;
                 min-height: 100vh;
                 box-sizing: border-box;
@@ -27,6 +27,7 @@ class CupioAuthorization extends LitElement {
                 box-shadow: rgba(0, 0, 0, 0.2) 0px 0px 12px;
                 padding: 32px;
                 gap: 64px;
+                box-sizing: border-box;
             }
 
             .form {
@@ -126,7 +127,7 @@ class CupioAuthorization extends LitElement {
             .right {
                 display: flex;
                 flex-direction: column;
-                max-height: 100vh;
+                max-height: 460px;
                 overflow-y: scroll;
                 padding-left: 12px;
                 border-left: 1px solid darkgrey;
@@ -323,6 +324,13 @@ class CupioAuthorization extends LitElement {
         if (!this.validateEmail(this.values.email)) {
             alert('შეამოწმეთ ელფოსტის მისამართი')
             return;
+        }
+
+        if(this.isReg){
+            if(this.values.password.length < 6){
+                alert('პაროლში სიმბოლოების რაოდენობა არ უნდა იყოს ნაკლები 6ზე')
+                return;
+            }
         }
         const regGql = `
             mutation {
