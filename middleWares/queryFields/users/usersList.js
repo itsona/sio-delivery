@@ -264,12 +264,12 @@ const userInfo = {
         const token = request.headers.token;
         if(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin' || !args.email ){
             query['_id'] = ObjectId(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).id)
-        }else {
+        }else if(args.email){
             query.email = args.email;
         }
         return userData().then(({res,db}) => {
             async function getUser() {
-                let user = await res.findOne({});
+                let user = await res.findOne(query);
                 db.close();
                 if (user != null) {
                     return user;
