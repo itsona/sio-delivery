@@ -86,34 +86,6 @@
 </div>
 
 <script>
-    window.fbAsyncInit = function() {
-        FB.init({
-            appId      : '340047111023873',
-            cookie     : true,
-            xfbml      : true,
-            version    : 'v10.0'
-        });
-
-        FB.AppEvents.logPageView();
-        checkLoginState();
-    };
-
-    (function(d, s, id){
-        var js, fjs = d.getElementsByTagName(s)[0];
-        if (d.getElementById(id)) {return;}
-        js = d.createElement(s); js.id = id;
-        js.src = "https://connect.facebook.net/en_US/sdk.js";
-        fjs.parentNode.insertBefore(js, fjs);
-    }(document, 'script', 'facebook-jssdk'));
-
-    function checkLoginState() {
-        console.log(1)
-        FB.getLoginStatus(function(response) {
-            console.log(response)
-        });
-    }
-</script>
-<script>
     var chatbox = document.getElementById('fb-customer-chat');
     chatbox.setAttribute("page_id", "103007248327640");
     chatbox.setAttribute("attribution", "biz_inbox");
