@@ -29,7 +29,6 @@ const RootMutationType = new GraphQLObjectType({
         addData: require('../middleWares/queryFields/data/dataList').addData,
         handleAccept: require('../middleWares/queryFields/data/dataList').handleAccept,
         cancelOrder: require('../middleWares/queryFields/data/dataList').cancelOrder,
-        resetPassword: require('../middleWares/queryFields/users/usersList').resetPassword,
         recoveryPassword: require('../middleWares/queryFields/users/usersList').recoveryPassword,
         setCourier: require('../middleWares/queryFields/users/usersList').setCourier,
         setBudget: require('../middleWares/queryFields/users/usersList').setBudget,

@@ -2,7 +2,6 @@ const Config = require("../../constants");
 const jwt = require('jsonwebtoken');
 const ObjectId = require('mongodb').ObjectID;
 require('dotenv').config();
-const nodemailer = require('nodemailer');
 
 const {
     GraphQLList,
@@ -186,70 +185,6 @@ const singleUser = {
 
             return getUser();
         })
-    }
-}
-
-const resetPassword = {
-    type: GraphQLString,
-    args: {
-        email: {type: GraphQLNonNull(GraphQLString)}
-    },
-    resolve: (parent, args) => {
-        return emailData().then(({res,db}) => {
-            return res.countDocuments({email: args.email}).then(contains => {
-                if (contains) {
-                    let transporter = nodemailer.createTransport({
-                        service: 'zoho',
-                        auth: {
-                            user: 'support@arteria.ge',
-                            pass: process.env.EMAIL_TOKEN_SECRET,
-                        }
-                    });
-
-                    let mailOptions = {
-                        from: 'support@arteria.ge',
-                        to: args.email,
-                        subject: 'Arteria Password Recover',
-                        html: `<div style="padding: 64px;background: rgb(244,244,244);">
-<h1>პაროლის აღდგენა
-</h1>
-<h2>პაროლის აღსადგენად დააჭირეთ ხელი ქვემოთ მოცემულ ღილაკს, თუ თქვენ არ გიცდიათ პაროლის აღდგენა არ მიაქციოთ ყურადღება.</h2>
-
-<div style="
-    display: flex;
-    align-items: center;
-    justify-content: center;
-"><a href="https://arteria.ge/recovery#${jwt.sign({email: args.email}, process.env.ACCESS_TOKEN_SECRET)}"
- target="_blank" style="
-text-decoration: none;
-    background: blue;
-    padding: 12px 24px;
-    border-radius: 8px;
-    margin-top: 36px;
-    /* display: flex; */
-    color: white;
-    font-weight: 600;
-     font-size: 20px; 
-    ">პაროლის აღდგენა</a></div>
-<h3 style="
-    font-size: 11px;
-    padding-top: 24px;
-">P.S. თუ განახლება თქვენ არ მოგითხოვიათ ჩვენი რჩევაა მოგვმართოთ support@arteria.ge მეილ მისამართზე</h3>`
-                    };
-
-                    transporter.sendMail(mailOptions, function (error, info) {
-                        if (error) {
-                            console.log(error);
-                        } else {
-                            console.log('Email sent: ' + info.response);
-                        }
-                    });
-                } else {
-                    return 'no-email';
-                }
-            })
-        })
-
     }
 }
 
@@ -451,7 +386,6 @@ module.exports = ({
     addUser,
     userInfo,
     modifyUser,
-    resetPassword,
     recoveryPassword,
     loadBudget,
     setCourier,

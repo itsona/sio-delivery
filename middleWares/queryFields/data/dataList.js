@@ -2,6 +2,7 @@ const pageData = require('../../authentication').pageData;
 const ObjectId = require('mongodb').ObjectID;
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
+const nodemailer = require('nodemailer');
 const {
     GraphQLList,
     GraphQLFloat,
@@ -221,7 +222,8 @@ const handleAccept = {
                 } else {
                     updated.deliveryCourier = '';
                 }
-                // sendNotificationToAdmin();
+                sendNotificationToAdmin('!!! კურიერმა გააუქმა შეკვეთა',
+                    `კურიერმა - ${jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).name} გააუქმა შეკვეთა N:${args.id}`);
             }
 
             return  pageData().then(({res, db}) => res.updateOne({id: args.id}, {$set: updated},{safe: true}).then(() => {
@@ -258,8 +260,10 @@ const cancelOrder = {
                 data.deliveryCourier = '';
             }
             data.accepted = false;
+
+            sendNotificationToAdmin('!!! კურიერმა გააუქმა შეკვეთა',
+                `კურიერმა - ${jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).name} გააუქმა შეკვეთა N:${args.id}`);
             return pageData().then(({res,db}) => res.updateOne(query, {$set: data},{safe:true}).then(() => {
-                sendNotificationToAdmin();
                 db.close();
                 return true
             }));
@@ -267,7 +271,10 @@ const cancelOrder = {
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'admin') {
             return pageData().then(async ({res,db}) => {
                 await res.deleteOne(query,{safe: true}).then(() => {
-                    sendNotificationToClient(args.client, 'removed');
+                    sendNotificationToClient(args.client,
+                        `შეკვეთა გაუქმდა!`,
+                            `თქვენი შეკვეთა N: ${args.id} გაუქმებულია დამატებითი ინფორმაციისთვის მოგვმართეთ.`
+                        );
                     db.close();
                     handlePay(args, 'plus')
                     return true
@@ -313,7 +320,10 @@ const addData = {
                 if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'admin' && args.id) {
                     if (args.courierChanged) {
                         data.accepted = false;
-                        sendNotificationToCourier(args[args.courierChanged]);
+                        sendNotificationToCourier(args[args.courierChanged],
+                                `ახალი შეკვეთა`,
+                            `თქვენს სახელზე დაემატა ახალი შეკვეთა.`
+                            );
                     }
                     if (args.status === 'აღებული' || args.status === 'ჩაბარებული') {
                         handleBudget(args);
@@ -335,13 +345,15 @@ const addData = {
                     if (args.deliveryCourier || args.takeCourier) {
                         if (args.courierChanged) {
                             data.accepted = false;
-                            sendNotificationToCourier(args[args.courierChanged]);
                             data[args.courierChanged] = args[args.courierChanged];
                         }
                     }
 
                     if (args.status === 'აღებული' || args.status === 'ჩაბარებული') {
-                        sendNotificationToClient(args.client, 'ჩაბარებული')
+                        sendNotificationToClient(args.client,
+                            `შეკვეთა ჩაბარებულია!`,
+                            `თქვენი შეკვეთა N: ${args.id} ჩაბარებულია, მადლობა ნდობისთვის .`
+                        );
                         handleBudget(args);
                     }
                     return res.updateOne({id: args.id}, {$set: data},{safe: true}).then(() => {
@@ -378,7 +390,8 @@ const addData = {
                     data.clientName = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).name;
                 }
                 return res.insertOne(data, {safe: true}).then(() => {
-                    sendNotificationToAdmin(data);
+                    sendNotificationToAdmin(`ახალი ${args.service} შეკვეთა`,
+                        `კლიენტმა - ${data.clientName} დაამატა ${args.service} შეკვეთა`);
                     handlePay(data, 'minus')
                     db.close();
                     return true;
@@ -533,12 +546,74 @@ const dayReport = {
     }
 }
 
-const sendNotificationToAdmin = () => {
+const sendNotificationToAdmin = (title, text) => {
+    sendEmail('info@siodelivery.ge', title, title, text);
 }
 
-const sendNotificationToCourier = (courier) => {
+const sendNotificationToCourier = (courier, title, text) => {
+    sendEmail(courier, title, title, text);
 }
-const sendNotificationToClient = (client, reason) => {
+const sendNotificationToClient = (client, title, text) => {
+    sendEmail(client, title, title, text);
+
+}
+
+
+const sendEmail = (receiver, subject, title, text)=> {
+    let transporter = nodemailer.createTransport({
+        service: 'zoho',
+        auth: {
+            user: 'info@siodelivery.ge',
+            pass: process.env.EMAIL_TOKEN_SECRET,
+        }
+    });
+
+    let mailOptions = {
+        from: 'info@siodelivery.ge',
+        to: receiver,
+        subject: subject,
+        html: `<div style="padding: 64px;background: rgb(244,244,244);">
+
+<img 
+style="height: 64px;
+    border-radius: 50%;"
+src="https://siodelivery.ge/Z-Frontend/images/logo.png">
+<h1>${title}
+</h1>
+<h2>${text}</h2>
+<div style="
+    display: flex;
+    align-items: center;
+    justify-content: center;
+"><a href="https://siodelivery.ge/login"
+ target="_blank" style="
+text-decoration: none;
+    background: blue;
+    padding: 12px 24px;
+    border-radius: 8px;
+    margin-top: 36px;
+    /* display: flex; */
+    color: white;
+    font-weight: 600;
+     font-size: 20px; 
+    ">სისტემაში შესვლა</a></div>
+<h3 style="
+    font-size: 11px;
+    padding-top: 24px;
+">P.S. დამატებითი ინფორმაციისათვის დაგვირეკეთ <a href="tel:551004010"> 551 004 010</a>
+ <br>
+    ან მოგვწერეთ <a href="mailto:info@siodelivery.ge">
+                            info@siodelivery.ge</a>
+ </h3>`
+    };
+
+    transporter.sendMail(mailOptions, function (error, info) {
+        if (error) {
+            console.log(error);
+        } else {
+            console.log('Email sent: ' + info.response);
+        }
+    });
 }
 
 module.exports = ({dataList, getForAccept, addData, cancelOrder, getDetails, handleAccept, dayReport});
