@@ -4,25 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="remove fb login check">
-      <change afterPath="$PROJECT_DIR$/middleWares/queryFields/data/createXcel.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/middleWares/queryFields/data/exportService.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="one more try">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/common/cupio-drawer.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/common/cupio-drawer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/common/cupio-main-table.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/common/cupio-main-table.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/mixins/graphql.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/mixins/graphql.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/authentication/cupio-authorization.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/authentication/cupio-authorization.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/delivery/cupio-delivery-view.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/delivery/cupio-delivery-view.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/main/common/cupio-main-left.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/main/common/cupio-main-left.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/new/cupio-details.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/new/cupio-details.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/middleWares/grapqhlServer.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/grapqhlServer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/middleWares/queryFields/data/dataList.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/queryFields/data/dataList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/middleWares/queryFields/users/usersList.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/queryFields/users/usersList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/middleWares/excel-from-js.xlsx" beforeDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -37,6 +21,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="main" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="ProjectId" id="1qprbPqvOmGLZOjBKWkW7m4mVXq" />
@@ -138,7 +127,7 @@
       <workItem from="1622902131347" duration="5539000" />
       <workItem from="1622964966819" duration="5020000" />
       <workItem from="1622991408413" duration="5947000" />
-      <workItem from="1624684012349" duration="38047000" />
+      <workItem from="1624684012349" duration="39084000" />
     </task>
     <task id="LOCAL-00001" summary="add task list from word">
       <created>1622402455138</created>
@@ -301,7 +290,21 @@
       <option name="project" value="LOCAL" />
       <updated>1623002957937</updated>
     </task>
-    <option name="localTasksCounter" value="24" />
+    <task id="LOCAL-00024" summary="add authorizations excel etc">
+      <created>1624726570581</created>
+      <option name="number" value="00024" />
+      <option name="presentableId" value="LOCAL-00024" />
+      <option name="project" value="LOCAL" />
+      <updated>1624726570584</updated>
+    </task>
+    <task id="LOCAL-00025" summary="one more try">
+      <created>1624727728215</created>
+      <option name="number" value="00025" />
+      <option name="presentableId" value="LOCAL-00025" />
+      <option name="project" value="LOCAL" />
+      <updated>1624727728215</updated>
+    </task>
+    <option name="localTasksCounter" value="26" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -335,7 +338,9 @@
     <MESSAGE value="add email sending" />
     <MESSAGE value="add fb login" />
     <MESSAGE value="remove fb login check" />
-    <option name="LAST_COMMIT_MESSAGE" value="remove fb login check" />
+    <MESSAGE value="add authorizations excel etc" />
+    <MESSAGE value="one more try" />
+    <option name="LAST_COMMIT_MESSAGE" value="one more try" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
