@@ -609,7 +609,6 @@ const sendNotificationToClient = (client, title, text) => {
 
 
 const sendEmail = (receiver, subject, title, text)=> {
-    return;
     let transporter = nodemailer.createTransport({
         service: 'zoho',
         auth: {
