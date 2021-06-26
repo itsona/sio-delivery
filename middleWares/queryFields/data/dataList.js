@@ -1,8 +1,11 @@
 const pageData = require('../../authentication').pageData;
 const ObjectId = require('mongodb').ObjectID;
 const jwt = require('jsonwebtoken');
+const fs = require('fs')
+const path = require('path')
 require('dotenv').config();
 const nodemailer = require('nodemailer');
+const loadFile = require('./createXcel')
 const {
     GraphQLList,
     GraphQLFloat,
@@ -56,6 +59,49 @@ const getForAccept = {
             }).toArray()
             db.close();
             return data;
+        })
+    }
+}
+
+const loadExcel = {
+    type: GraphQLBoolean,
+    args: {
+        fromDate: {type: GraphQLString},
+        toDate: {type: GraphQLString},
+    },
+    description: 'List of All data',
+
+    resolve: async (parent, args, response) => {
+        return pageData().then(async ({res,db}) => {
+            const token = response.headers.token;
+            if(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
+            const query = {}
+            if(args.fromDate){
+                if(!query.registerDate) query.registerDate = {};
+                query.registerDate['$gte'] = args.fromDate;
+            }
+            if(args.toDate) {
+                if(!query.registerDate) query.registerDate = {};
+                query.registerDate['$lte'] = args.toDate;
+            }
+            // const data = await res.find(query,
+            //     {accepted: 1,courierChanged: 1, oldPayed: 1, payed: 1, counted: 1}
+            //     ).toArray()
+            const data = await res.aggregate([
+                {$match: query},
+                {
+                    $project: {_id: 0, accepted: 0,courierChanged: 0, oldPayed: 0, counted: 0}
+                    }]).toArray()
+
+            const filePath = './middleWares/excel-from-js.xlsx';
+            try {
+                fs.unlinkSync(path.resolve(filePath))
+            }catch (e) {
+                console.log(e)
+            }
+             loadFile(data)
+            db.close();
+            return true;
         })
     }
 }
@@ -181,7 +227,7 @@ const dataList = {
                                 payed: 1,
                             }
                         },
-                        {$sort: {deliveryAddress: 1}}
+                        {$sort: {deliveryDate: 1,deliveryAddress: 1}}
                     ]).toArray()
                     db.close();
                     return data;
@@ -373,7 +419,7 @@ const addData = {
                 data.registerDate = getNewDate();
                 id = Math.random().toString(10).substring(12);
                 data.id = id;
-                data.status = 'ასაღები';
+                data.status = 'განხილვაშია';
                 const user = await userData().then(async ({res,db}) => {
                     const user = await res.findOne({
                             _id: ObjectId(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).id)
@@ -410,14 +456,15 @@ const handleBudget = async (args) => {
     let item = {};
     await pageData().then(async ({res: data,db}) => {
         item = await data.findOne({id: args.id});
-        data.updateOne({id: args.id}, {
-            $set: {
-                counted: true,
-            },
-        },{safe:true}).then(()=> db.close())
+        // data.updateOne({id: args.id}, {
+        //     $set: {
+        //         counted: true,
+        //     },
+        // },{safe:true}).then(()=> db.close())
     })
-    if (item.counted) return;
+    // if (item.counted) return;
     await userData().then(async ({res,db}) => {
+        console.log(item[courierType], courierType);
         const user = await res.findOne({email: item[courierType]})
         const budgetList = user.budgetList || [];
         const newRate = user.rates[rate];
@@ -480,6 +527,8 @@ const getNewDate = () => {
     const day = date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate();
     return year + '-' + month + '-' + day;
 }
+
+
 
 // //
 // const openSearch = () => {
@@ -560,6 +609,7 @@ const sendNotificationToClient = (client, title, text) => {
 
 
 const sendEmail = (receiver, subject, title, text)=> {
+    return;
     let transporter = nodemailer.createTransport({
         service: 'zoho',
         auth: {
@@ -616,4 +666,4 @@ text-decoration: none;
     });
 }
 
-module.exports = ({dataList, getForAccept, addData, cancelOrder, getDetails, handleAccept, dayReport});
+module.exports = ({dataList, getForAccept, addData, cancelOrder, getDetails, handleAccept, dayReport,loadExcel});

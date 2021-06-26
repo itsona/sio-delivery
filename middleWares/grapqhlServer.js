@@ -15,6 +15,7 @@ const RootQueryType = new GraphQLObjectType({
         usersDetails: require('../middleWares/queryFields/users/usersList').usersDetails,
         data: require('../middleWares/queryFields/data/dataList').dataList,
         getForAccept: require('../middleWares/queryFields/data/dataList').getForAccept,
+        loadExcel: require('../middleWares/queryFields/data/dataList').loadExcel,
         getDetails: require('../middleWares/queryFields/data/dataList').getDetails,
         dayReport: require('../middleWares/queryFields/data/dataList').dayReport,
     })
@@ -30,6 +31,7 @@ const RootMutationType = new GraphQLObjectType({
         handleAccept: require('../middleWares/queryFields/data/dataList').handleAccept,
         cancelOrder: require('../middleWares/queryFields/data/dataList').cancelOrder,
         recoveryPassword: require('../middleWares/queryFields/users/usersList').recoveryPassword,
+        FbLogin: require('../middleWares/queryFields/users/usersList').FbLogin,
         setCourier: require('../middleWares/queryFields/users/usersList').setCourier,
         setBudget: require('../middleWares/queryFields/users/usersList').setBudget,
         setRates: require('../middleWares/queryFields/users/usersList').setRates,

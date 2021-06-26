@@ -286,11 +286,16 @@ class CupioMainLeft extends LitElement {
                 <label for="cars">სტატუსი</label>
                 <select id="city" name="city" @change="${this._onStatusChange}">
                     <option value="">ყველა</option>
-                    <option value="ასაღები">ასაღები</option>
+                    ${this.delivery ? html`
+                        <option value="ასაღები">ასაღები</option>` : html`
+                        <option value="ასაღები">მიღებულია</option>
+                    `}
                     <option value="აღებული">აღებული</option>
                     <option value="ჩაბარებული">ჩაბარებული</option>
                     ${this.delivery ? html`
                         <option value="ჩასაბარებელი">ჩასაბარებელი</option>` : ''}
+                    ${this.panel || !this.delivery ? html`
+                        <option value="განხილვაშია">განხილვაშია</option>` : ''}
                 </select>
                 ${!this.delivery || this.panel ? html`
                     <label class="price">ფასი</label>

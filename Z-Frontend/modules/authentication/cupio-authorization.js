@@ -49,8 +49,8 @@ class CupioAuthorization extends LitElement {
                 color: white;
                 cursor: pointer;
             }
-            
-            .register[disabled]{
+
+            .register[disabled] {
                 opacity: 0.5;
                 pointer-events: none;
             }
@@ -108,8 +108,8 @@ class CupioAuthorization extends LitElement {
                 padding-top: 24px;
                 align-items: flex-start;
             }
-            
-            label{
+
+            label {
                 cursor: pointer;
             }
 
@@ -123,7 +123,7 @@ class CupioAuthorization extends LitElement {
                 padding: 12px;
                 border-radius: 12px;
             }
-            
+
             .right {
                 display: flex;
                 flex-direction: column;
@@ -166,7 +166,7 @@ class CupioAuthorization extends LitElement {
                                         class="input"
                                         place-holder="${this.getName(item)}"
                                         name="${item}"
-                                        value="${item === 'email' && this.email? this.email: ''}"
+                                        value="${item === 'email' && this.email ? this.email : ''}"
                                         @value-changed="${(event) => this.setValue(event, item)}"
                                 ></cupio-input>
                             `
@@ -190,19 +190,17 @@ class CupioAuthorization extends LitElement {
                                 href="/${this.isReg ? 'login' : 'register'}">
                             ${this.isReg ? 'უკვე მაქვს ანგარიში' : 'რეგისტრაცია'}</a>
                     </div>
-                    ${false ? html`
                     <div class="additionals">
-                        <span id="facebook">
+                        <span id="facebook" @click="${this.statusChangeCallback}">
                             <img src="/Z-Frontend/images/icons/facebook.svg">
                             ავტორიზაცია Facebook-ის გამოყენებით
                         </span>
 
-                        <span id="gmail">
+                        <span id="gmail" @click="${this.handleAuthClick}">
                             <img src="/Z-Frontend/images/icons/gmail.svg">
                             ავტორიზაცია Gmail-ის გამოყენებით
                         </span>
                     </div>
-                    `:''}
                 </div>
                 <div class="right">
                     <cupio-logo></cupio-logo>
@@ -272,8 +270,8 @@ class CupioAuthorization extends LitElement {
     constructor() {
         super();
         this.disabled = true;
-        this.listener = (event)=> {
-            if(event.key === 'enter' || event.keyCode === 13) this.authentication();
+        this.listener = (event) => {
+            if (event.key === 'enter' || event.keyCode === 13) this.authentication();
         }
         document.addEventListener('keydown', this.listener)
         if (!!localStorage.getItem('rndString')) handleRequest(true)
@@ -285,8 +283,83 @@ class CupioAuthorization extends LitElement {
         this.values = {};
         this.email = window.localStorage.getItem('email') || '';
         this.values.email = this.email;
+        window.fbAsyncInit = () => {
+            FB.init({
+                appId: '340047111023873',
+                cookie: true,                     // Enable cookies to allow the server to access the session.
+                xfbml: true,                     // Parse social plugins on this webpage.
+                version: 'v10.0'           // Use this Graph API version for this call.
+            });
 
 
+            FB.getLoginStatus((response) => {   // Called after the JS SDK has been initialized.
+                this.statusChangeCallback(response);        // Returns the login status.
+            });
+        };
+    }
+
+    initGoogle() {
+        this.GoogleAuth = null;
+        this.SCOPE = 'https://www.googleapis.com/auth/userinfo.email';
+        this.handleClientLoad()
+    }
+    handleClientLoad() {
+        // Load the API's client and auth2 modules.
+        // Call the initClient function after the modules load.
+        gapi.load('client:auth2',this.initClient);
+    }
+
+    initClient() {
+        const cl = new CupioAuthorization();
+        var discoveryUrl = 'https://www.googleapis.com/discovery/v1/apis/drive/v3/rest';
+        const SCOPE = cl.SCOPE;
+        gapi.client.init({
+            'clientId': '73835995426-mobvi48b742q22ji731j6a4off70bodg.apps.googleusercontent.com',
+            'discoveryDocs': [discoveryUrl],
+            'scope': SCOPE
+        }).then(()=> {
+            cl.GoogleAuth = gapi.auth2.getAuthInstance();
+
+            // Listen for sign-in state changes.
+            cl.GoogleAuth.isSignedIn.listen(cl.updateSigninStatus);
+
+            // Handle initial sign-in state. (Determine if user is already signed in.)
+            cl.user = cl.GoogleAuth.currentUser.get();
+            cl.setSigninStatus();
+        });
+    }
+
+    handleAuthClick() {
+        GoogleAuth.signOut();
+        GoogleAuth.signIn();
+        GoogleAuth.isSignedIn.listen(this.updateSigninStatus);
+
+    }
+
+    updateSigninStatus(){
+        const user = GoogleAuth.currentUser.get();
+        if(!user.mc) return;
+        const item = {
+            email: user.Ys.It,
+            name: user.Ys.Ve,
+            id: user.Ys.xS,
+            token: user.mc.access_token,
+            channel: 'google'
+        }
+        const cl = new CupioAuthorization();
+        cl.socialAuth(item);
+        // GoogleAuth.signOut();
+    }
+
+    statusChangeCallback(response){
+        FB.api('/me?fields=email, name', function(response) {
+            FB.login((login)=> {
+                response.token = login.authResponse.accessToken;
+                response.channel = 'facebook'
+                const cl = new CupioAuthorization();
+                cl.socialAuth(response);
+            })
+        });
     }
 
     disconnectedCallback() {
@@ -317,7 +390,7 @@ class CupioAuthorization extends LitElement {
     }
 
     authentication() {
-        if(this.disabled) {
+        if (this.disabled) {
             alert('გაეცანით და დაეთანხმეთ პირობებს')
             return;
         }
@@ -326,8 +399,8 @@ class CupioAuthorization extends LitElement {
             return;
         }
 
-        if(this.isReg){
-            if(this.values.password.length < 6){
+        if (this.isReg) {
+            if (this.values.password.length < 6) {
                 alert('პაროლში სიმბოლოების რაოდენობა არ უნდა იყოს ნაკლები 6ზე')
                 return;
             }
@@ -363,6 +436,23 @@ class CupioAuthorization extends LitElement {
             } else if (r.data.user === 'incorrect' || !r.data.user) {
                 alert('არასწორი ელფოსტა ან პაროლი')
             } else alert('დაფიქსირდა არასწორი ინფორმაცია')
+        })
+    }
+    socialAuth(response) {
+        const regGql = `
+            mutation {
+                FbLogin(
+                name: "${response.name}",
+                email: "${response.email || response.id}",
+                id: "${response.id}",
+                token: "${response.token}",
+                channel: "${response.channel}",
+                )
+            }
+        `
+        graphqlPost(regGql).then(({data: {FbLogin}}) => {
+            window.localStorage.setItem('rndString', FbLogin);
+            handleRequest(true);
         })
     }
 }

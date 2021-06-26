@@ -344,7 +344,7 @@ class CupioDetails extends LitElement {
     loadData() {
         const gql = `
         {
-            userInfo(${this.panel? `email: "${this.values.client}"`: ''}){
+            userInfo${this.panel? `(email: "${this.values.client}")`: ''}{
                 address
                 phone
                 rates{

@@ -99,6 +99,11 @@ class CupioDrawer extends LitElement {
                 outline: none;
                 border-radius: 12px 12px 0 0;
             }
+            
+            .select[disabled]{
+                pointer-events: none;
+                opacity: 0.6;
+            }
 
             .save {
                 display: flex;
@@ -142,8 +147,27 @@ class CupioDrawer extends LitElement {
                 <div class="content">
                     <div class="item">
                         <span class="title">სტატუსი: ${this.item.status}</span>
+                        ${this.item.status === 'განხილვაშია' ? html`
+                            <select
+                                    class="select"
+                                    @input="${(event) => this.onValueChange({detail: event.target.value}, 'status')}">
+                                <option
+                                        value="განხილვაშია">
+                                    განხილვაშია
+                                </option>
+                                <option
+                                        value="გაუქმებულია">
+                                    გაუქმებულია
+                                </option>
+                                <option
+                                        value="ასაღები">
+                                    ასაღები
+                                </option>
+                            </select>
+                        `: html`
                         <select
                                 class="select"
+                                ?disabled="${this.item.status === 'ჩაბარებული' && !this.panel}"
                                 @input="${(event) => this.onValueChange({detail: event.target.value}, 'status')}">
                             <option
                                     ?selected="${this.item.status === 'ჩასაბარებელი'}"
@@ -161,8 +185,8 @@ class CupioDrawer extends LitElement {
                                         ?selected="${this.item.status === 'ჩაბარებული'}"
                                         value="ჩაბარებული">ჩაბარებული
                                 </option>`}
-                            
                         </select>
+                        `}
                     </div>
                     ${this.panel? html`
                     <div class="item">

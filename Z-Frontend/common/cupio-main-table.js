@@ -58,6 +58,14 @@ class CupioMainTable extends LitElement {
             img {
                 margin-right: 4px;
             }
+            .phone {
+                color: unset;
+                text-decoration: none;
+                display: flex;
+                flex-grow: 1;
+                height: 100%;
+                align-items: center;
+            }
         `;
     }
 
@@ -71,10 +79,16 @@ class CupioMainTable extends LitElement {
                         <span class="${key} item"
                               ?warning="${this.isWarning(item)}"
                               ?error="${this.panel && item.canceled}"
-                              @click="${() => this.drawerToggle(item)}"
+                              @click="${() => this.drawerToggle(item, key)}"
                               style="color: ${key === 'status' ? this.getStatusColor(item.status) : 'black'}"
                         >
-                            ${this.delivery && key === 'status' ? this.status : item[key]}
+                            ${this.delivery && key === 'status' ? this.status : 
+                                    key === 'status' ?
+                                item[key] === 'ასაღები' ? 'მიღებულია' : item[key]: 
+                                key === 'phone' || key ==='deliveryPhone' ? html`
+                                    <a class="phone" href="tel:${item[key]}">${item[key]}</a>
+                                `: item[key]
+            }
                             ${key === 'price' ? html`
                                 ₾ ` : ''}
                         </span>
@@ -131,14 +145,15 @@ class CupioMainTable extends LitElement {
     }
 
     getStatusColor(status) {
+        if(status === 'გაუქმებულია') return 'red';
         if (status === 'ჩაბარებული' || (status === 'აღებული' && this.delivery)) return 'green';
         if (status === 'ჩასაბარებელი' || (status === 'აღებული' && !this.delivery)) return 'sandybrown';
         return 'grey'
     }
 
-    drawerToggle(item) {
-        if (!this.delivery) return;
-
+    drawerToggle(item, key) {
+        console.log(item)
+        if (!this.delivery || key === 'phone' || key === 'deliveryPhone') return;
         if (!this.drawerOpened) this.shadowRoot.querySelector('#drawer').item = item;
         this.drawerOpened = !this.drawerOpened;
     }

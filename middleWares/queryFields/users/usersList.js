@@ -2,7 +2,7 @@ const Config = require("../../constants");
 const jwt = require('jsonwebtoken');
 const ObjectId = require('mongodb').ObjectID;
 require('dotenv').config();
-
+const https = require('https')
 const {
     GraphQLList,
     GraphQLObjectType,
@@ -57,7 +57,7 @@ const usersList = {
     type: GraphQLList(UserType),
     description: 'List of All users',
     resolve: async (parent, args, request) => {
-        return userData().then(async({res,db}) => {
+        return userData().then(async ({res, db}) => {
             const data = await res.find({}).toArray();
             db.close();
             return data;
@@ -75,7 +75,7 @@ const usersDetails = {
         const query = {
             status: args.status,
         }
-        return userData().then(async({res,db}) => {
+        return userData().then(async ({res, db}) => {
             const data = await res.find(query).toArray();
             db.close();
             return data;
@@ -96,8 +96,8 @@ const setCourier = {
         }
         const status = args.courier ? 'delivery' : 'client';
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
-        return userData().then(async ({res,db}) => {
-            await res.updateOne(query, {$set: {status: status}},{safe: true});
+        return userData().then(async ({res, db}) => {
+            await res.updateOne(query, {$set: {status: status}}, {safe: true});
             db.close()
             return true;
         })
@@ -118,7 +118,7 @@ const setBudget = {
             email: args.client,
         }
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
-        return userData().then(async ({res,db}) => {
+        return userData().then(async ({res, db}) => {
             const budget = await res.findOne(query, {projection: {_id: 0, budget: 1}})
             await res.updateOne(query,
                 {$set: {budget: parseFloat(budget.budget) + parseFloat(args.budget)}},
@@ -146,7 +146,7 @@ const setRates = {
             email: args.client,
         }
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
-        return userData().then(async ({res,db}) => {
+        return userData().then(async ({res, db}) => {
             const user = await res.findOne(query, {projection: {_id: 0, rates: 1}})
             const rates = user.rates;
             delete args.client;
@@ -167,11 +167,12 @@ const singleUser = {
         password: {type: GraphQLString}
     },
     resolve: (parent, args, request) => {
-        return userData().then(async ({res,db}) => {
+        return userData().then(async ({res, db}) => {
             args.email = args.email.toLowerCase();
+
             async function getUser() {
                 let user = await res.findOne({email: args.email, password: args.password});
-                // db.close();
+                db.close();
                 if (user != null) {
                     return jwt.sign({
                         id: user._id,
@@ -197,12 +198,12 @@ const userInfo = {
     resolve: (parent, args, request) => {
         const query = {};
         const token = request.headers.token;
-        if(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin' || !args.email ){
+        if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin' || !args.email) {
             query['_id'] = ObjectId(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).id)
-        }else if(args.email){
+        } else if (args.email) {
             query.email = args.email;
         }
-        return userData().then(({res,db}) => {
+        return userData().then(({res, db}) => {
             async function getUser() {
                 let user = await res.findOne(query);
                 db.close();
@@ -221,28 +222,28 @@ const loadBudget = {
     type: GraphQLFloat,
     description: 'A budget of user',
     args: {
-        fromDate:{type: GraphQLString},
-        toDate:{type: GraphQLString},
+        fromDate: {type: GraphQLString},
+        toDate: {type: GraphQLString},
     },
     resolve: (parent, args, request) => {
         const token = request.headers.token;
-        return userData().then(({res,db}) => {
+        return userData().then(({res, db}) => {
             async function getUser() {
                 let user = await res.findOne({_id: ObjectId(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).id)});
                 db.close();
                 if (user != null) {
-                    if(args.fromDate || args.toDate){
-                        const budgetList = user.budgetList.filter((item)=> {
-                            if(args.fromDate && args.toDate){
+                    if (args.fromDate || args.toDate) {
+                        const budgetList = user.budgetList.filter((item) => {
+                            if (args.fromDate && args.toDate) {
                                 return item.date <= args.toDate && item.date >= args.fromDate;
-                            }else if(args.fromDate){
+                            } else if (args.fromDate) {
                                 return item.date >= args.fromDate;
-                            }else {
+                            } else {
                                 return item.date <= args.toDate
                             }
                         })
                         let sum = 0;
-                        budgetList.forEach((item)=> sum += item.budget)
+                        budgetList.forEach((item) => sum += item.budget)
                         return sum.toFixed(2)
                     }
                     const budget = user.budget || 0;
@@ -263,12 +264,12 @@ const recoveryPassword = {
     },
     resolve: (parent, args, request) => {
         const token = request.headers.token;
-        return userData().then(({res,db}) => {
+        return userData().then(({res, db}) => {
             async function getUser() {
                 let user = await res.updateOne({email: jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).email},
                     {$set: {password: args.password}},
-                    {safe:true});
-                    db.close();
+                    {safe: true});
+                db.close();
                 if (user != null) {
                     return user;
                 }
@@ -301,11 +302,11 @@ const addUser = {
         delete user.passwordRepeat;
         user.rates = Config.rates;
         user.budget = 0;
-        return emailData().then(({res,db}) => {
+        return emailData().then(({res, db}) => {
             return res.countDocuments({email: args.email}).then(contains => {
                 if (!contains) {
-                    res.insertOne({email: args.email}, {safe: true}).then(()=> db.close());
-                    return userData().then(({res,db}) => {
+                    res.insertOne({email: args.email}, {safe: true}).then(() => db.close());
+                    return userData().then(({res, db}) => {
                         res.insertOne(user, {safe: true})
                         db.close();
                         return 'success';
@@ -314,6 +315,84 @@ const addUser = {
             })
         })
     }
+}
+
+const FbLogin = {
+    type: GraphQLString,
+    args: {
+        name: {type: GraphQLNonNull(GraphQLString)},
+        email: {type: GraphQLNonNull(GraphQLString)},
+        id: {type: GraphQLNonNull(GraphQLString)},
+        token: {type: GraphQLNonNull(GraphQLString)},
+        channel: {type: GraphQLNonNull(GraphQLString)},
+    },
+    resolve: async (parent, args) => {
+        args.email = args.email.toLowerCase();
+        let url;
+        if (args.channel === 'google') {
+            url = `https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${args.token}`
+        } else if (args.channel === 'facebook') {
+            url = `https://graph.facebook.com/${args.id}/accounts?access_token=${args.token}`
+        }
+        const callback = (req) => {
+            if (req.statusCode !== 200) {
+                return '';
+            }
+            let user = args;
+            user.rates = Config.rates;
+            user.budget = 0;
+
+            async function getUser(res, db) {
+                let user = await res.findOne({email: args.email});
+                db.close();
+                if (user != null) {
+                    return jwt.sign({
+                        id: user._id,
+                        status: user.status,
+                        email: user.email,
+                        name: user.name,
+                    }, process.env.ACCESS_TOKEN_SECRET);
+                }
+                return '';
+            }
+
+            return emailData().then(({res, db}) => {
+                return res.countDocuments({email: args.email}).then(contains => {
+                    if (!contains) {
+                        res.insertOne({email: args.email}, {safe: true}).then(() => db.close());
+                        return userData().then(({res, db}) => {
+                            res.insertOne(user, {safe: true})
+                            return getUser(res, db);
+                        });
+                    }
+                    return userData().then(({res, db}) => {
+                        return getUser(res, db);
+                    });
+                })
+            })
+        }
+        const pr = new Promise(async (resolve) => {
+            const req = await https.get(url,
+                async (req) => {
+                    const back = await callback(req);
+                    resolve(back)
+                })
+        })
+        const raime = await pr;
+        return raime;
+    }
+}
+
+const checkToken = async (channel, token) => {
+    let ret = false;
+    if (channel === 'google') {
+        const req = await https.get(`https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${token}`, (req) => {
+            console.log(req.statusCode)
+        })
+        // req.then(r=> console.log(r))
+    }
+    console.log(ret);
+    return ret;
 }
 
 const modifyUser = {
@@ -335,7 +414,7 @@ const modifyUser = {
     resolve: (parent, args, request) => {
         if (!args.email || !args.name || !args.address || !args.phone) return 'nonNUll'
         const token = request.headers.token;
-        return userData().then(({res,db}) => {
+        return userData().then(({res, db}) => {
             async function updateUser() {
                 if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'admin') {
                     args.rates = {
@@ -391,4 +470,5 @@ module.exports = ({
     setCourier,
     setBudget,
     setRates,
+    FbLogin,
 });

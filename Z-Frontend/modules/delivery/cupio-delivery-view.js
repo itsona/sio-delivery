@@ -13,6 +13,13 @@ class CupioDeliveryView extends LitElement {
                 display: grid;
                 width: 100%;
             }
+            
+            .excel {
+                color: unset;
+                font-weight: bold;
+                padding-left: 4px;
+                cursor: pointer;
+            }
 
             .left {
                 height: 100vh;
@@ -104,6 +111,10 @@ class CupioDeliveryView extends LitElement {
                 <div class="drawer" @click="${() => this.closed = false}" ?closed="${this.closed}">
                     <img src="/Z-Frontend/images/icons/search.svg">
                 </div>
+                ${this.panel ? html`
+                    <div class="excel" @click="${this.loadExcel}">ახლის დაგენერირება</div>
+                    <a class="excel" href="/middleWares/excel-from-js.xlsx" target="_blank">ფაილის ჩამოწერა</a>
+                `:''}
                 ${this.statuses.map((status) => html`
                     <cupio-main-container
                             class="category"
@@ -127,6 +138,9 @@ class CupioDeliveryView extends LitElement {
             statuses: {
                 type: Array,
             },
+            panel: {
+                type: Boolean,
+            },
         };
     }
 
@@ -135,13 +149,40 @@ class CupioDeliveryView extends LitElement {
         this.closed = true;
         this.searchValues = {};
         if (!localStorage.getItem('rndString')) redirectTo('/login');
+        handleRequest(false).then(r => {
+            this.panel = r === 'admin';
+            this.setStatuses();
+            this.loadUsers();
+        });
+        this.loadForAccept();
+    }
+
+    setStatuses(){
         this.statuses = [
             'ჩასაბარებელი',
             'ასაღები',
             'აღებული',
             'ჩაბარებული',
         ];
-        this.loadForAccept();
+        if(this.panel){
+            this.statuses = ['განხილვაშია', ...this.statuses,  ]
+        }
+    }
+
+    loadExcel(){
+        const gql =
+            `        
+            {
+                loadExcel(
+                fromDate: "${this.searchValues.fromDate|| ''}"
+                toDate: "${this.searchValues.toDate|| ''}"
+                
+                )
+                }
+            `
+        graphqlPost(gql).then((r) => {
+            console.log(r)
+        })
     }
 
     searchWithWord(e) {
@@ -156,12 +197,7 @@ class CupioDeliveryView extends LitElement {
             if (status) {
                 this.statuses = [status];
             } else {
-                this.statuses = [
-                    'ჩასაბარებელი',
-                    'ასაღები',
-                    'აღებული',
-                    'ჩაბარებული',
-                ]
+                this.setStatuses();
             }
         }, 100);
     }
