@@ -114,7 +114,7 @@ class CupioDeliveryView extends LitElement {
                 ${this.panel ? html`
                     <div class="excel" @click="${this.loadExcel}">ახლის დაგენერირება</div>
                     <a class="excel" 
-                       href="http://138.201.104.132:8081/middleWares/excel-from-js.xlsx" 
+                       href="https://138.201.104.132:443/middleWares/excel-from-js.xlsx" 
                        target="_blank">ფაილის ჩამოწერა</a>
                 `:''}
                 ${this.statuses.map((status) => html`
