@@ -21,7 +21,7 @@ const UserType = new GraphQLObjectType({
     fields: () => ({
         name: {type: GraphQLNonNull(GraphQLString)},
         email: {type: GraphQLNonNull(GraphQLString)},
-        password: {type: GraphQLNonNull(GraphQLString)},
+        password: {type: GraphQLString},
         budget: {type: GraphQLFloat},
         address: {type: GraphQLString},
         phone: {type: GraphQLString},
@@ -306,8 +306,8 @@ const addUser = {
             return res.countDocuments({email: args.email}).then(contains => {
                 if (!contains) {
                     res.insertOne({email: args.email}, {safe: true}).then(() => db.close());
-                    return userData().then(({res, db}) => {
-                        res.insertOne(user, {safe: true})
+                    return userData().then(async ({res, db}) => {
+                        await res.insertOne(user, {safe: true})
                         db.close();
                         return 'success';
                     });

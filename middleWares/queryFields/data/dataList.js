@@ -180,9 +180,19 @@ const dataList = {
                     if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'delivery') {
                         if (args.status === 'ასაღები' || args.status === 'აღებული') {
                             if (args.status === 'აღებული') {
-                                query['$or'] = [
-                                    {status: 'აღებული'},
-                                    {status: 'ჩაბარებული'}]
+                                if(query['$or']){
+                                    // query['$or'].push([{status: 'აღებული'},{status: 'ჩაბარებული'}])
+                                    const or = query.$or;
+                                    delete query.$or;
+                                    query.$and = [
+                                        {$or: or},
+                                        {$or : [{status: 'აღებული'},{status: 'ჩაბარებული'}]}
+                                    ]
+                                }else {
+                                    query['$or'] = [
+                                        {status: 'აღებული'},
+                                        {status: 'ჩაბარებული'}]
+                                }
                             } else query.status = args.status;
                             query.takeCourier = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).email;
                         } else {
@@ -296,6 +306,7 @@ const cancelOrder = {
         const data = {}
         data.canceled = true
 
+        console.log(query, data)
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'delivery') {
 
             if (args.status === 'ასაღები') {
@@ -306,7 +317,6 @@ const cancelOrder = {
                 data.deliveryCourier = '';
             }
             data.accepted = false;
-
             sendNotificationToAdmin('!!! კურიერმა გააუქმა შეკვეთა',
                 `კურიერმა - ${jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).name} გააუქმა შეკვეთა N:${args.id}`);
             return pageData().then(({res,db}) => res.updateOne(query, {$set: data},{safe:true}).then(() => {
@@ -316,7 +326,7 @@ const cancelOrder = {
         }
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'admin') {
             return pageData().then(async ({res,db}) => {
-                await res.deleteOne(query,{safe: true}).then(() => {
+                await res.updateOne(query,{$set: {status: 'გაუქმებულია'}}, {safe: true}).then(() => {
                     sendNotificationToClient(args.client,
                         `შეკვეთა გაუქმდა!`,
                             `თქვენი შეკვეთა N: ${args.id} გაუქმებულია დამატებითი ინფორმაციისთვის მოგვმართეთ.`
@@ -329,8 +339,6 @@ const cancelOrder = {
                 })
             });
         }
-
-
         return false;
     }
 }
@@ -344,6 +352,7 @@ const addData = {
         deliveryAddress: {type: GraphQLNonNull(GraphQLString)},
         service: {type: GraphQLNonNull(GraphQLString)},
         status: {type: GraphQLString},
+        oldStatus: {type: GraphQLString},
         takeDate: {type: GraphQLNonNull(GraphQLString)},
         deliveryDate: {type: GraphQLNonNull(GraphQLString)},
         description: {type: GraphQLString},
@@ -371,8 +380,15 @@ const addData = {
                             `თქვენს სახელზე დაემატა ახალი შეკვეთა.`
                             );
                     }
-                    if (args.status === 'აღებული' || args.status === 'ჩაბარებული') {
+                    if ((args.status === 'აღებული' || args.status === 'ჩაბარებული' && args.status !== args.oldStatus)){
                         handleBudget(args);
+                    }
+                    if( args.status === 'გაუქმებულია' && args.status !== args.oldStatus){
+                        sendNotificationToClient(args.client,
+                            `შეკვეთა გაუქმდა!`,
+                            `თქვენი შეკვეთა N: ${args.id} გაუქმებულია დამატებითი ინფორმაციისთვის მოგვმართეთ.`
+                        );
+                        handlePay(args, 'plus')
                     }
                     if (args.payed && !args.oldPayed) {
                         await handlePay(args, 'plus');
@@ -412,9 +428,11 @@ const addData = {
                     return false;
                 }
                 if(args.service ==='ექსპრესი') {
-                    db.close();
                     const dt = new Date();
-                    if(dt.getHours() < 13) return false;
+                    if(dt.getHours() > 13) {
+                        db.close();
+                        return false;
+                    }
                 }
                 data.registerDate = getNewDate();
                 id = Math.random().toString(10).substring(12);

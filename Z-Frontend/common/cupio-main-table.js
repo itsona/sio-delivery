@@ -152,7 +152,6 @@ class CupioMainTable extends LitElement {
     }
 
     drawerToggle(item, key) {
-        console.log(item)
         if (!this.delivery || key === 'phone' || key === 'deliveryPhone') return;
         if (!this.drawerOpened) this.shadowRoot.querySelector('#drawer').item = item;
         this.drawerOpened = !this.drawerOpened;

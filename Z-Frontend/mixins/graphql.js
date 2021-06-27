@@ -2,8 +2,8 @@
 // const ServiceUrl = 'http://94.43.110.189:5000/';
 import {redirectTo} from "./redirectTo";
 
-// const ServiceUrl = 'http://localhost:5000/';
-const ServiceUrl = '/';
+const ServiceUrl = 'http://localhost:5000/';
+// const ServiceUrl = '/';
 
 export const graphqlPost = (gqlString) => {
     return fetch(`${ServiceUrl}api`, {

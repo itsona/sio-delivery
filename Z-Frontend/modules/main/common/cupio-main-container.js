@@ -385,7 +385,11 @@ class CupioMainContainer extends LitElement {
                 delete item.clientName;
                 return item;
             })
-            this.items = [...this.items, ...data];
+            if(this.skip){
+                this.items = [...this.items, ...data];
+            } else {
+                this.items = data;
+            }
             this.loading = false;
             if (data.length >= this.loadedLength) {
                 this.shouldLoadMore = true;

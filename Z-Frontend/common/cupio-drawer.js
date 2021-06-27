@@ -121,6 +121,11 @@ class CupioDrawer extends LitElement {
                 display: flex;
                 justify-content: space-around;
             }
+            
+            .save[disabled] {
+                pointer-events: none;
+                opacity: 0.5;
+            }
 
             @media only screen and (max-width: 800px) {
                 .container {
@@ -213,10 +218,11 @@ class CupioDrawer extends LitElement {
                             @change="${(event) => this.onValueChange({detail:!this.item.payed}, 'payed')}">
                     <label for="payed"> გადახდილია</label><br>
                     `:''}
-                    <div class="buttons">
+                    <div class="buttons" >
                         <div
                                 class="save"
-                                @click="${this.save}">
+                                @click="${this.save}"
+                                ?disabled="${!this.changed}">
                             შენახვა
                         </div>
                         ${this.item.status ==='ასაღები' || this.item.status === 'ჩასაბარებელი'
@@ -257,6 +263,9 @@ class CupioDrawer extends LitElement {
             },
             panel: {
                 type: Boolean,
+            },
+            changed: {
+                type: Boolean,
             }
         };
     }
@@ -295,6 +304,7 @@ class CupioDrawer extends LitElement {
     }
 
     onValueChange(event, key) {
+        this.changed = true;
         if (!this.newItem) this.newItem = this.item;
         const value = event.detail;
         this.newItem[key] = value;
@@ -362,7 +372,6 @@ class CupioDrawer extends LitElement {
     save() {
         if(this.cantSave) return;
         this.cantSave = true;
-        console.log('daemata')
         const gql = `mutation{
               addData(
                     id: "${this.newItem.id || ''}",
@@ -372,6 +381,7 @@ class CupioDrawer extends LitElement {
                     deliveryPhone: "${this.newItem.deliveryPhone || ''}",
                     client: "${this.newItem.clientEmail || ''}",
                     status: "${this.newItem.status || ''}",
+                    oldStatus: "${this.item.status || ''}",
                     takeCourier: "${this.newItem.takeCourier || ''}",
                     deliveryCourier: "${this.newItem.deliveryCourier || ''}",
                     takeDate: "${this.newItem.takeDate || ''}",
@@ -396,11 +406,11 @@ class CupioDrawer extends LitElement {
         mutation {
             cancelOrder(id: "${this.item.id}",
              status: "${this.item.status}",
-              client:"${this.item.clientEmail}",
-              price: ${this.item.price}
+              client:"${this.item.clientEmail || ''}",
+              price: ${this.item.price || 0}
               )
         }`
-        graphqlPost(gql).then(()=> window.location.reload())
+        graphqlPost(gql).then()
             .catch(r=> console.warn(r));
     }
 }
