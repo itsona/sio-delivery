@@ -305,8 +305,6 @@ const cancelOrder = {
         const query = {id: args.id}
         const data = {}
         data.canceled = true
-
-        console.log(query, data)
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'delivery') {
 
             if (args.status === 'ასაღები') {
@@ -380,8 +378,9 @@ const addData = {
                             `თქვენს სახელზე დაემატა ახალი შეკვეთა.`
                             );
                     }
-                    if ((args.status === 'აღებული' || args.status === 'ჩაბარებული' && args.status !== args.oldStatus)){
-                        handleBudget(args);
+                    if (args.status !== args.oldStatus){
+
+                        handleBudget(args, true);
                     }
                     if( args.status === 'გაუქმებულია' && args.status !== args.oldStatus){
                         sendNotificationToClient(args.client,
@@ -468,9 +467,19 @@ const addData = {
     }
 }
 
-const handleBudget = async (args) => {
-    const rate = args.status === 'აღებული' ? 'takeRate' : 'delivery';
-    const courierType = args.status === 'აღებული' ? 'takeCourier' : 'deliveryCourier';
+const handleBudget = async (args, check=false) => {
+    let minus = false;
+    if(check){
+        if(args.status === 'ასაღები'){
+            if(args.oldStatus !== 'აღებული' && args.oldStatus !== 'ჩასაბარებელი') return;
+            minus = true;
+        }
+        if(args.status === 'აღებული' && args.oldStatus === 'ჩაბარებული')minus = true;
+    }
+    let rate = args.status === 'აღებული' ? 'takeRate' : 'delivery';
+    if(minus) rate = args.status === 'აღებული' ? 'delivery' : 'takeRate';
+    let courierType = args.status === 'აღებული' ? 'takeCourier' : 'deliveryCourier';
+    if(minus) courierType = args.status === 'აღებული' ? 'deliveryCourier' : 'takeCourier';
     let item = {};
     await pageData().then(async ({res: data,db}) => {
         item = await data.findOne({id: args.id});
@@ -482,33 +491,25 @@ const handleBudget = async (args) => {
     })
     // if (item.counted) return;
     await userData().then(async ({res,db}) => {
-        console.log(item[courierType], courierType);
         const user = await res.findOne({email: item[courierType]})
         const budgetList = user.budgetList || [];
         const newRate = user.rates[rate];
         const obj = {date: getNewDate(), budget: newRate, id: args.id, status: args.status};
+        if(minus) obj.budget = obj.budget * -1;
         budgetList.push(obj);
+        let newBudget = (parseFloat(user.budget) + parseFloat(newRate)).toFixed(2);
+        if(minus) newBudget = (parseFloat(user.budget) - parseFloat(newRate)).toFixed(2);
         res.updateOne({email: item[courierType]},
             {
                 $set:
                     {
                         budgetList: budgetList,
-                        budget: (parseFloat(user.budget) + parseFloat(newRate)).toFixed(2)
+                        budget: newBudget,
                         // budget: 0,
                     }
             },{safe:true}
         ).then(()=> db.close())
     })
-    if (args.status === 'აღებული') {
-        await userData().then(async ({res,db}) => {
-            const user = await res.findOne({email: item.client})
-            res.updateOne({email: item.client}, {
-                $set: {
-                    budget: (parseFloat(user.budget) - parseFloat(item.price)).toFixed(2)
-                }
-            },{safe: true}).then(()=> db.close())
-        })
-    }
 
 }
 

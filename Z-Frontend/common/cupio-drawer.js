@@ -172,7 +172,8 @@ class CupioDrawer extends LitElement {
                         `: html`
                         <select
                                 class="select"
-                                ?disabled="${this.item.status === 'ჩაბარებული' && !this.panel}"
+                                ?disabled="${(this.item.status === 'ჩაბარებული' || this.item.status === 'აღებული')
+                                && !this.panel}"
                                 @input="${(event) => this.onValueChange({detail: event.target.value}, 'status')}">
                             <option
                                     ?selected="${this.item.status === 'ჩასაბარებელი'}"
@@ -184,9 +185,18 @@ class CupioDrawer extends LitElement {
                                         selected
                                         value="ასაღები">ასაღები
                                 </option>
-                             `: html`
+                             `: (this.item.status === 'აღებული' || this.item.status === 'ჩასაბარებელი')  && this.panel ? html`
                                 <option
 
+                                        ?selected="${this.item.status === 'ჩაბარებული'}"
+                                        value="ასაღები">ასაღები
+                                </option>
+
+                                <option
+                                        ?selected="${this.item.status === 'ჩაბარებული'}"
+                                        value="ჩაბარებული">ჩაბარებული
+                                </option>`: html`
+                                <option
                                         ?selected="${this.item.status === 'ჩაბარებული'}"
                                         value="ჩაბარებული">ჩაბარებული
                                 </option>`}
@@ -311,6 +321,7 @@ class CupioDrawer extends LitElement {
     }
 
     courierChanged(e) {
+        this.changed = true;
         const value = e.target.value;
         if (this.newItem.status === 'ასაღები') {
             this.newItem.takeCourier = value;
