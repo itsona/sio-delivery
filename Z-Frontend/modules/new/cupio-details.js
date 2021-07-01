@@ -338,7 +338,7 @@ class CupioDetails extends LitElement {
     setValue(event, item) {
         this.values[item] = event.detail;
         this.canSend = this.values.takeAddress && this.values.deliveryAddress
-            && this.values.phone && this.values.takeDate && this.values.deliveryDate
+            && this.values.phone && this.values.takeDate && this.values.deliveryDate && this.values.deliveryPhone
     }
 
     loadData() {

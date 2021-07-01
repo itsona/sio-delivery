@@ -348,6 +348,7 @@ class CupioMainContainer extends LitElement {
                     canceled
                     payed
                     clientName
+                    client
                 }
             }`
             } else {
@@ -373,6 +374,7 @@ class CupioMainContainer extends LitElement {
                     canceled
                     payed
                     clientName
+                    client
                 }
             }
         `;

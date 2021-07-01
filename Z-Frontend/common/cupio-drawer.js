@@ -244,7 +244,7 @@ class CupioDrawer extends LitElement {
                             }
                     </div>
                     ${Object.keys(this.item).map((key) => html`
-                        ${key !== 'status' ? html`
+                        ${(key !== 'status' && key !== 'canceled' && key !== 'payed') && (this.panel || key !== 'client') ? html`
                             <div class="item">
                                 <span class="title">${localize(key)}</span>
                                 <cupio-input
@@ -381,28 +381,31 @@ class CupioDrawer extends LitElement {
     }
 
     save() {
+        let clientEmail;
+        if(this.panel) clientEmail = this.newItem.clientEmail;
+        else clientEmail = this.newItem.client;
         if(this.cantSave) return;
         this.cantSave = true;
         const gql = `mutation{
               addData(
-                    id: "${this.newItem.id || ''}",
-                    takeAddress: "${this.newItem.takeAddress || ''}",
-                    service: "${this.newItem.service || ''}",
-                    deliveryAddress: "${this.newItem.deliveryAddress || ''}",
-                    deliveryPhone: "${this.newItem.deliveryPhone || ''}",
-                    client: "${this.newItem.clientEmail || ''}",
-                    status: "${this.newItem.status || ''}",
-                    oldStatus: "${this.item.status || ''}",
-                    takeCourier: "${this.newItem.takeCourier || ''}",
-                    deliveryCourier: "${this.newItem.deliveryCourier || ''}",
-                    takeDate: "${this.newItem.takeDate || ''}",
-                    deliveryDate: "${this.newItem.deliveryDate || ''}",
-                    description: "${this.newItem.description || ''}",
-                    phone: "${this.newItem.phone || ''}",
-                    price: ${this.newItem.price || 0},
-                    courierChanged: "${this.newCourierSet || ''}",
-                    payed: ${this.newItem.payed || false},
-                    oldPayed: ${this.newItem.oldPayed || false},
+                id: "${this.newItem.id || ''}",
+                takeAddress: "${this.newItem.takeAddress || ''}",
+                service: "${this.newItem.service || ''}",
+                deliveryAddress: "${this.newItem.deliveryAddress || ''}",
+                deliveryPhone: "${this.newItem.deliveryPhone || ''}",
+                client: "${clientEmail ||  ''}",
+                status: "${this.newItem.status || ''}",
+                oldStatus: "${this.item.status || ''}",
+                takeCourier: "${this.newItem.takeCourier || ''}",
+                deliveryCourier: "${this.newItem.deliveryCourier || ''}",
+                takeDate: "${this.newItem.takeDate || ''}",
+                deliveryDate: "${this.newItem.deliveryDate || ''}",
+                description: "${this.newItem.description || ''}",
+                phone: "${this.newItem.phone || ''}",
+                price: ${this.newItem.price || 0},
+                courierChanged: "${this.newCourierSet || ''}",
+                payed: ${this.newItem.payed || false},
+                oldPayed: ${this.newItem.oldPayed || false},
               )
             }`
 

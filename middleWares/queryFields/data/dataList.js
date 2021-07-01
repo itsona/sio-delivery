@@ -137,6 +137,7 @@ const dataList = {
                     // })
                     query["$or"] = [
                         {takeAddress: {'$regex': args.searchWord}},
+                        {clientName: {'$regex': args.searchWord}},
                         {deliveryAddress: {'$regex': args.searchWord}},
                         {status: {'$regex': args.searchWord}},
                         {takeCourier: {'$regex': args.searchWord}},
@@ -234,6 +235,7 @@ const dataList = {
                                 deliveryPhone: 1,
                                 canceled: 1,
                                 clientName: 1,
+                                client: 1,
                                 payed: 1,
                             }
                         },
@@ -380,8 +382,14 @@ const addData = {
                             `თქვენს სახელზე დაემატა ახალი შეკვეთა.`
                             );
                     }
+                    if (args.status === 'ჩაბარებული') {
+                        console.log(args.client)
+                        sendNotificationToClient(args.client,
+                            `შეკვეთა ჩაბარებულია!`,
+                            `თქვენი შეკვეთა N: ${args.id} ჩაბარებულია, მადლობა ნდობისთვის .`
+                        );
+                    }
                     if (args.status !== args.oldStatus){
-
                         handleBudget(args, true);
                     }
                     if( args.status === 'გაუქმებულია' && args.status !== args.oldStatus){
@@ -411,12 +419,14 @@ const addData = {
                             data[args.courierChanged] = args[args.courierChanged];
                         }
                     }
-
-                    if (args.status === 'აღებული' || args.status === 'ჩაბარებული') {
+                    if (args.status === 'ჩაბარებული') {
                         sendNotificationToClient(args.client,
                             `შეკვეთა ჩაბარებულია!`,
                             `თქვენი შეკვეთა N: ${args.id} ჩაბარებულია, მადლობა ნდობისთვის .`
                         );
+                    }
+
+                    if (args.status === 'აღებული' || args.status === 'ჩაბარებული') {
                         handleBudget(args);
                     }
                     return res.updateOne({id: args.id}, {$set: data},{safe: true}).then(() => {
@@ -629,7 +639,6 @@ const sendNotificationToCourier = (courier, title, text) => {
 }
 const sendNotificationToClient = (client, title, text) => {
     sendEmail(client, title, title, text);
-
 }
 
 const sendEmail = (receiver, subject, title, text)=> {

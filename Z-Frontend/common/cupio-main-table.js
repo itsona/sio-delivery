@@ -75,7 +75,7 @@ class CupioMainTable extends LitElement {
                 <span class="header">${item}</span>
             `)}
             ${this.items.map((item) => html`${Object.keys(item).map((key) =>
-                    !key.includes('Courier') && key !== 'canceled' && key !== 'payed' ? html`
+                    !key.includes('Courier') && key !== 'canceled' && key !== 'payed' && key !=='client' && key !== 'clientEmail' ? html`
                         <span class="${key} item"
                               ?warning="${this.isWarning(item)}"
                               ?error="${this.panel && item.canceled}"
