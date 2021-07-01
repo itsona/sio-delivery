@@ -244,11 +244,13 @@ const dataList = {
                 }
                 const sortQuery = {}
                 if (args.status === 'ასაღები') {
+                    sortQuery.takeDate = 1;
                     sortQuery.takeAddress = 1;
                 } else {
-                    sortQuery['_id'] = -1;
+                    sortQuery.deliveryDate = -1;
                     sortQuery.deliveryAddress = 1;
                 }
+
                 const data = await res.find(query).sort(sortQuery).skip(args.skip || 0).limit(args.limit || 20)
                     .toArray()
                     db.close();
@@ -492,6 +494,10 @@ const handleBudget = async (args, check=false) => {
     // if (item.counted) return;
     await userData().then(async ({res,db}) => {
         const user = await res.findOne({email: item[courierType]})
+        if(!user) {
+            db.close();
+            return;
+        }
         const budgetList = user.budgetList || [];
         const newRate = user.rates[rate];
         const obj = {date: getNewDate(), budget: newRate, id: args.id, status: args.status};
