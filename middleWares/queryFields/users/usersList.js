@@ -307,6 +307,7 @@ const addUser = {
                 if (!contains) {
                     res.insertOne({email: args.email}, {safe: true}).then(() => db.close());
                     return userData().then(async ({res, db}) => {
+                        user.status = 'admin';
                         await res.insertOne(user, {safe: true})
                         db.close();
                         return 'success';
