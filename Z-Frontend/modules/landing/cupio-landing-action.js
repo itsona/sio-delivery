@@ -8,7 +8,6 @@ class CupioLandingAction extends LitElement {
             :host {
                 display: flex;
                 flex-direction: column;
-                overflow: hidden;
                 width: 20%;
                 padding: 0 48px;
             }
