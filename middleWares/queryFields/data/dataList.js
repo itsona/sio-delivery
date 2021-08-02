@@ -364,6 +364,7 @@ const addData = {
         deliveryPhone: {type: GraphQLString},
         id: {type: GraphQLString},
         price: {type: GraphQLFloat},
+        oldPrice: {type: GraphQLFloat},
         courierChanged: {type: GraphQLString},
         payed: {type: GraphQLBoolean},
         oldPayed: {type: GraphQLBoolean},
@@ -383,14 +384,16 @@ const addData = {
                             );
                     }
                     if (args.status === 'ჩაბარებული') {
-                        console.log(args.client)
                         sendNotificationToClient(args.client,
                             `შეკვეთა ჩაბარებულია!`,
                             `თქვენი შეკვეთა N: ${args.id} ჩაბარებულია, მადლობა ნდობისთვის .`
                         );
                     }
                     if (args.status !== args.oldStatus){
-                        handleBudget(args, true);
+                        await handleBudget(args, true);
+                    }
+                    if(args.price !== args.oldPrice){
+                        await handlePay({...args, price: (args.oldPrice - args.price)}, 'plus')
                     }
                     if( args.status === 'გაუქმებულია' && args.status !== args.oldStatus){
                         sendNotificationToClient(args.client,
@@ -493,15 +496,7 @@ const handleBudget = async (args, check=false) => {
     let courierType = args.status === 'აღებული' ? 'takeCourier' : 'deliveryCourier';
     if(minus) courierType = args.status === 'აღებული' ? 'deliveryCourier' : 'takeCourier';
     let item = {};
-    await pageData().then(async ({res: data,db}) => {
-        item = await data.findOne({id: args.id});
-        // data.updateOne({id: args.id}, {
-        //     $set: {
-        //         counted: true,
-        //     },
-        // },{safe:true}).then(()=> db.close())
-    })
-    // if (item.counted) return;
+
     await userData().then(async ({res,db}) => {
         const user = await res.findOne({email: item[courierType]})
         if(!user) {

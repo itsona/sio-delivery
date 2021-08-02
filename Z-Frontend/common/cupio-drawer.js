@@ -396,6 +396,7 @@ class CupioDrawer extends LitElement {
                 client: "${clientEmail ||  ''}",
                 status: "${this.newItem.status || ''}",
                 oldStatus: "${this.item.status || ''}",
+                oldPrice: ${this.item.price || ''},
                 takeCourier: "${this.newItem.takeCourier || ''}",
                 deliveryCourier: "${this.newItem.deliveryCourier || ''}",
                 takeDate: "${this.newItem.takeDate || ''}",
