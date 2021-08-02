@@ -49,7 +49,7 @@ const getForAccept = {
     description: 'List of All data',
 
     resolve: (parent, args, response) => {
-        return pageData().then(async ({res,db}) => {
+        return pageData().then(async ({res, db}) => {
             const token = response.headers.token;
             const courier = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).email;
             const data = await res.find({
@@ -72,16 +72,16 @@ const loadExcel = {
     description: 'List of All data',
 
     resolve: async (parent, args, response) => {
-        return pageData().then(async ({res,db}) => {
+        return pageData().then(async ({res, db}) => {
             const token = response.headers.token;
-            if(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
+            if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
             const query = {}
-            if(args.fromDate){
-                if(!query.registerDate) query.registerDate = {};
+            if (args.fromDate) {
+                if (!query.registerDate) query.registerDate = {};
                 query.registerDate['$gte'] = args.fromDate;
             }
-            if(args.toDate) {
-                if(!query.registerDate) query.registerDate = {};
+            if (args.toDate) {
+                if (!query.registerDate) query.registerDate = {};
                 query.registerDate['$lte'] = args.toDate;
             }
             // const data = await res.find(query,
@@ -90,16 +90,16 @@ const loadExcel = {
             const data = await res.aggregate([
                 {$match: query},
                 {
-                    $project: {_id: 0, accepted: 0,courierChanged: 0, oldPayed: 0, counted: 0}
-                    }]).toArray()
+                    $project: {_id: 0, accepted: 0, courierChanged: 0, oldPayed: 0, counted: 0}
+                }]).toArray()
 
             const filePath = './middleWares/excel-from-js.xlsx';
             try {
                 fs.unlinkSync(path.resolve(filePath))
-            }catch (e) {
+            } catch (e) {
                 console.log(e)
             }
-             loadFile(data)
+            loadFile(data)
             db.close();
             return true;
         })
@@ -120,7 +120,7 @@ const dataList = {
         toDate: {type: GraphQLString},
     },
     resolve: (parent, args, response) => {
-        return pageData().then(async ({res,db}) => {
+        return pageData().then(async ({res, db}) => {
                 const token = response.headers.token;
                 let query = {};
                 if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin'
@@ -181,15 +181,15 @@ const dataList = {
                     if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'delivery') {
                         if (args.status === 'ასაღები' || args.status === 'აღებული') {
                             if (args.status === 'აღებული') {
-                                if(query['$or']){
+                                if (query['$or']) {
                                     // query['$or'].push([{status: 'აღებული'},{status: 'ჩაბარებული'}])
                                     const or = query.$or;
                                     delete query.$or;
                                     query.$and = [
                                         {$or: or},
-                                        {$or : [{status: 'აღებული'},{status: 'ჩაბარებული'}]}
+                                        {$or: [{status: 'აღებული'}, {status: 'ჩაბარებული'}]}
                                     ]
-                                }else {
+                                } else {
                                     query['$or'] = [
                                         {status: 'აღებული'},
                                         {status: 'ჩაბარებული'}]
@@ -205,6 +205,8 @@ const dataList = {
                 if (args.status === 'ჩასაბარებელი') {
                     let data = await res.aggregate([
                         {$match: {...query, status: 'აღებული'}},
+                        {$skip: args.skip || 0},
+                        {$limit: args.limit || 20},
                         {
                             $project: {
                                 status: {
@@ -239,7 +241,7 @@ const dataList = {
                                 payed: 1,
                             }
                         },
-                        {$sort: {deliveryDate: 1,deliveryAddress: 1}}
+                        {$sort: {deliveryDate: 1, deliveryAddress: 1}}
                     ]).toArray()
                     db.close();
                     return data;
@@ -255,8 +257,8 @@ const dataList = {
 
                 const data = await res.find(query).sort(sortQuery).skip(args.skip || 0).limit(args.limit || 20)
                     .toArray()
-                    db.close();
-                    return data;
+                db.close();
+                return data;
 
             }
         )
@@ -286,7 +288,10 @@ const handleAccept = {
                     `კურიერმა - ${jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).name} გააუქმა შეკვეთა N:${args.id}`);
             }
 
-            return  pageData().then(({res, db}) => res.updateOne({id: args.id}, {$set: updated},{safe: true}).then(() => {
+            return pageData().then(({
+                                        res,
+                                        db
+                                    }) => res.updateOne({id: args.id}, {$set: updated}, {safe: true}).then(() => {
                 db.close();
                 return true
             }));
@@ -321,18 +326,18 @@ const cancelOrder = {
             data.accepted = false;
             sendNotificationToAdmin('!!! კურიერმა გააუქმა შეკვეთა',
                 `კურიერმა - ${jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).name} გააუქმა შეკვეთა N:${args.id}`);
-            return pageData().then(({res,db}) => res.updateOne(query, {$set: data},{safe:true}).then(() => {
+            return pageData().then(({res, db}) => res.updateOne(query, {$set: data}, {safe: true}).then(() => {
                 db.close();
                 return true
             }));
         }
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'admin') {
-            return pageData().then(async ({res,db}) => {
-                await res.updateOne(query,{$set: {status: 'გაუქმებულია'}}, {safe: true}).then(() => {
+            return pageData().then(async ({res, db}) => {
+                await res.updateOne(query, {$set: {status: 'გაუქმებულია'}}, {safe: true}).then(() => {
                     sendNotificationToClient(args.client,
                         `შეკვეთა გაუქმდა!`,
-                            `თქვენი შეკვეთა N: ${args.id} გაუქმებულია დამატებითი ინფორმაციისთვის მოგვმართეთ.`
-                        );
+                        `თქვენი შეკვეთა N: ${args.id} გაუქმებულია დამატებითი ინფორმაციისთვის მოგვმართეთ.`
+                    );
                     db.close();
                     handlePay(args, 'plus')
                     return true
@@ -372,16 +377,16 @@ const addData = {
     resolve: (parent, args, response) => {
         const token = response.headers.token;
         let data = args;
-        return pageData().then(({res,db}) => {
+        return pageData().then(({res, db}) => {
             let id = '';
             return res.find().toArray().then(async (arr) => {
                 if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'admin' && args.id) {
                     if (args.courierChanged) {
                         data.accepted = false;
                         sendNotificationToCourier(args[args.courierChanged],
-                                `ახალი შეკვეთა`,
+                            `ახალი შეკვეთა`,
                             `თქვენს სახელზე დაემატა ახალი შეკვეთა.`
-                            );
+                        );
                     }
                     if (args.status === 'ჩაბარებული') {
                         sendNotificationToClient(args.client,
@@ -389,13 +394,13 @@ const addData = {
                             `თქვენი შეკვეთა N: ${args.id} ჩაბარებულია, მადლობა ნდობისთვის .`
                         );
                     }
-                    if (args.status !== args.oldStatus){
+                    if (args.status !== args.oldStatus) {
                         await handleBudget(args, true);
                     }
-                    if(args.price !== args.oldPrice){
+                    if (args.price !== args.oldPrice) {
                         await handlePay({...args, price: (args.oldPrice - args.price)}, 'plus')
                     }
-                    if( args.status === 'გაუქმებულია' && args.status !== args.oldStatus){
+                    if (args.status === 'გაუქმებულია' && args.status !== args.oldStatus) {
                         sendNotificationToClient(args.client,
                             `შეკვეთა გაუქმდა!`,
                             `თქვენი შეკვეთა N: ${args.id} გაუქმებულია დამატებითი ინფორმაციისთვის მოგვმართეთ.`
@@ -428,11 +433,10 @@ const addData = {
                             `თქვენი შეკვეთა N: ${args.id} ჩაბარებულია, მადლობა ნდობისთვის .`
                         );
                     }
-
                     if (args.status === 'აღებული' || args.status === 'ჩაბარებული') {
                         handleBudget(args);
                     }
-                    return res.updateOne({id: args.id}, {$set: data},{safe: true}).then(() => {
+                    return res.updateOne({id: args.id}, {$set: data}, {safe: true}).then(() => {
                         db.close();
                         return true;
                     });
@@ -441,9 +445,9 @@ const addData = {
                     db.close();
                     return false;
                 }
-                if(args.service ==='ექსპრესი') {
+                if (args.service === 'ექსპრესი') {
                     const dt = new Date();
-                    if(dt.getHours() > 13) {
+                    if (dt.getHours() > 13) {
                         db.close();
                         return false;
                     }
@@ -452,7 +456,7 @@ const addData = {
                 id = Math.random().toString(10).substring(12);
                 data.id = id;
                 data.status = 'განხილვაშია';
-                const user = await userData().then(async ({res,db}) => {
+                const user = await userData().then(async ({res, db}) => {
                     const user = await res.findOne({
                             _id: ObjectId(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).id)
                         },
@@ -482,34 +486,40 @@ const addData = {
     }
 }
 
-const handleBudget = async (args, check=false) => {
+const handleBudget = async (args, check = false) => {
     let minus = false;
-    if(check){
-        if(args.status === 'ასაღები'){
-            if(args.oldStatus !== 'აღებული' && args.oldStatus !== 'ჩასაბარებელი') return;
+    if (check) {
+        if (args.status === 'ასაღები') {
+            if (args.oldStatus !== 'აღებული' && args.oldStatus !== 'ჩასაბარებელი') return;
             minus = true;
         }
-        if(args.status === 'აღებული' && args.oldStatus === 'ჩაბარებული')minus = true;
+        if (args.status === 'აღებული' && args.oldStatus === 'ჩაბარებული') minus = true;
     }
     let rate = args.status === 'აღებული' ? 'takeRate' : 'delivery';
-    if(minus) rate = args.status === 'აღებული' ? 'delivery' : 'takeRate';
+    if (minus) rate = args.status === 'აღებული' ? 'delivery' : 'takeRate';
     let courierType = args.status === 'აღებული' ? 'takeCourier' : 'deliveryCourier';
-    if(minus) courierType = args.status === 'აღებული' ? 'deliveryCourier' : 'takeCourier';
+    if (minus) courierType = args.status === 'აღებული' ? 'deliveryCourier' : 'takeCourier';
     let item = {};
-
-    await userData().then(async ({res,db}) => {
+    await pageData().then(async ({res: data,db}) => {
+        item = await data.findOne({id: args.id});
+        db.close()
+    })
+    await userData().then(async ({res, db}) => {
         const user = await res.findOne({email: item[courierType]})
-        if(!user) {
+        if (!user) {
             db.close();
             return;
         }
         const budgetList = user.budgetList || [];
         const newRate = user.rates[rate];
+
         const obj = {date: getNewDate(), budget: newRate, id: args.id, status: args.status};
-        if(minus) obj.budget = obj.budget * -1;
+        if (minus) obj.budget = obj.budget * -1;
         budgetList.push(obj);
         let newBudget = (parseFloat(user.budget) + parseFloat(newRate)).toFixed(2);
-        if(minus) newBudget = (parseFloat(user.budget) - parseFloat(newRate)).toFixed(2);
+        if (minus) newBudget = (parseFloat(user.budget) - parseFloat(newRate)).toFixed(2);
+        console.log(newBudget, 'gvanca')
+        // console.log(budgetList, 'list')
         res.updateOne({email: item[courierType]},
             {
                 $set:
@@ -518,14 +528,14 @@ const handleBudget = async (args, check=false) => {
                         budget: newBudget,
                         // budget: 0,
                     }
-            },{safe:true}
-        ).then(()=> db.close())
+            }, {safe: true}
+        ).then(() => db.close())
     })
 
 }
 
 const handlePay = async (args, type) => {
-    await userData().then(async ({res,db}) => {
+    await userData().then(async ({res, db}) => {
         const user = await res.findOne({email: args.client})
         let newVal = 0;
         if (type === 'minus') {
@@ -537,7 +547,7 @@ const handlePay = async (args, type) => {
             $set: {
                 budget: (newVal).toFixed(2)
             }
-        },{safe: true}).then(()=> db.close())
+        }, {safe: true}).then(() => db.close())
     })
 }
 
@@ -557,7 +567,6 @@ const getNewDate = () => {
     const day = date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate();
     return year + '-' + month + '-' + day;
 }
-
 
 
 // //
@@ -589,7 +598,7 @@ const getDetails = {
         id: {type: GraphQLNonNull(GraphQLString)}
     },
     resolve: (parent, args) => {
-        return pageData().then(async ({res,db}) => {
+        return pageData().then(async ({res, db}) => {
             const data = await res.findOne({id: args.id});
             db.close();
             return data;
@@ -603,7 +612,7 @@ const dayReport = {
         const token = response.headers.token;
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return '';
 
-        const {res,db} = await pageData();
+        const {res, db} = await pageData();
         const query = {registerDate: getNewDate()}
         let length = 0;
         let income = 0;
@@ -636,7 +645,7 @@ const sendNotificationToClient = (client, title, text) => {
     sendEmail(client, title, title, text);
 }
 
-const sendEmail = (receiver, subject, title, text)=> {
+const sendEmail = (receiver, subject, title, text) => {
     let transporter = nodemailer.createTransport({
         service: 'zoho',
         auth: {
@@ -693,4 +702,4 @@ text-decoration: none;
     });
 }
 
-module.exports = ({dataList, getForAccept, addData, cancelOrder, getDetails, handleAccept, dayReport,loadExcel});
+module.exports = ({dataList, getForAccept, addData, cancelOrder, getDetails, handleAccept, dayReport, loadExcel});

@@ -119,7 +119,9 @@ const setBudget = {
         }
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
         return userData().then(async ({res, db}) => {
-            const budget = await res.findOne(query, {projection: {_id: 0, budget: 1}})
+            const budget = await res.findOne(query, {projection: {_id: 0, budget: 1}}) || {}
+            if(!budget || !budget.budget) budget.budget = 0;
+            if(!args.budget) args.budget = 0;
             await res.updateOne(query,
                 {$set: {budget: parseFloat(budget.budget) + parseFloat(args.budget)}},
                 {safe: true});
@@ -391,7 +393,6 @@ const checkToken = async (channel, token) => {
         })
         // req.then(r=> console.log(r))
     }
-    console.log(ret);
     return ret;
 }
 
