@@ -456,10 +456,12 @@ const addData = {
                 id = Math.random().toString(10).substring(12);
                 data.id = id;
                 data.status = 'განხილვაშია';
+                const query = {};
+                if (!args.client) {
+                    query._id = ObjectId(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).id)
+                } else query.email = args.client;
                 const user = await userData().then(async ({res, db}) => {
-                    const user = await res.findOne({
-                            _id: ObjectId(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).id)
-                        },
+                    const user = await res.findOne(query,
                         {
                             projection: {_id: 0, rates: 1}
                         });
@@ -500,7 +502,7 @@ const handleBudget = async (args, check = false) => {
     let courierType = args.status === 'აღებული' ? 'takeCourier' : 'deliveryCourier';
     if (minus) courierType = args.status === 'აღებული' ? 'deliveryCourier' : 'takeCourier';
     let item = {};
-    await pageData().then(async ({res: data,db}) => {
+    await pageData().then(async ({res: data, db}) => {
         item = await data.findOne({id: args.id});
         db.close()
     })
