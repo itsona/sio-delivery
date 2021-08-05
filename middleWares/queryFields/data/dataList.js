@@ -377,118 +377,118 @@ const addData = {
     resolve: (parent, args, response) => {
         const token = response.headers.token;
         let data = args;
-        return pageData().then(({res, db}) => {
+        return pageData().then(async ({res, db}) => {
             let id = '';
-            return res.find().toArray().then(async (arr) => {
-                if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'admin' && args.id) {
-                    if (args.courierChanged) {
-                        data.accepted = false;
-                        sendNotificationToCourier(args[args.courierChanged],
-                            `ახალი შეკვეთა`,
-                            `თქვენს სახელზე დაემატა ახალი შეკვეთა.`
-                        );
-                    }
-                    if (args.status === 'ჩაბარებული') {
-                        sendNotificationToClient(args.client,
-                            `შეკვეთა ჩაბარებულია!`,
-                            `თქვენი შეკვეთა N: ${args.id} ჩაბარებულია, მადლობა ნდობისთვის .`
-                        );
-                    }
-                    if (args.status !== args.oldStatus) {
-                        await handleBudget(args, true);
-                    }
-                    if (args.price !== args.oldPrice) {
-                        await handlePay({...args, price: (args.oldPrice - args.price)}, 'plus')
-                    }
-                    if (args.status === 'გაუქმებულია' && args.status !== args.oldStatus) {
-                        sendNotificationToClient(args.client,
-                            `შეკვეთა გაუქმდა!`,
-                            `თქვენი შეკვეთა N: ${args.id} გაუქმებულია დამატებითი ინფორმაციისთვის მოგვმართეთ.`
-                        );
-                        handlePay(args, 'plus')
-                    }
-                    if (args.payed && !args.oldPayed) {
-                        await handlePay(args, 'plus');
-                        data.payDate = getNewDate();
-                    } else if (!args.payed && args.oldPayed) {
-                        await handlePay(args, 'minus');
-                    }
-                    // res.findOne({email: jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).email}).then((r) => console.log(r))
-                    return res.updateOne({id: args.id}, {$set: data}, {safe: true}).then(() => {
-                        db.close();
-                        return true;
-                    });
+            if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'admin' && args.id) {
+                if (args.courierChanged) {
+                    data.accepted = false;
+                    sendNotificationToCourier(args[args.courierChanged],
+                        `ახალი შეკვეთა`,
+                        `თქვენს სახელზე დაემატა ახალი შეკვეთა.`
+                    );
                 }
-                if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'delivery' && args.id) {
-                    data = {status: args.status};
-                    if (args.deliveryCourier || args.takeCourier) {
-                        if (args.courierChanged) {
-                            data.accepted = false;
-                            data[args.courierChanged] = args[args.courierChanged];
-                        }
-                    }
-                    if (args.status === 'ჩაბარებული') {
-                        sendNotificationToClient(args.client,
-                            `შეკვეთა ჩაბარებულია!`,
-                            `თქვენი შეკვეთა N: ${args.id} ჩაბარებულია, მადლობა ნდობისთვის .`
-                        );
-                    }
-                    if (args.status === 'აღებული' || args.status === 'ჩაბარებული') {
-                        handleBudget(args);
-                    }
-                    return res.updateOne({id: args.id}, {$set: data}, {safe: true}).then(() => {
-                        db.close();
-                        return true;
-                    });
+                if (args.status === 'ჩაბარებული') {
+                    sendNotificationToClient(args.client,
+                        `შეკვეთა ჩაბარებულია!`,
+                        `თქვენი შეკვეთა N: ${args.id} ჩაბარებულია, მადლობა ნდობისთვის .`
+                    );
                 }
-                if (args.id) {
-                    db.close();
-                    return false;
+                if (args.status !== args.oldStatus) {
+                    await handleBudget(args, true);
                 }
-                if (args.service === 'ექსპრესი') {
-                    const dt = new Date();
-                    if (dt.getHours() > 13) {
-                        db.close();
-                        return false;
-                    }
+                if (args.price !== args.oldPrice) {
+                    await handlePay({...args, price: (args.oldPrice - args.price)}, 'plus')
                 }
-                data.registerDate = getNewDate();
-                id = Math.random().toString(10).substring(12);
-                data.id = id;
-                data.status = 'განხილვაშია';
-                const query = {};
-                if (!args.client) {
-                    query._id = ObjectId(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).id)
-                } else query.email = args.client;
-                const user = await userData().then(async ({res, db}) => {
-                    const user = await res.findOne(query,
-                        {
-                            projection: {_id: 0, rates: 1}
-                        });
-                    db.close();
-                    return user;
-                })
-                data.price = getRate(args.service, user.rates);
-                if (!args.client) {
-                    data.client = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).email;
-                    data.clientName = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).name;
+                if (args.status === 'გაუქმებულია' && args.status !== args.oldStatus) {
+                    sendNotificationToClient(args.client,
+                        `შეკვეთა გაუქმდა!`,
+                        `თქვენი შეკვეთა N: ${args.id} გაუქმებულია დამატებითი ინფორმაციისთვის მოგვმართეთ.`
+                    );
+                    handlePay(args, 'plus')
                 }
-                return res.insertOne(data, {safe: true}).then(() => {
-                    sendNotificationToAdmin(`ახალი ${args.service} შეკვეთა`,
-                        `კლიენტმა - ${data.clientName} დაამატა ${args.service} შეკვეთა`);
-                    handlePay(data, 'minus')
+                if (args.payed && !args.oldPayed) {
+                    await handlePay(args, 'plus');
+                    data.payDate = getNewDate();
+                } else if (!args.payed && args.oldPayed) {
+                    await handlePay(args, 'minus');
+                }
+                // res.findOne({email: jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).email}).then((r) => console.log(r))
+                return res.updateOne({id: args.id}, {$set: data}, {safe: true}).then(() => {
                     db.close();
                     return true;
-                }).catch(() => {
+                });
+            }
+            if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'delivery' && args.id) {
+                data = {status: args.status};
+                console.log(args, 'შიგნით')
+                if (args.deliveryCourier || args.takeCourier) {
+                    if (args.courierChanged) {
+                        data.accepted = false;
+                        data[args.courierChanged] = args[args.courierChanged];
+                    }
+                }
+                if (args.status === 'ჩაბარებული') {
+                    sendNotificationToClient(args.client,
+                        `შეკვეთა ჩაბარებულია!`,
+                        `თქვენი შეკვეთა N: ${args.id} ჩაბარებულია, მადლობა ნდობისთვის .`
+                    );
+                }
+                if (args.status === 'აღებული' || args.status === 'ჩაბარებული') {
+                    handleBudget(args);
+                }
+                return res.updateOne({id: args.id}, {$set: data}, {safe: true}).then(() => {
+                    db.close();
+                    return true;
+                });
+            }
+            if (args.id) {
+                db.close();
+                return false;
+            }
+            if (args.service === 'ექსპრესი') {
+                const dt = new Date();
+                if (dt.getHours() > 13) {
                     db.close();
                     return false;
-                });
+                }
+            }
+            data.registerDate = getNewDate();
+            id = Math.random().toString(10).substring(12);
+            data.id = id;
+            data.status = 'განხილვაშია';
+            const query = {};
+            if (!args.client) {
+                query._id = ObjectId(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).id)
+            } else query.email = args.client;
+            const user = await userData().then(async ({res, db}) => {
+                const user = await res.findOne(query,
+                    {
+                        projection: {_id: 0, rates: 1}
+                    });
+                db.close();
+                return user;
+            })
+            data.price = getRate(args.service, user.rates);
+            if (!args.client) {
+                data.client = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).email;
+                data.clientName = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).name;
+            }
+            return res.insertOne(data, {safe: true}).then(() => {
+                sendNotificationToAdmin(`ახალი ${args.service} შეკვეთა`,
+                    `კლიენტმა - ${data.clientName} დაამატა ${args.service} შეკვეთა`);
+                handlePay(data, 'minus')
+                db.close();
+                return true;
+            }).catch(() => {
+                db.close();
+                return false;
             });
         })
     }
 }
 
 const handleBudget = async (args, check = false) => {
+    console.log(args, 'handler')
     let minus = false;
     if (check) {
         if (args.status === 'ასაღები') {
@@ -647,7 +647,7 @@ const sendNotificationToClient = (client, title, text) => {
     sendEmail(client, title, title, text);
 }
 
-const sendEmail = (receiver, subject, title, text) => {
+const sendEmail = (receiver, subject, title, text, href = 'https://siodelivery.ge/login') => {
     let transporter = nodemailer.createTransport({
         service: 'zoho',
         auth: {
@@ -673,7 +673,7 @@ src="https://siodelivery.ge/Z-Frontend/images/logo.png">
     display: flex;
     align-items: center;
     justify-content: center;
-"><a href="https://siodelivery.ge/login"
+"><a href="${href}"
  target="_blank" style="
 text-decoration: none;
     background: blue;
@@ -704,4 +704,14 @@ text-decoration: none;
     });
 }
 
-module.exports = ({dataList, getForAccept, addData, cancelOrder, getDetails, handleAccept, dayReport, loadExcel});
+module.exports = ({
+    dataList,
+    getForAccept,
+    addData,
+    cancelOrder,
+    getDetails,
+    handleAccept,
+    dayReport,
+    loadExcel,
+    sendEmail
+});

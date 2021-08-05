@@ -15,6 +15,7 @@ const {
 
 const userData = require('../../authentication').userData;
 const emailData = require('../../authentication').emailData;
+const sendEmail = require('../data/dataList').sendEmail;
 const UserType = new GraphQLObjectType({
     name: 'User',
     description: 'User from UsersList',
@@ -258,24 +259,55 @@ const loadBudget = {
         })
     }
 }
+
+
+const resetPassword = {
+    type: GraphQLString,
+    args: {
+        email: {type: GraphQLNonNull(GraphQLString)}
+    },
+    resolve: (parent, args) => {
+        return emailData().then(({res,db}) => {
+            return res.countDocuments({email: args.email}).then(contains => {
+
+                db.close();
+                if (contains) {
+                    const tok = jwt.sign({email: args.email}, process.env.ACCESS_TOKEN_SECRET);
+                    const href= 'https://siodelivery.ge/reset?'+tok
+                    sendEmail(
+                        args.email,
+                        'პაროლის აღდგენა',
+                        'პაროლის აღდგენა',
+                        'პაროლის აღსადგენად დააჭირეთ სისტემაში შესვ{ლას',
+                         href );
+                    return 'success'
+                } else {
+                    return 'no-email';
+                }
+            })
+        })
+
+    }
+}
+
 const recoveryPassword = {
     type: GraphQLString,
     description: 'exchange password',
     args: {
-        password: {type: GraphQLNonNull(GraphQLString)}
+        password: {type: GraphQLNonNull(GraphQLString)},
+        token: {type: GraphQLNonNull(GraphQLString)}
     },
     resolve: (parent, args, request) => {
-        const token = request.headers.token;
         return userData().then(({res, db}) => {
             async function getUser() {
-                let user = await res.updateOne({email: jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).email},
+                let user = await res.updateOne({email: jwt.verify(args.token, process.env.ACCESS_TOKEN_SECRET).email},
                     {$set: {password: args.password}},
                     {safe: true});
                 db.close();
                 if (user != null) {
-                    return user;
+                    return 'success';
                 }
-                return {};
+                return 'failed';
             }
 
             return getUser();
@@ -472,4 +504,5 @@ module.exports = ({
     setBudget,
     setRates,
     FbLogin,
+    resetPassword
 });

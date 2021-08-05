@@ -7,6 +7,7 @@ import './modules/new/cupio-details';
 import './modules/landing/cupio-landing';
 import './modules/authentication/cupio-company-registration';
 import './modules/authentication/cupio-authorization';
+import './modules/authentication/cupio-reset';
 const outlet = document.getElementById('outlet');
 const router = new Router(outlet);
 router.setRoutes([
@@ -19,5 +20,6 @@ router.setRoutes([
     {path: '/companyDetails', component: 'cupio-company-registration'},
     {path: '/login', component: 'cupio-authorization'},
     {path: '/register', component: 'cupio-authorization'},
+    {path: '/reset', component: 'cupio-reset'},
     {path: '(.*)', component: 'cupio-landing'},
 ]);

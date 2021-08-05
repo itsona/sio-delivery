@@ -396,7 +396,7 @@ class CupioDrawer extends LitElement {
                 client: "${clientEmail ||  ''}",
                 status: "${this.newItem.status || ''}",
                 oldStatus: "${this.item.status || ''}",
-                oldPrice: ${this.item.price || ''},
+                oldPrice: ${this.item.price || 0},
                 takeCourier: "${this.newItem.takeCourier || ''}",
                 deliveryCourier: "${this.newItem.deliveryCourier || ''}",
                 takeDate: "${this.newItem.takeDate || ''}",
@@ -425,7 +425,9 @@ class CupioDrawer extends LitElement {
               price: ${this.item.price || 0}
               )
         }`
-        graphqlPost(gql).then()
+        graphqlPost(gql).then(()=> {
+            window.location.reload();
+        })
             .catch(r=> console.warn(r));
     }
 }

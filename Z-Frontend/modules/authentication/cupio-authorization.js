@@ -189,6 +189,12 @@ class CupioAuthorization extends LitElement {
                                 class="contact login"
                                 href="/${this.isReg ? 'login' : 'register'}">
                             ${this.isReg ? 'უკვე მაქვს ანგარიში' : 'რეგისტრაცია'}</a>
+                        <a
+                                class="contact login"
+                                href="/reset"
+                                target="_blank"
+                        >
+                            პაროლის აღდგენა</a>
                     </div>
                     <div class="additionals">
                         <span id="facebook" @click="${this.statusChangeCallback}">
