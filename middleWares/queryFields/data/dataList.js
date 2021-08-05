@@ -420,7 +420,6 @@ const addData = {
             }
             if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'delivery' && args.id) {
                 data = {status: args.status};
-                console.log(args, 'შიგნით')
                 if (args.deliveryCourier || args.takeCourier) {
                     if (args.courierChanged) {
                         data.accepted = false;
@@ -488,7 +487,6 @@ const addData = {
 }
 
 const handleBudget = async (args, check = false) => {
-    console.log(args, 'handler')
     let minus = false;
     if (check) {
         if (args.status === 'ასაღები') {
@@ -520,8 +518,6 @@ const handleBudget = async (args, check = false) => {
         budgetList.push(obj);
         let newBudget = (parseFloat(user.budget) + parseFloat(newRate)).toFixed(2);
         if (minus) newBudget = (parseFloat(user.budget) - parseFloat(newRate)).toFixed(2);
-        console.log(newBudget, 'gvanca')
-        // console.log(budgetList, 'list')
         res.updateOne({email: item[courierType]},
             {
                 $set:
