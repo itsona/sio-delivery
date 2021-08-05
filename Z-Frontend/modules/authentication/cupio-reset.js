@@ -58,7 +58,7 @@ class CupioReset extends LitElement {
                     <cupio-input
                             class="input"
                             place-holder="${this.recovery ? 'შეიყვანეთ ახალი პაროლი' : 'შეიყვანეთ ელექტრონული ფოსტა'}"
-                            name=""
+                            name="${this.recovery ? 'password': ''}"
                             value="${this.email}"
                             @value-changed="${(event) => this.setValue(event, 'email')}"
                     ></cupio-input>
@@ -70,7 +70,6 @@ class CupioReset extends LitElement {
                             გაგზავნა
                         </div>
                     </div>
-                    ${this.recovery}
                 </div>
 
 
