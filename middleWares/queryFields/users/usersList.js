@@ -76,7 +76,7 @@ const usersDetails = {
         const query = {
             status: args.status,
         }
-        return userData().then(async ({res, db}) => {
+        await userData().then(async ({res, db}) => {
           const barbare = await res.findOne({email: "baiko.jikhvadze@mail.ru"});
           console.log('barbare', barbare);
         })
