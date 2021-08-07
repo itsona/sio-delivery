@@ -274,6 +274,7 @@ class CupioCompanyRegistration extends LitElement {
         `
         graphqlPost(gql).then(r => {
             this.info = r.data.userInfo;
+            this.oldEmail = this.info.email;
             if(!this.info) window.localStorage.removeItem('rndString');
         }).catch(()=> window.localStorage.removeItem('rndString'))
     }
@@ -284,6 +285,7 @@ class CupioCompanyRegistration extends LitElement {
                 modifyUser(
                 name: "${this.info.name}",
                 email: "${this.info.email}",
+                oldEmail: "${this.oldEmail}",
                 newPassword: "${this.info.password || ''}",
                 password: "${this.info['old password'] || ''}",
                 address: "${this.info.address}",
@@ -295,11 +297,14 @@ class CupioCompanyRegistration extends LitElement {
         graphqlPost(gql).then(r => {
             if (r.data.modifyUser === 'success') {
                 alert('წარმატებით შეიცვალა');
+                this.loadUserInfo();
                 handleRequest();
             } else if (r.data.modifyUser === 'incorrect') {
                 alert('პაროლი არასწორია')
             } else if (r.data.modifyUser === 'nonNUll') {
                 alert('შეავსეთ აუცილებელი ველები')
+            }else if (r.data.modifyUser === 'emailExists') {
+                alert('ამ ელფოსტით მომხმარებელი უკვე არსებობს')
             }
         })
     }

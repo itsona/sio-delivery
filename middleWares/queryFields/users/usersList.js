@@ -433,6 +433,7 @@ const modifyUser = {
     args: {
         name: {type: GraphQLNonNull(GraphQLString)},
         email: {type: GraphQLNonNull(GraphQLString)},
+        oldEmail: {type: GraphQLString},
         password: {type: GraphQLString},
         newPassword: {type: GraphQLString},
         budget: {type: GraphQLFloat},
@@ -473,6 +474,19 @@ const modifyUser = {
                     args.password = args.newPassword;
                     delete args.newPassword;
                 }
+                let emailExists = false;
+                if(args.email !== args.oldEmail){
+                    await emailData().then(async ({res, db}) => {
+                        await res.countDocuments({email: args.email}).then(async contains => {
+                            if (!contains) {
+                                await res.insertOne({email: args.email}, {safe: true})
+                                await res.deleteOne({email: args.email}, {safe: true}).then(r=> {
+                                })
+                            }else emailExists = true;
+                        })
+                    })
+                }
+                if(emailExists) return 'emailExists';
                 if (!args.password) args.password = user.password;
                 if (!user.status) args.status = 'client';
                 else args.status = user.status;
