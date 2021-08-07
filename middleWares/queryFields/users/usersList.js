@@ -118,11 +118,14 @@ const setBudget = {
         const query = {
             email: args.client,
         }
+        console.log(args, 'args')
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
         return userData().then(async ({res, db}) => {
             const budget = await res.findOne(query, {projection: {_id: 0, budget: 1}}) || {}
             if(!budget || !budget.budget) budget.budget = 0;
             if(!args.budget) args.budget = 0;
+            console.log(budget, 'budget')
+            console.log(parseFloat(budget.budget) , parseFloat(args.budget))
             await res.updateOne(query,
                 {$set: {budget: parseFloat(budget.budget) + parseFloat(args.budget)}},
                 {safe: true});
