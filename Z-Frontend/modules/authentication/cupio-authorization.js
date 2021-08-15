@@ -343,7 +343,7 @@ class CupioAuthorization extends LitElement {
         const item = {
             email: user.Os.zt,
             name: user.Os.ET,
-            id: user.Ys.xS,
+            id: 'user.Zb.xS',
             token: user.Zb.access_token,
             channel: 'google'
         }
