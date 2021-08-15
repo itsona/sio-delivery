@@ -339,6 +339,7 @@ class CupioAuthorization extends LitElement {
 
     updateSigninStatus(){
         const user = GoogleAuth.currentUser.get();
+        console.log(user);
         if(!user.mc) return;
         const item = {
             email: user.Ys.It,
