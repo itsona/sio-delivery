@@ -7,7 +7,7 @@ app.use(cors());
 app.use('/api',
     expressGraphQL({
         schema: schema,
-        graphiql: true
+        graphiql: false
     })
 )
 
