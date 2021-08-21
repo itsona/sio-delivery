@@ -14,6 +14,7 @@ const {
 } = require('graphql');
 
 const userData = require('../../authentication').userData;
+const pageData = require('../../authentication').pageData;
 const emailData = require('../../authentication').emailData;
 const sendEmail = require('../data/dataList').sendEmail;
 const UserType = new GraphQLObjectType({
@@ -479,8 +480,9 @@ const modifyUser = {
                     await emailData().then(async ({res, db}) => {
                         await res.countDocuments({email: args.email}).then(async contains => {
                             if (!contains) {
+                                handleEmailChange(args.email, args.oldEmail)
                                 await res.insertOne({email: args.email}, {safe: true})
-                                await res.deleteOne({email: args.email}, {safe: true}).then(r=> {
+                                await res.deleteOne({email: args.oldEmail}, {safe: true}).then(r=> {
                                 })
                             }else emailExists = true;
                         })
@@ -502,6 +504,13 @@ const modifyUser = {
             return updateUser();
         });
     }
+}
+
+const handleEmailChange = async (email, oldEmail)=> {
+    pageData().then(async ({res, db}) => {
+      await res.updateMany({client: oldEmail}, {$set: {client: email}}, {safe: true});
+      db.close();
+    })
 }
 
 
