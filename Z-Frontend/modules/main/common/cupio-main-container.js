@@ -148,6 +148,7 @@ class CupioMainContainer extends LitElement {
                             .menu="${this.menu}"
                             .items="${this.items}"
                             .status="${this.status}"
+                            @updated="${this.drawerUpdated}""
                     ></cupio-main-table>
 
                 ` : ''}
@@ -155,7 +156,7 @@ class CupioMainContainer extends LitElement {
                     ${this.items.map((item) => html`
                         <cupio-delivery-item
                                 .item="${item}"
-                                @click="${() => this.drawerToggle(item)}""
+                                @click="${() => this.drawerToggle(item)}"
                         ></cupio-delivery-item>
                     `)}
                 </div>
@@ -275,11 +276,16 @@ class CupioMainContainer extends LitElement {
         }
     }
 
-    drawerToggle(item) {
-        if (!this.delivery) return;
+    drawerUpdated(){
+        this.dispatchEvent(new CustomEvent('need-to-change',{bubbles: true, composed: true}));
+    }
 
-        if (!this.drawerOpened) this.shadowRoot.querySelector('#drawer').item = item;
-        this.drawerOpened = !this.drawerOpened;
+    loadAfterChange() {
+        const additional = this.loadedLength - (this.items.length % this.loadedLength || this.loadedLength);
+        this.limit = this.items.length + additional;
+        this.skip = 0;
+        this.needReload = true;
+        this.loadData();
     }
 
 
@@ -391,6 +397,17 @@ class CupioMainContainer extends LitElement {
                 this.items = [...this.items, ...data];
             } else {
                 this.items = data;
+                if(this.needReload) {
+                    this.skip = this.items.length;
+                    this.limit = this.loadedLength;
+                    this.needReload = false;
+                    this.loading = false;
+                    if(data.length % this.loadedLength) {
+                        this.shouldLoadMore = false;
+                    }
+                    else this.shouldLoadMore = true;
+                    return;
+                }
             }
             this.loading = false;
             if (data.length >= this.loadedLength) {

@@ -112,6 +112,7 @@ class CupioMainTable extends LitElement {
                     ?opened="${this.drawerOpened}"
                     @closed="${this.drawerToggle}"
                     @click="${this.drawerToggle}"
+                    @updated="${this.drawerUpdated}"
             ></cupio-drawer>
         `
     }
@@ -151,9 +152,17 @@ class CupioMainTable extends LitElement {
         return 'grey'
     }
 
+    drawerUpdated(){
+        this.drawerToggle();
+        this.dispatchEvent(new CustomEvent('updated'));
+    }
+
     drawerToggle(item, key) {
         if (!this.delivery || key === 'phone' || key === 'deliveryPhone') return;
-        if (!this.drawerOpened) this.shadowRoot.querySelector('#drawer').item = item;
+        if (!this.drawerOpened) {
+            this.shadowRoot.querySelector('#drawer').item = item;
+            this.shadowRoot.querySelector('#drawer').cantSave = false;
+        }
         this.drawerOpened = !this.drawerOpened;
     }
 

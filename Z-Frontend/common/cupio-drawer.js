@@ -289,8 +289,9 @@ class CupioDrawer extends LitElement {
         this.loadCouriers();
     }
 
-    drawerClose() {
-        this.dispatchEvent(new CustomEvent('closed'));
+    drawerClose(event = 'closed') {
+        this.item = {};
+        this.dispatchEvent(new CustomEvent(event));
     }
 
     updated(_changedProperties) {
@@ -411,7 +412,8 @@ class CupioDrawer extends LitElement {
             }`
 
         graphqlPost(gql).then(()=> {
-            window.location.reload();
+            // window.location.reload();
+            this.drawerClose('updated');
         })
             .catch(r=> console.warn(r) );
     }
@@ -426,7 +428,8 @@ class CupioDrawer extends LitElement {
               )
         }`
         graphqlPost(gql).then(()=> {
-            window.location.reload();
+            // window.location.reload();
+            this.drawerClose('updated');
         })
             .catch(r=> console.warn(r));
     }

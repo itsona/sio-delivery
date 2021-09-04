@@ -93,7 +93,6 @@ class CupioReset extends LitElement {
         }
         this.recovery = !!window.location.search;
         document.addEventListener('keydown', this.listener)
-        console.log(window.location.search)
         this.token = window.location.search.substr(1);
         if(this.recovery) this.email ='';
     }

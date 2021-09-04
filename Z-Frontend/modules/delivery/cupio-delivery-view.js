@@ -101,6 +101,7 @@ class CupioDeliveryView extends LitElement {
         return html`
             <div class="left" ?closed="${this.closed}">
                 <cupio-main-left
+                        id="left"
                         ?closed="${this.closed}"
                         delivery
                         @closed="${() => this.closed = true}"
@@ -122,7 +123,9 @@ class CupioDeliveryView extends LitElement {
                             class="category"
                             delivery
                             .searchValues="${this.searchValues}"
-                            status="${status}"></cupio-main-container>
+                            status="${status}"
+                            @need-to-change="${this.updateAllContainer}"
+                    ></cupio-main-container>
                 `)}
             </div>
 
@@ -171,6 +174,12 @@ class CupioDeliveryView extends LitElement {
         }
     }
 
+    updateAllContainer(){
+        const categories = this.shadowRoot.querySelectorAll('.category')
+        categories.forEach((category)=> category.loadAfterChange())
+        this.shadowRoot.querySelector('#left').loadBudget();
+    }
+
     loadExcel(){
         const gql =
             `        
@@ -182,9 +191,7 @@ class CupioDeliveryView extends LitElement {
                 )
                 }
             `
-        graphqlPost(gql).then((r) => {
-            console.log(r)
-        })
+        graphqlPost(gql).then()
     }
 
     searchWithWord(e) {
