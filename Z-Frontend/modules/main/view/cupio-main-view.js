@@ -132,12 +132,12 @@ class CupioMainView extends LitElement {
         this.searchValues = {};
         this.closed = true;
         this.loadClientInfo()
-        // if (!window.localStorage.getItem('rndString')) redirectTo('/login')
+        if (!window.localStorage.getItem('rndString')) redirectTo('/login')
         handleRequest(true);
     }
 
     logout() {
-        // window.localStorage.removeItem('rndString');
+        window.localStorage.removeItem('rndString');
         this.panel = false;
         location.reload();
     }
