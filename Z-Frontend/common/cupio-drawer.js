@@ -221,13 +221,15 @@ class CupioDrawer extends LitElement {
                             `)}
                         </select>
                     </div>
-                    <input 
-                            type="checkbox" 
-                            id="payed" 
-                            name="payed" 
-                            ?checked="${this.item.payed}"
-                            @change="${(event) => this.onValueChange({detail:!this.item.payed}, 'payed')}">
-                    <label for="payed"> გადახდილია</label><br>
+                    ${this.opened ? html`
+                        <input 
+                                type="checkbox" 
+                                id="payed" 
+                                name="payed" 
+                                ?checked="${this.item.payed}"
+                                @change="${(event) => this.onValueChange({detail:!this.item.payed}, 'payed')}">
+                        <label for="payed"> გადახდილია</label><br>
+                    `:''}
                     `:''}
                     <div class="buttons" >
                         <div
