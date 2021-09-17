@@ -379,6 +379,7 @@ const addData = {
         let data = args;
         return pageData().then(async ({res, db}) => {
             let id = '';
+            if (!jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status) return false;
             if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'admin' && args.id) {
                 if (args.courierChanged) {
                     data.accepted = false;

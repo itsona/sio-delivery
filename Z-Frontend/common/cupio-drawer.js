@@ -151,7 +151,7 @@ class CupioDrawer extends LitElement {
                 </span>
                 <div class="content">
                     <div class="item">
-                        <span class="title">სტატუსი: ${this.item.status}</span>
+                        <span class="title">სტატუსი: ${this.getStatus(this.item.status)}</span>
                         ${this.item.status === 'განხილვაშია' ? html`
                             <select
                                     class="select"
@@ -208,6 +208,7 @@ class CupioDrawer extends LitElement {
                         <span class="title">კურიერი</span>
                         <select
                                 class="select"
+                                ?disabled="${this.item.status === 'ჩაბარებული'}"
                                 @change="${this.courierChanged}">
                             <option
                                     value="${this.deliveryChangeValue()}">${this.deliveryChangeTitle()}
@@ -300,7 +301,7 @@ class CupioDrawer extends LitElement {
             if (this.opened) document.documentElement.classList.add('no-scroll');
             else document.documentElement.classList.remove('no-scroll');
             if (this.panel) this.loadDetails();
-            this.newItem = this.item;
+            this.newItem = {...this.item};
         }
     }
 
@@ -314,9 +315,15 @@ class CupioDrawer extends LitElement {
         return '';
     }
 
+    getStatus(status){
+        if(status=== 'აღებული' && this.item.deliveryCourier)
+            return 'ჩასაბარებელი';
+        return status;
+    }
+
     onValueChange(event, key) {
         this.changed = true;
-        if (!this.newItem) this.newItem = this.item;
+        if (!this.newItem) this.newItem = {...this.item};
         const value = event.detail;
         this.newItem[key] = value;
     }
@@ -375,8 +382,8 @@ class CupioDrawer extends LitElement {
         `;
 
         graphqlPost(gql).then(({data: {getDetails}}) => {
-            this.item = {...getDetails, status: this.item.status};
-            this.newItem = getDetails;
+            this.item = {...getDetails};
+            this.newItem = {...getDetails};
             this.newItem.oldPayed = this.item.payed;
         })
     }
@@ -387,6 +394,8 @@ class CupioDrawer extends LitElement {
         else clientEmail = this.newItem.client;
         if(this.cantSave) return;
         this.cantSave = true;
+        if(this.item.status === 'ჩასაბარებელი') this.item.status = 'აღებული';
+        if(this.newItem.status === 'ჩასაბარებელი') this.newItem.status = 'აღებული';
         const gql = `mutation{
               addData(
                 id: "${this.newItem.id || ''}",
