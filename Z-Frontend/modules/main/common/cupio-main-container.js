@@ -218,6 +218,11 @@ class CupioMainContainer extends LitElement {
 
     constructor() {
         super();
+        const version = '1.0.0';
+        if(window.localStorage.getItem('version') !== version){
+            window.localStorage.setItem('version', version);
+            setTimeout(()=> window.location.reload(true), 50);
+        }
         this.loading = true;
         this.loadedLength = 10;
         this.searchValues = {}
