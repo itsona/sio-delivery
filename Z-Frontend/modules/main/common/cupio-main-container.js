@@ -218,7 +218,7 @@ class CupioMainContainer extends LitElement {
 
     constructor() {
         super();
-        const version = '1.0.0';
+        const version = '1.0.1';
         if(window.localStorage.getItem('version') !== version){
             window.localStorage.setItem('version', version);
             setTimeout(()=> window.location.reload(true), 50);

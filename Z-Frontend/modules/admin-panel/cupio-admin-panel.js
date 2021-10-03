@@ -1,6 +1,6 @@
 import {LitElement, html, css} from 'lit-element';
 import './cupio-admin-item';
-import {graphqlPost} from "../../mixins/graphql";
+import {graphqlPost, handleRequest} from "../../mixins/graphql";
 import {redirectTo} from "../../mixins/redirectTo";
 
 class CupioAdminPanel extends LitElement {
@@ -152,6 +152,10 @@ class CupioAdminPanel extends LitElement {
         this.couriers = [];
         this.clients = [];
         this.loadAll();
+        if(window.localStorage.getItem('isEmployee')) redirectTo('/panel')
+        handleRequest(false).then(r=> {
+            if(r !== 'admin')redirectTo('/client')
+        })
     }
 
     loadAll() {
