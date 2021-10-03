@@ -265,12 +265,14 @@ class CupioMainLeft extends LitElement {
             </div>
             <div class="logo">
                 <img src="${'/Z-Frontend/images/logo.png'}">
+                ${!this.isEmployee ? html`
                 <div class="user-console">
                     <a class="link" href="${this.panel ? '/admin' : '/companyDetails'}">
                         პირადი კაბინეტი
                         <img src="/Z-Frontend/images/icons/next-svgrepo-com.svg">
                     </a>
                 </div>
+                `: ''}
             </div>
 
             <div class="filter">
@@ -366,6 +368,9 @@ class CupioMainLeft extends LitElement {
             panel: {
                 type: Boolean,
             },
+            isEmployee: {
+                type: Boolean,
+            },
             closed: {
                 type: Boolean,
             },
@@ -382,6 +387,7 @@ class CupioMainLeft extends LitElement {
         super();
         this._alreadySent = false;
         this.loadBudget();
+        this.isEmployee = window.localStorage.getItem('isEmployee');
         handleRequest().then((r) => {
             this.panel = r === 'admin';
 

@@ -66,6 +66,7 @@ class CupioInput extends LitElement {
                 <input 
                     id="input" 
                     type="${this.getType()}" 
+                    min="${this.min}"
                     placeholder="${this.placeholder || 'მისანიჭებელი'}"
                     value="${this.value}"
                     @input="${this.saveValue}">
@@ -91,6 +92,9 @@ class CupioInput extends LitElement {
             name: {
                 type: String,
             },
+            min: {
+                type: String,
+            },
             checkLatin: {
                 type: Boolean,
             },
@@ -109,6 +113,7 @@ class CupioInput extends LitElement {
         this.checkLatin = false;
         this.errorCount = 0;
         this.value= '';
+        this.min= '';
     }
 
     saveValue(e) {

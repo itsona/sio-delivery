@@ -23,10 +23,13 @@ export const handleRequest = async (redirect) => {
         {
             userInfo{
                 status
+                email
             }
         }`
     const data = await graphqlPost(gql);
     const userInfo = data.data.userInfo;
+    if(userInfo.email === 'info@siodelivery.ge') window.localStorage.setItem('isEmployee', 'true');
+    else window.localStorage.removeItem('isEmployee')
     if (!redirect) return userInfo.status
     if (userInfo.status === 'client') redirectTo('/client');
     if (userInfo.status === 'delivery') redirectTo('/delivery');

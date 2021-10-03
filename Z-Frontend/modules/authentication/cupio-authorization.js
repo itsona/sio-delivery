@@ -432,8 +432,8 @@ class CupioAuthorization extends LitElement {
             } else if (r.data.addUser && r.data.addUser === 'contains') {
                 alert('ელქტრონული ფოსტა უკვე დარეგისტრირებულია')
             } else if (r.data.addUser) {
-                alert('წარმატებით დარეგისტრირდით');
-                redirectTo('/login')
+                this.isReg = false;
+                this.authentication();
             } else if (r.data.user === 'incorrect' || !r.data.user) {
                 alert('არასწორი ელფოსტა ან პაროლი')
             } else alert('დაფიქსირდა არასწორი ინფორმაცია')

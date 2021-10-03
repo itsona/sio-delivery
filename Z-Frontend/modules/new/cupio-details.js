@@ -188,6 +188,7 @@ class CupioDetails extends LitElement {
                 <cupio-input
                         class="input"
                         name="date"
+                        min="${this.minDate}"
                         value="${this.values.takeDate}"
                         @value-changed="${(event) => this.setValue(event, 'takeDate')}"></cupio-input>
 
@@ -195,6 +196,7 @@ class CupioDetails extends LitElement {
                 <cupio-input
                         class="input"
                         name="date"
+                        min="${this.minDate}"
                         value="${this.values.deliveryDate}"
                         @value-changed="${(event) => this.setValue(event, 'deliveryDate')}"></cupio-input>
                 <cupio-input
@@ -238,6 +240,9 @@ class CupioDetails extends LitElement {
             rate: {
                 type: Number,
             },
+            minDate: {
+                type: String,
+            },
             panel: {
                 type: Boolean,
             },
@@ -278,6 +283,7 @@ class CupioDetails extends LitElement {
         this.values = {city: 'თბილისი'};
         this.values.takeDate = this.getDate(1);
         this.values.deliveryDate = this.getDate(1);
+        this.minDate = this.values.takeDate;
         this.values.service = 'სტანდარტი';
     }
 
@@ -302,6 +308,7 @@ class CupioDetails extends LitElement {
         if (status === 'ექსპრესი') {
             this.values.takeDate = this.getDate(0);
             this.values.deliveryDate = this.getDate(0);
+            this.minDate = this.values.takeDate;
         } else {
             this.values.takeDate = this.getDate(1);
             this.values.deliveryDate = this.getDate(1);
@@ -370,8 +377,17 @@ class CupioDetails extends LitElement {
         this.values.clientName = e.detail.name;
         this.loadData();
     }
+    validDates(){
+        const takeDate = new Date(this.values.takeDate).getDay();
+        const deliveryDate = new Date(this.values.deliveryDate).getDay();
+        return takeDate && deliveryDate;
+    }
 
     authentication() {
+        if(!this.validDates()){
+            alert('კვირა დღეს არასამუშაო დღეა, გთხოვთ შეცვალოთ თარიღი.')
+            return;
+        }
         if(this.values.service === 'ექსპრესი'){
             const dt = new Date();
             if(dt.getHours() >=13){
