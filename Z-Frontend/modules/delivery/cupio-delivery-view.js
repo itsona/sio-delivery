@@ -13,6 +13,26 @@ class CupioDeliveryView extends LitElement {
                 display: grid;
                 width: 100%;
             }
+
+            .link {
+                color: black;
+                font-weight: 600;
+                text-decoration: none;
+                cursor: pointer;
+                transition: color 0.5s;
+                display: flex;
+            }
+
+            .link:hover {
+                color: gray;
+            }
+
+            .link img {
+                width: 14px;
+                display: flex;
+                align-self: baseline;
+                padding-left: 4px;
+            }
             
             .excel {
                 color: unset;
@@ -117,6 +137,11 @@ class CupioDeliveryView extends LitElement {
                     <a class="excel" 
                        href="https://138.201.104.132:443/middleWares/excel-from-js.xlsx" 
                        target="_blank">ფაილის ჩამოწერა</a>
+
+                    <a class="link" href="/new">
+                        შეკვეთის დამატება
+                        <img src="/Z-Frontend/images/icons/add.svg">
+                    </a>
                 `:''}
                 ${this.statuses.map((status) => html`
                     <cupio-main-container
