@@ -142,7 +142,7 @@ class CupioDrawer extends LitElement {
     render() {
         return html`
             <div class="container" @click="${(e) => e.stopPropagation()}">
-                <div class="close" @click="${this.drawerClose}">
+                <div class="close" @click="${()=>this.drawerClose()}">
                     <img src="/Z-Frontend/images/icons/close.svg">
                 </div>
 
