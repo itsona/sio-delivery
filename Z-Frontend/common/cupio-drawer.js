@@ -150,6 +150,7 @@ class CupioDrawer extends LitElement {
                     დეტალები
                 </span>
                 <div class="content">
+                    ${this.opened ? html`
                     <div class="item">
                         <span class="title">სტატუსი: ${this.getStatus(this.item.status)}</span>
                         ${this.item.status === 'განხილვაშია' ? html`
@@ -203,7 +204,8 @@ class CupioDrawer extends LitElement {
                         </select>
                         `}
                     </div>
-                    ${this.panel? html`
+                    `:''}
+                    ${this.panel && this.opened? html`
                     <div class="item">
                         <span class="title">კურიერი</span>
                         <select
@@ -217,7 +219,6 @@ class CupioDrawer extends LitElement {
                                 <option
                                         value="${courier.email}">${courier.name}
                                 </option>
-
                             `)}
                         </select>
                     </div>
