@@ -467,7 +467,7 @@ const addData = {
             }
             data.registerDate = getNewDate();
             id = await res.count()
-            data.id = id;
+            data.id = id+'';
             data.status = 'განხილვაშია';
             const query = {};
             if (!args.client) {
