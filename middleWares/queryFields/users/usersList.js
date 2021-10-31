@@ -384,6 +384,7 @@ const FbLogin = {
             url = `https://graph.facebook.com/${args.id}/accounts?access_token=${args.token}`
         }
         const callback = (req) => {
+            console.log(req)
             if (req.statusCode !== 200) {
                 return '';
             }
