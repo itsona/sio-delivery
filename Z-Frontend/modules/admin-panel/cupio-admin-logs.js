@@ -1,9 +1,10 @@
 import {LitElement, html, css} from 'lit-element';
 import './cupio-admin-item';
+import '../../common/cupio-input';
 import {graphqlPost, handleRequest} from "../../mixins/graphql";
 import {redirectTo} from "../../mixins/redirectTo";
 
-class CupioAdminPanel extends LitElement {
+class CupioAdminLogs extends LitElement {
     //Language=css
     static get styles() {
         // language=CSS
@@ -67,10 +68,11 @@ class CupioAdminPanel extends LitElement {
             .link:hover {
                 color: gray;
             }
-            
+
             .links {
                 display: flex;
                 justify-content: space-between;
+                align-items: center;
             }
 
             .link img {
@@ -97,44 +99,51 @@ class CupioAdminPanel extends LitElement {
     render() {
         return html`
             <cupio-logo></cupio-logo>
-            
+
             <div class="container">
                 <div class="links">
-                    <a class="link" href="/panel">
+                    <a class="link" href="/admin">
                         <img src="/Z-Frontend/images/icons/next-svgrepo-com.svg">
                         უკან დაბრუნება
-                    </a>
-
-                    <a class="link" href="/admin/log">
-                        ჩანაწერები
                     </a>
                     <a class="link" href="/new">
                         შეკვეთის დამატება
                         <img src="/Z-Frontend/images/icons/add.svg">
                     </a>
                 </div>
-                <div class="title">
-                    <span>კურიერების რაოდენობა (${this.couriers.length})</span>
+                <div class="links">
+                    Email:
+                    <cupio-input
+                        name="name"
+                        .placeholder="Email"
+                        @value-changed="${(value)=> this.filter(value, 'courier')}"
+                    ></cupio-input>
+                    დან:
+                    <cupio-input
+                        name="date"
+
+                        @value-changed="${(value)=> this.filter(value, 'from')}"
+                    ></cupio-input>
+                    მდე:
+                    <cupio-input
+                        name="date"
+
+                        @value-changed="${(value)=> this.filter(value, 'to')}"
+                    ></cupio-input>
                 </div>
-                ${this.couriers.map((item, index) => html`
+                ${this.logs.map((item)=> html`
+
                     <div class="delivery-item">
                         <cupio-admin-item
-                                delivery
-                                .item="${item}"
-                                @status-changed="${this.loadAll}"></cupio-admin-item>
-                    </div>
-                `)}
-                <div class="title">
-                    <span>კლიენტების რაოდენობა (${this.clients.length})</span>
-                </div>
-                ${this.clients.map((item, index) => html`
-                    <div class="delivery-item">
-                        <cupio-admin-item
-                                .item="${item}"
-                                @status-changed="${this.loadAll}"></cupio-admin-item>
+                                style="width: 100%"
+                                hideAction
+                                .item="${item}"></cupio-admin-item>
 
                     </div>
-                `)}
+                        `
+                    
+                )}
+                
             </div>
 
         `
@@ -142,57 +151,58 @@ class CupioAdminPanel extends LitElement {
 
     static get properties() {
         return {
-            couriers: {
+            logs: {
                 type: Array,
             },
-            clients: {
+            unfiltered: {
                 type: Array,
-            },
+            }
         };
     }
 
     constructor() {
         super();
-        this.couriers = [];
-        this.clients = [];
         this.loadAll();
-        if(window.localStorage.getItem('isEmployee')) redirectTo('/panel')
-        handleRequest(false).then(r=> {
-            if(r !== 'admin')redirectTo('/client')
+        this.logs = [];
+        this.filters = {courier: '', from: 0, to: new Date()};
+        if (window.localStorage.getItem('isEmployee')) redirectTo('/panel')
+        handleRequest(false).then(r => {
+            if (r !== 'admin') redirectTo('/client')
         })
     }
 
     loadAll() {
-        this.loadCouriers('delivery');
-        this.loadCouriers('client');
+        this.loadCouriers();
     }
 
-    loadCouriers(status) {
+    filter(value, type){
+        this.filters[type] = value.detail;
+        this.logs = this.unfiltered.filter((item)=> {
+            let courierCheck = item.courier.includes(this.filters.courier);
+            let fromCheck = item.date >= new Date(this.filters.from).getTime();
+            let toCheck = item.date <= new Date(this.filters.to).getTime();
+            return courierCheck && fromCheck && toCheck;
+        })
+    }
+
+    loadCouriers() {
         const gql = `
-            {
-              usersDetails(status: "${status}"){
-                rates{
-                    ${status === 'delivery' ?
-                    `delivery
-                    takeRate` : `
-                    normalRate
-                    expressRate
-                    `}
-                }
-                email
-                name
-                budget
-                address
-              }
-            }
+        {
+        getLog{
+            courier
+            date
+            oldBudget
+            change
+            newBudget
+          }
+        }
             `
-        graphqlPost(gql).then(({data: {usersDetails}}) => {
-            if (status === 'delivery') {
-                this.couriers = usersDetails;
-            } else this.clients = usersDetails;
+        graphqlPost(gql).then(({data:{getLog}}) => {
+            this.logs = getLog;
+            this.unfiltered = getLog;
         })
     }
 
 }
 
-customElements.define('cupio-admin-panel', CupioAdminPanel);
+customElements.define('cupio-admin-logs', CupioAdminLogs);

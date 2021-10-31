@@ -44,6 +44,16 @@ export const localize = (key)=> {
             return 'სტანდ.';
         case 'expressRate':
             return 'ექსპრესი';
+        case 'newBudget':
+            return 'ახალი';
+        case 'oldBudget':
+            return 'ძველი';
+        case 'change':
+            return 'ცვლილება';
+        case 'date':
+            return 'თარიღი';
+        case 'courier':
+            return 'მეილი';
         default:
             return key;
     }

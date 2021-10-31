@@ -40,6 +40,9 @@ class CupioAdminItem extends LitElement {
                 flex-direction: column;
                 gap: 12px;
             }
+            :host([hideAction]) .take {
+                display: none;
+            }
 
             .take > div {
                 border-radius: 12px;
@@ -106,7 +109,7 @@ class CupioAdminItem extends LitElement {
                     `) : html`
                         <span claass="value ${key}"
                               style="color: ${key === 'status' ? this.getStatusColor(this.item.status) : 'black'}">
-                        ${this.item[key]}
+                        ${key === 'date'? new Date(this.item[key] * 1).toLocaleString() : this.item[key]}
                         
                     ${key === 'budget' ? html`
                         <cupio-input
@@ -166,7 +169,7 @@ class CupioAdminItem extends LitElement {
             setCourier(
                 courier: ${isCourier}
                     client: "${this.item.email}"
-        
+
         )
         }
 

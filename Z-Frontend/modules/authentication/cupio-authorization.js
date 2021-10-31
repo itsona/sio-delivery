@@ -331,6 +331,7 @@ class CupioAuthorization extends LitElement {
     }
 
     handleAuthClick() {
+        if(!GoogleAuth) return;
         GoogleAuth.signOut();
         GoogleAuth.signIn();
         GoogleAuth.isSignedIn.listen(this.updateSigninStatus);
@@ -341,18 +342,18 @@ class CupioAuthorization extends LitElement {
         const user = GoogleAuth.currentUser.get();
         if(!user.Zb) return;
         const item = {
-            email: user.Os.zt,
-            name: user.Os.ET,
+            email: user.it.Tt,
+            name: user.it.Se,
             id: 'user.Zb.xS',
             token: user.Zb.access_token,
             channel: 'google'
         }
         const cl = new CupioAuthorization();
         cl.socialAuth(item);
-        // GoogleAuth.signOut();
     }
 
     statusChangeCallback(response){
+        FB.logout();
         FB.api('/me?fields=email, name', function(response) {
             FB.login((login)=> {
                 response.token = login.authResponse.accessToken;

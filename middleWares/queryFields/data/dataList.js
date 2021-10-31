@@ -17,6 +17,7 @@ const {
 } = require('graphql');
 
 const userData = require('../../authentication').userData;
+const logData = require('../../authentication').logData;
 
 const DataType = new GraphQLObjectType({
     name: 'data',
@@ -379,6 +380,13 @@ const addData = {
         let data = args;
         return pageData().then(async ({res, db}) => {
             let id = '';
+            let item = {};
+            if(args.id) {
+                item = await res.findOne({id: args.id});
+                args.oldStatus = item.status;
+                args.oldPayed = item.payed;
+                args.oldPrice = item.price;
+            }
             if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'admin' && args.id) {
                 if (args.courierChanged) {
                     data.accepted = false;
@@ -394,7 +402,7 @@ const addData = {
                     );
                 }
                 if (args.status !== args.oldStatus) {
-                    await handleBudget(args, true);
+                    await handleBudget(args, true, item);
                 }
                 if (args.price !== args.oldPrice) {
                     await handlePay({...args, price: (args.oldPrice - args.price)}, 'plus')
@@ -433,7 +441,7 @@ const addData = {
                     );
                 }
                 if (args.status === 'აღებული' || args.status === 'ჩაბარებული') {
-                    handleBudget(args);
+                    handleBudget(args, false, item);
                 }
                 return res.updateOne({id: args.id}, {$set: data}, {safe: true}).then(() => {
                     db.close();
@@ -444,7 +452,6 @@ const addData = {
                 db.close();
                 return false;
             }
-
             if (!jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status ||
                 !args.deliveryAddress || !args.takeAddress || !args.service
             ) {
@@ -459,7 +466,7 @@ const addData = {
                 }
             }
             data.registerDate = getNewDate();
-            id = Math.random().toString(10).substring(12);
+            id = await res.count()
             data.id = id;
             data.status = 'განხილვაშია';
             const query = {};
@@ -490,10 +497,12 @@ const addData = {
                 return false;
             });
         })
+
+            .catch((r)=> console.log(r))
     }
 }
 
-const handleBudget = async (args, check = false) => {
+const handleBudget = async (args, check = false, item) => {
     let minus = false;
     if (check) {
         if (args.status === 'ასაღები') {
@@ -506,11 +515,7 @@ const handleBudget = async (args, check = false) => {
     if (minus) rate = args.status === 'აღებული' ? 'delivery' : 'takeRate';
     let courierType = args.status === 'აღებული' ? 'takeCourier' : 'deliveryCourier';
     if (minus) courierType = args.status === 'აღებული' ? 'deliveryCourier' : 'takeCourier';
-    let item = {};
-    await pageData().then(async ({res: data, db}) => {
-        item = await data.findOne({id: args.id});
-        db.close()
-    })
+    let newRate = 0;
     await userData().then(async ({res, db}) => {
         const user = await res.findOne({email: item[courierType]})
         if (!user) {
@@ -518,13 +523,13 @@ const handleBudget = async (args, check = false) => {
             return;
         }
         const budgetList = user.budgetList || [];
-        const newRate = user.rates[rate];
+        newRate = user.rates[rate];
+        if(minus) newRate = newRate * -1;
 
         const obj = {date: getNewDate(), budget: newRate, id: args.id, status: args.status};
         if (minus) obj.budget = obj.budget * -1;
         budgetList.push(obj);
         let newBudget = (parseFloat(user.budget) + parseFloat(newRate)).toFixed(2);
-        if (minus) newBudget = (parseFloat(user.budget) - parseFloat(newRate)).toFixed(2);
         res.updateOne({email: item[courierType]},
             {
                 $set:
@@ -536,13 +541,13 @@ const handleBudget = async (args, check = false) => {
             }, {safe: true}
         ).then(() => db.close())
     })
-
 }
 
 const handlePay = async (args, type) => {
+    let newVal = 0;
+    let user = {}
     await userData().then(async ({res, db}) => {
-        const user = await res.findOne({email: args.client})
-        let newVal = 0;
+        user = await res.findOne({email: args.client})
         if (type === 'minus') {
             newVal = parseFloat(user.budget) - parseFloat(args.price)
         } else {
@@ -707,6 +712,30 @@ text-decoration: none;
     });
 }
 
+const logType = new GraphQLObjectType({
+    name: 'log',
+    description: 'User from UsersList',
+    fields: () => ({
+        oldBudget: {type: GraphQLString},
+        courier: {type: GraphQLString},
+        change: {type: GraphQLString},
+        newBudget: {type: GraphQLString},
+        date: {type: GraphQLString},
+    })
+})
+const getLog = {
+    type: GraphQLList(logType),
+    resolve: async (parent, args, response) => {
+        const token = response.headers.token;
+        if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return [];
+
+        return logData().then(async ({res, db}) => {
+            const data = await res.find({}).sort({date: -1}).toArray();
+            db.close();
+            return data;
+        })
+    }
+}
 module.exports = ({
     dataList,
     getForAccept,
@@ -716,5 +745,6 @@ module.exports = ({
     handleAccept,
     dayReport,
     loadExcel,
+    getLog,
     sendEmail
 });

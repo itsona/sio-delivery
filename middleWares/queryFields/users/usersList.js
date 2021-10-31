@@ -14,6 +14,7 @@ const {
 } = require('graphql');
 
 const userData = require('../../authentication').userData;
+const logData = require('../../authentication').logData;
 const pageData = require('../../authentication').pageData;
 const emailData = require('../../authentication').emailData;
 const sendEmail = require('../data/dataList').sendEmail;
@@ -121,13 +122,26 @@ const setBudget = {
         }
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
         return userData().then(async ({res, db}) => {
-            const budget = await res.findOne(query, {projection: {_id: 0, budget: 1}}) || {}
+            const budget = await res.findOne(query, {projection: {_id: 0, budget: 1, status: 1}}) || {}
             if(!budget || !budget.budget) budget.budget = 0;
             if(!args.budget) args.budget = 0;
             await res.updateOne(query,
                 {$set: {budget: parseFloat(budget.budget) + parseFloat(args.budget)}},
                 {safe: true});
             db.close()
+
+            if(budget.status === 'delivery') {
+                await logData().then(async ({res, db}) => {
+                    await res.insertOne({
+                        courier: args.client,
+                        oldBudget: budget.budget,
+                        change: args.budget,
+                        newBudget: parseFloat(budget.budget) + parseFloat(args.budget),
+                        date: new Date()
+                    }, {safe: true})
+                    db.close();
+                })
+            }
             return true;
         })
         return false

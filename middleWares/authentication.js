@@ -18,6 +18,11 @@ const pageData = async ()=> {
     const dbo = await db.db('delivery');
     return {res: dbo.collection("data"), db};
 }
+const logData = async ()=> {
+    const db = await MongoClient.connect(url, {useUnifiedTopology: true});
+    const dbo = await db.db('delivery');
+    return {res: dbo.collection("log"), db};
+}
 
-module.exports = ({userData, emailData, pageData});
+module.exports = ({userData, emailData, pageData, logData});
 // module.exports = ({pageData});
