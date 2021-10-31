@@ -353,7 +353,6 @@ class CupioAuthorization extends LitElement {
     }
 
     statusChangeCallback(response){
-        FB.logout();
         FB.api('/me?fields=email, name', function(response) {
             FB.login((login)=> {
                 response.token = login.authResponse.accessToken;
