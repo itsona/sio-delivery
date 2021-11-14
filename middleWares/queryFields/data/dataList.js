@@ -246,6 +246,7 @@ const dataList = {
                         {$sort: {deliveryDate: 1, deliveryAddress: 1}}
                     ]).toArray()
                     await db.close();
+                    if(data.length) data[0].count =await res.count(query);
                     return data;
                 }
                 const sortQuery = {}
