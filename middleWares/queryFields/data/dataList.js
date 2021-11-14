@@ -245,7 +245,7 @@ const dataList = {
                         },
                         {$sort: {deliveryDate: 1, deliveryAddress: 1}}
                     ]).toArray();
-                    if(data.length) data[0].count =await res.count(query);
+                    if(data.length) data[0].count =await res.count({...query, status: 'აღებული'});
                     await db.close();
                     return data;
                 }
