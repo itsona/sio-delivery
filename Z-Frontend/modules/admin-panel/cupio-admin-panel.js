@@ -119,6 +119,7 @@ class CupioAdminPanel extends LitElement {
                 ${this.couriers.map((item, index) => html`
                     <div class="delivery-item">
                         <cupio-admin-item
+                                .value="0"
                                 delivery
                                 .item="${item}"
                                 @status-changed="${this.loadAll}"></cupio-admin-item>
@@ -130,6 +131,7 @@ class CupioAdminPanel extends LitElement {
                 ${this.clients.map((item, index) => html`
                     <div class="delivery-item">
                         <cupio-admin-item
+                                .value="0"
                                 .item="${item}"
                                 @status-changed="${this.loadAll}"></cupio-admin-item>
 

@@ -68,7 +68,7 @@ class CupioInput extends LitElement {
                     type="${this.getType()}" 
                     min="${this.min}"
                     placeholder="${this.placeholder || 'მისანიჭებელი'}"
-                    value="${this.value}"
+                    .value="${this.value}"
                     @input="${this.saveValue}">
                     <img src="/Z-Frontend/images/icons/add.svg" id="img" 
                     @click="${() => this.dispatchEvent(new CustomEvent('add-request', {detail: this.value}))}">

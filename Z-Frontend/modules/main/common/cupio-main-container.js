@@ -332,7 +332,6 @@ class CupioMainContainer extends LitElement {
                     description
                     price
                     status
-                    payed
                 }
             }
         `;
@@ -357,7 +356,6 @@ class CupioMainContainer extends LitElement {
                     status
                     takeCourier
                     canceled
-                    payed
                     clientName
                     client
                 }
@@ -383,7 +381,6 @@ class CupioMainContainer extends LitElement {
                     status
                     deliveryCourier
                     canceled
-                    payed
                     clientName
                     client
                 }
@@ -407,7 +404,7 @@ class CupioMainContainer extends LitElement {
                     this.limit = this.loadedLength;
                     this.needReload = false;
                     this.loading = false;
-                    if(data.length % this.loadedLength) {
+                    if(!data.length || (data.length % this.loadedLength)) {
                         this.shouldLoadMore = false;
                     }
                     else this.shouldLoadMore = true;

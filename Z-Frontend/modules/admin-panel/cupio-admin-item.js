@@ -115,7 +115,7 @@ class CupioAdminItem extends LitElement {
                         <cupio-input
                                 with-sign
                                 name="budget"
-                                .value="0"
+                                .value="${this.value}"
                                 @add-request="${this.setBudget}"></cupio-input>
                     ` : ''}
         </span>
@@ -145,6 +145,9 @@ class CupioAdminItem extends LitElement {
             delivery: {
                 type: Boolean,
             },
+            value: {
+                type: Number,
+            },
             needToSave: {
                 type: Boolean,
             }
@@ -154,6 +157,7 @@ class CupioAdminItem extends LitElement {
     constructor() {
         super();
         this.values = {};
+        this.value = 0;
     }
 
 
@@ -180,13 +184,15 @@ class CupioAdminItem extends LitElement {
     }
 
     setBudget(event) {
+        this.value = parseFloat(event.detail)
         const gql = `
             mutation{
-                setBudget(client: "${this.item.email}", budget: ${parseFloat(event.detail)})
+                setBudget(client: "${this.item.email}", budget: ${this.value})
             }
         `
         graphqlPost(gql).then(({data: {setBudget}}) => {
             this.dispatchEvent(new CustomEvent('status-changed'));
+            this.value = 0;
         });
     }
 

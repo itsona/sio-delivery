@@ -285,8 +285,6 @@ const handleAccept = {
                 } else {
                     updated.deliveryCourier = '';
                 }
-                sendNotificationToAdmin('!!! კურიერმა გააუქმა შეკვეთა',
-                    `კურიერმა - ${jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).name} გააუქმა შეკვეთა N:${args.id}`);
             }
 
             return pageData().then(({
@@ -306,9 +304,6 @@ const cancelOrder = {
     description: 'removes Data Item',
     args: {
         id: {type: GraphQLString},
-        client: {type: GraphQLString},
-        price: {type: GraphQLFloat},
-        status: {type: GraphQLString},
     },
     resolve: async (parent, args, response) => {
         const token = response.headers.token;
@@ -325,8 +320,6 @@ const cancelOrder = {
                 data.deliveryCourier = '';
             }
             data.accepted = false;
-            sendNotificationToAdmin('!!! კურიერმა გააუქმა შეკვეთა',
-                `კურიერმა - ${jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).name} გააუქმა შეკვეთა N:${args.id}`);
             return pageData().then(({res, db}) => res.updateOne(query, {$set: data}, {safe: true}).then(() => {
                 db.close();
                 return true
@@ -334,13 +327,14 @@ const cancelOrder = {
         }
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'admin') {
             return pageData().then(async ({res, db}) => {
+                const item = await res.findOne({id: args.id});
                 await res.updateOne(query, {$set: {status: 'გაუქმებულია'}}, {safe: true}).then(async () => {
-                    await handlePay(args, 'plus')
+                    await handlePay(item, false)
                     sendNotificationToClient(args.client,
                         `შეკვეთა გაუქმდა!`,
                         `თქვენი შეკვეთა N: ${args.id} გაუქმებულია დამატებითი ინფორმაციისთვის მოგვმართეთ.`
                     );
-                    db.close();
+                    await db.close();
                     return true
                 }).catch(() => {
                     return false
@@ -351,6 +345,51 @@ const cancelOrder = {
     }
 }
 
+const updateData = {
+    type: GraphQLBoolean,
+    args: {
+        takeAddress: {type: GraphQLNonNull(GraphQLString)},
+        deliveryAddress: {type: GraphQLNonNull(GraphQLString)},
+        takeDate: {type: GraphQLNonNull(GraphQLString)},
+        deliveryDate: {type: GraphQLNonNull(GraphQLString)},
+        description: {type: GraphQLString},
+        phone: {type: GraphQLString},
+        deliveryPhone: {type: GraphQLString},
+        id: {type: GraphQLString},
+    },
+    resolve: (parent, args, response) => {
+        const token = response.headers.token;
+        return pageData().then(async ({res, db}) => {
+            if(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin'){
+                return false;
+            }
+            await res.updateOne({id: args.id}, {$set:args}, {safe: true});
+            await db.close();
+            return true;
+        })
+    }
+}
+const changePrice = {
+    type: GraphQLBoolean,
+    args: {
+        priceDiff: {type: GraphQLNonNull(GraphQLFloat)},
+        id: {type: GraphQLString},
+    },
+    resolve: (parent, args, response) => {
+        const token = response.headers.token;
+        return pageData().then(async ({res, db}) => {
+            if(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin'){
+                return false;
+            }
+            const item = await res.findOne({id: args.id});
+            const newPrice = item.price + args.priceDiff;
+            await handlePay({id: args.id, client: item.client, price: args.priceDiff})
+            await res.updateOne({id: args.id}, {$set: {price: newPrice}}, {safe: true});
+            await db.close();
+            return true;
+        })
+    }
+}
 const addData = {
     type: GraphQLBoolean,
     args: {
@@ -359,118 +398,30 @@ const addData = {
         takeAddress: {type: GraphQLNonNull(GraphQLString)},
         deliveryAddress: {type: GraphQLNonNull(GraphQLString)},
         service: {type: GraphQLNonNull(GraphQLString)},
-        status: {type: GraphQLString},
-        oldStatus: {type: GraphQLString},
         takeDate: {type: GraphQLNonNull(GraphQLString)},
         deliveryDate: {type: GraphQLNonNull(GraphQLString)},
         description: {type: GraphQLString},
-        takeCourier: {type: GraphQLString},
-        deliveryCourier: {type: GraphQLString},
         phone: {type: GraphQLString},
         deliveryPhone: {type: GraphQLString},
-        id: {type: GraphQLString},
-        price: {type: GraphQLFloat},
-        oldPrice: {type: GraphQLFloat},
-        courierChanged: {type: GraphQLString},
-        payed: {type: GraphQLBoolean},
-        oldPayed: {type: GraphQLBoolean},
     },
     resolve: (parent, args, response) => {
         const token = response.headers.token;
-        let data = args;
         return pageData().then(async ({res, db}) => {
-            let id = '';
-            let item = {};
-            if(args.id) {
-                item = await res.findOne({id: args.id});
-                args.oldStatus = item.status;
-                args.oldPayed = item.payed;
-                args.oldPrice = item.price;
-            }
-            if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'admin' && args.id) {
-
-                if (args.status !== args.oldStatus) {
-                    await handleBudget(args, true, item);
-                }
-                if (args.price !== args.oldPrice) {
-                    await handlePay({...args, price: (args.oldPrice - args.price)}, 'plus')
-                }
-
-                if (args.courierChanged) {
-                    data.accepted = false;
-                    sendNotificationToCourier(args[args.courierChanged],
-                        `ახალი შეკვეთა`,
-                        `თქვენს სახელზე დაემატა ახალი შეკვეთა.`
-                    );
-                }
-                if (args.status === 'ჩაბარებული') {
-                    sendNotificationToClient(args.client,
-                        `შეკვეთა ჩაბარებულია!`,
-                        `თქვენი შეკვეთა N: ${args.id} ჩაბარებულია, მადლობა ნდობისთვის .`
-                    );
-                }
-                if (args.status === 'გაუქმებულია' && args.status !== args.oldStatus) {
-                    await handlePay(args, 'plus')
-                    sendNotificationToClient(args.client,
-                        `შეკვეთა გაუქმდა!`,
-                        `თქვენი შეკვეთა N: ${args.id} გაუქმებულია დამატებითი ინფორმაციისთვის მოგვმართეთ.`
-                    );
-                }
-                if (args.payed && !args.oldPayed) {
-                    await handlePay(args, 'plus');
-                    data.payDate = getNewDate();
-                } else if (!args.payed && args.oldPayed) {
-                    await handlePay(args, 'minus');
-                }
-                // res.findOne({email: jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).email}).then((r) => console.log(r))
-                return res.updateOne({id: args.id}, {$set: data}, {safe: true}).then(() => {
-                    db.close();
-                    return true;
-                });
-            }
-            if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'delivery' && args.id) {
-                data = {status: args.status};
-                if (args.deliveryCourier || args.takeCourier) {
-                    if (args.courierChanged) {
-                        data.accepted = false;
-                        data[args.courierChanged] = args[args.courierChanged];
-                    }
-                }
-                if (args.status === 'აღებული' || args.status === 'ჩაბარებული') {
-                    await handleBudget(args, false, item);
-                    if (args.status === 'ჩაბარებული') {
-                        sendNotificationToClient(args.client,
-                            `შეკვეთა ჩაბარებულია!`,
-                            `თქვენი შეკვეთა N: ${args.id} ჩაბარებულია, მადლობა ნდობისთვის .`
-                        );
-                    }
-                }
-                return res.updateOne({id: args.id}, {$set: data}, {safe: true}).then(() => {
-                    db.close();
-                    return true;
-                });
-            }
-            if (args.id) {
-                db.close();
-                return false;
-            }
-            if (!jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status ||
-                !args.deliveryAddress || !args.takeAddress || !args.service
+            if (!args.deliveryAddress || !args.takeAddress || !args.service
             ) {
-                db.close();
+                await db.close();
                 return false;
             }
             if (args.service === 'ექსპრესი') {
                 const dt = new Date();
                 if (dt.getHours() > 13) {
-                    db.close();
+                    await db.close();
                     return false;
                 }
             }
-            data.registerDate = getNewDate();
-            id = await res.count()
-            data.id = id+' ';
-            data.status = 'განხილვაშია';
+            args.registerDate = getNewDate();
+            args.id = await res.count()+' ';
+            args.status = 'განხილვაშია';
             const query = {};
             if (!args.client) {
                 query._id = ObjectId(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).id)
@@ -480,19 +431,17 @@ const addData = {
                     {
                         projection: {_id: 0, rates: 1}
                     });
-                db.close();
+                await db.close();
                 return user;
             })
-            data.price = getRate(args.service, user.rates);
+            args.price = getRate(args.service, user.rates);
             if (!args.client) {
-                data.client = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).email;
-                data.clientName = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).name;
+                args.client = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).email;
+                args.clientName = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).name;
             }
-            return res.insertOne(data, {safe: true}).then(async () => {
-                await handlePay(data, 'minus')
-                sendNotificationToAdmin(`ახალი ${args.service} შეკვეთა`,
-                    `კლიენტმა - ${data.clientName} დაამატა ${args.service} შეკვეთა`);
-                db.close();
+            return res.insertOne(args, {safe: true}).then(async () => {
+                await handlePay(args)
+                await db.close();
                 return true;
             }).catch(() => {
                 db.close();
@@ -504,32 +453,91 @@ const addData = {
     }
 }
 
-const handleBudget = async (args, check = false, item) => {
+const changeStatus = {
+    type: GraphQLBoolean,
+    args: {
+        status: {type: GraphQLNonNull(GraphQLString)},
+        id: {type: GraphQLNonNull(GraphQLString)},
+    },
+
+    resolve: async (parent, args, response) => {
+        const token = response.headers.token;
+        if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'client') return;
+        const {res, db} = await pageData();
+        try {
+            const item = await res.findOne({id: args.id})
+            if(args.status === 'გაუქმებულია') {
+                await handlePay(item, false)
+            } else if(args.status === 'ასაღები' && item.status === 'გაუქმებულია') {
+                await handlePay(item)
+            }else {
+                await handleBudget(args.status, item)
+            }
+            await res.updateOne({id: args.id}, {$set: {status: args.status}}, {safe: true});
+            await db.close();
+            return true;
+        }catch (e){
+            return false;
+        }
+    }
+}
+const changeCourier = {
+    type: GraphQLBoolean,
+    args: {
+        courier: {type: GraphQLNonNull(GraphQLString)},
+        id: {type: GraphQLNonNull(GraphQLString)},
+    },
+    resolve: async (parent, args, response) => {
+        const token = response.headers.token;
+        if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
+        const {res, db} = await pageData();
+        try {
+            const item = await res.findOne({id: args.id})
+            let courierType;
+            switch (item.status) {
+                case 'ასაღები':
+                case 'განხილვაშია':
+                    courierType = 'takeCourier';
+                    break;
+                case 'აღებული':
+                case 'ჩასაბარებელი':
+                case 'ჩაბარებული':
+                    courierType = 'deliveryCourier';
+                    break;
+            }
+            const updateObject = {};
+            updateObject[courierType] = args.courier;
+            await res.updateOne({id: args.id}, {$set: updateObject}, {safe: true});
+            await db.close();
+            return true;
+        }catch (e){
+            return false;
+        }
+    }
+}
+
+const handleBudget = async (status,item,) => {
     let minus = false;
-    if (check) {
-        if (args.status === 'ასაღები') {
-            if (args.oldStatus !== 'აღებული' && args.oldStatus !== 'ჩასაბარებელი') return;
+        if (status === 'ასაღები') {
+            if (item.status !== 'აღებული' && item.status !== 'ჩასაბარებელი') return;
             minus = true;
         }
-        if (args.status === 'აღებული' && args.oldStatus === 'ჩაბარებული') minus = true;
-    }
-    let rate = args.status === 'აღებული' ? 'takeRate' : 'delivery';
-    if (minus) rate = args.status === 'აღებული' ? 'delivery' : 'takeRate';
-    let courierType = args.status === 'აღებული' ? 'takeCourier' : 'deliveryCourier';
-    if (minus) courierType = args.status === 'აღებული' ? 'deliveryCourier' : 'takeCourier';
+        if (status === 'აღებული' && item.status === 'ჩაბარებული') minus = true;
+    let rate = status === 'აღებული' ? 'takeRate' : 'delivery';
+    if (minus) rate = status === 'აღებული' ? 'delivery' : 'takeRate';
+    let courierType = status === 'აღებული' ? 'takeCourier' : 'deliveryCourier';
+    if (minus) courierType = status === 'აღებული' ? 'deliveryCourier' : 'takeCourier';
     let newRate = 0;
     await userData().then(async ({res, db}) => {
-        const user = await res.findOne({email: args[courierType]})
+        const user = await res.findOne({email: item[courierType]})
         if (!user) {
-            db.close();
+            await db.close();
             return;
         }
         const budgetList = user.budgetList || [];
         newRate = user.rates[rate];
         if(minus) newRate = newRate * -1;
-
-        const obj = {date: getNewDate(), budget: newRate, id: args.id, status: args.status};
-        if (minus) obj.budget = obj.budget * -1;
+        const obj = {date: getNewDate(), budget: newRate, id: item.id, status: status};
         budgetList.push(obj);
         let newBudget = (parseFloat(user.budget) + parseFloat(newRate)).toFixed(2);
         await res.updateOne({email: item[courierType]},
@@ -538,31 +546,29 @@ const handleBudget = async (args, check = false, item) => {
                     {
                         budgetList: budgetList,
                         budget: newBudget,
-                        // budget: 0,
                     }
             }, {safe: true}
-        ).then(() => {db.close(); console.log('aqac mushaobs')})
-        db.close(); console.log('aqac mushaobs')
+        )
+        await db.close();
     })
 }
 
-const handlePay = async (args, type) => {
+const handlePay = async (args, minus = true) => {
     let newVal = 0;
     let user = {}
     await userData().then(async ({res, db}) => {
         user = await res.findOne({email: args.client})
-        if (type === 'minus') {
-            newVal = parseFloat(user.budget) - parseFloat(args.price)
+        if (minus) {
+            newVal = parseFloat(user.budget || 0) - parseFloat(args.price)
         } else {
-            newVal = parseFloat(user.budget) + parseFloat(args.price)
+            newVal = parseFloat(user.budget || 0) + parseFloat(args.price)
         }
         await res.updateOne({email: args.client}, {
             $set: {
-                budget: (newVal).toFixed(2)
+                budget: (newVal).toFixed(2),
             }
         }, {safe: true})
-        console.log('რაღაც')
-        db.close()
+        await db.close()
     })
 }
 
@@ -615,7 +621,7 @@ const getDetails = {
     resolve: (parent, args) => {
         return pageData().then(async ({res, db}) => {
             const data = await res.findOne({id: args.id});
-            db.close();
+            await db.close();
             return data;
         })
     }
@@ -644,18 +650,12 @@ const dayReport = {
                 })
             })
         const str = `დღის განმავლობაში შემოსულია ${length} შეკვეთა, გადახდილია ${income}₾`
-        db.close();
+        await db.close();
         return str;
     }
 }
 
-const sendNotificationToAdmin = (title, text) => {
-    sendEmail('info@siodelivery.ge', title, title, text);
-}
 
-const sendNotificationToCourier = (courier, title, text) => {
-    sendEmail(courier, title, title, text);
-}
 const sendNotificationToClient = (client, title, text) => {
     sendEmail(client, title, title, text);
 }
@@ -736,7 +736,7 @@ const getLog = {
 
         return logData().then(async ({res, db}) => {
             const data = await res.find({}).sort({date: -1}).toArray();
-            db.close();
+            await db.close();
             return data;
         })
     }
@@ -751,5 +751,9 @@ module.exports = ({
     dayReport,
     loadExcel,
     getLog,
+    changeStatus,
+    updateData,
+    changePrice,
+    changeCourier,
     sendEmail
 });

@@ -163,6 +163,9 @@ class CupioMainTable extends LitElement {
             this.shadowRoot.querySelector('#drawer').item = item;
             this.shadowRoot.querySelector('#drawer').cantSave = false;
         }
+        if(this.shadowRoot.querySelector('#drawer').saved) {
+            this.dispatchEvent(new CustomEvent('updated'));
+        }
         this.drawerOpened = !this.drawerOpened;
     }
 

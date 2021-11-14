@@ -150,10 +150,13 @@ class CupioDrawer extends LitElement {
                     დეტალები
                 </span>
                 <div class="content">
-                    ${this.opened ? html`
+                    ${this.saved ? html`
+                        <span class="title" style="padding: 8px 0; color: red">წარმატებით შევინახეთ</span>
+                    ` : ''}
+                    ${this.opened && !this.cantSave ? html`
                     <div class="item">
                         <span class="title">სტატუსი: ${this.getStatus(this.item.status)}</span>
-                        ${this.item.status === 'განხილვაშია' ? html`
+                        ${this.item.status === 'განხილვაშია'  || this.item.status === 'გაუქმებულია' ? html`
                             <select
                                     class="select"
                                     @input="${(event) => this.onValueChange({detail: event.target.value}, 'status')}">
@@ -205,7 +208,7 @@ class CupioDrawer extends LitElement {
                         `}
                     </div>
                     `:''}
-                    ${this.panel && this.opened? html`
+                    ${this.panel && this.opened && !this.cantSave ? html`
                     <div class="item">
                         <span class="title">კურიერი</span>
                         <select
@@ -213,32 +216,19 @@ class CupioDrawer extends LitElement {
                                 ?disabled="${this.item.status === 'ჩაბარებული'}"
                                 @change="${this.courierChanged}">
                             <option
+                                    ?selected="${!this.item[this.getCourierType()]}"
                                     value="${this.deliveryChangeValue()}">${this.deliveryChangeTitle()}
                             </option>
                             ${this.couriers.map((courier) => html`
                                 <option
+                                        ?selected="${this.item[this.getCourierType()] === courier.email}"
                                         value="${courier.email}">${courier.name}
                                 </option>
                             `)}
                         </select>
                     </div>
-                    ${this.opened ? html`
-                        <input 
-                                type="checkbox" 
-                                id="payed" 
-                                name="payed" 
-                                ?checked="${this.item.payed}"
-                                @change="${(event) => this.onValueChange({detail:!this.item.payed}, 'payed')}">
-                        <label for="payed"> გადახდილია</label><br>
-                    `:''}
                     `:''}
                     <div class="buttons" >
-                        <div
-                                class="save"
-                                @click="${this.save}"
-                                ?disabled="${!this.changed}">
-                            შენახვა
-                        </div>
                         ${this.item.status ==='ასაღები' || this.item.status === 'ჩასაბარებელი'
                                 ? html`                        <div
                                 class="save"
@@ -248,17 +238,32 @@ class CupioDrawer extends LitElement {
                             }
                     </div>
                     ${Object.keys(this.item).map((key) => html`
-                        ${(key !== 'status' && key !== 'canceled' && key !== 'payed') && (this.panel || key !== 'client') ? html`
+                        ${(key !== 'status' && key !== 'canceled') && (this.panel || (key !== 'client' && !key.includes('Courier'))) ? html`
                             <div class="item">
                                 <span class="title">${localize(key)}</span>
                                 <cupio-input
                                         name="key"
-                                        ?disabled="${!this.panel}"
+                                        ?disabled="${!this.panel || this.disableds.indexOf(key) !== -1}"
                                         value="${this.item[key] || ''}"
                                         @value-changed="${(event) => this.onValueChange(event, key)}"></cupio-input>` : html`
                         `}
                         </div>
                     `)}
+                    ${this.panel ? html`
+                    <span class="title">ფასი</span>
+                    <cupio-input
+                            style="width: 200px"
+                            with-sign
+                            name="budget"
+                            .value="${this.priceDiff}"
+                            @add-request="${this.changePrice}"></cupio-input>
+                <div
+                        class="save"
+                        @click="${this.save}"
+                        ?disabled="${!this.changed}">
+                    შენახვა
+                </div>
+                ` : ''}
                 </div>
             </div>
         `
@@ -272,10 +277,22 @@ class CupioDrawer extends LitElement {
             opened: {
                 type: Boolean,
             },
+            priceDiff: {
+                type: Number,
+            },
             couriers: {
                 type: Array,
             },
+            disableds: {
+                type: Array,
+            },
             panel: {
+                type: Boolean,
+            },
+            saved: {
+                type: Boolean,
+            },
+            cantSave: {
                 type: Boolean,
             },
             changed: {
@@ -287,6 +304,16 @@ class CupioDrawer extends LitElement {
     constructor() {
         super();
         this.couriers = [];
+        this.priceDiff = 0;
+        this.disableds = [
+            'id',
+            'service',
+            'client',
+            'clientEmail',
+            'takeCourier',
+            'deliveryCourier',
+            'price'
+        ];
         this._alreadySent = false;
         this.item = {};
         handleRequest().then(r => this.panel = r === 'admin');
@@ -301,6 +328,8 @@ class CupioDrawer extends LitElement {
     updated(_changedProperties) {
         super.updated(_changedProperties);
         if (_changedProperties.has('opened')) {
+            this.saved = false;
+            this.changed = false;
             if (this.opened) document.documentElement.classList.add('no-scroll');
             else document.documentElement.classList.remove('no-scroll');
             if (this.panel) this.loadDetails();
@@ -309,13 +338,24 @@ class CupioDrawer extends LitElement {
     }
 
     deliveryChangeTitle() {
-        if (!this.panel) return 'ამანათის გადაწერა';
         if (this.item.status === 'ჩაბარებული') return 'დასრულებულია';
         return 'კურიერის მინიჭება';
     }
 
     deliveryChangeValue() {
         return '';
+    }
+
+    getCourierType(){
+        switch (this.item.status){
+            case 'ასაღები':
+            case 'განხილვაშია':
+                return 'takeCourier';
+            case 'აღებული':
+            case 'ჩასაბარებელი':
+            case 'ჩაბარებული':
+                return 'deliveryCourier';
+            }
     }
 
     getStatus(status){
@@ -325,23 +365,46 @@ class CupioDrawer extends LitElement {
     }
 
     onValueChange(event, key) {
-        this.changed = true;
         if (!this.newItem) this.newItem = {...this.item};
         const value = event.detail;
+        if(key === 'status'){
+            this._onStatusChange(value);
+        } else {
+            this.changed = true;
+        }
         this.newItem[key] = value;
     }
 
+    changePrice(event){
+        this.priceDiff = parseFloat(event.detail);
+
+        const gql = `mutation{
+              changePrice(
+                id: "${this.newItem.id}",
+                priceDiff: ${this.priceDiff},
+               )
+              }`
+        graphqlPost(gql).then(r=> {
+                this.loadDetails();
+                this.saved = true;
+                this.priceDiff = 0;
+            }
+        );
+    }
+
     courierChanged(e) {
-        this.changed = true;
         const value = e.target.value;
-        if (this.newItem.status === 'ასაღები') {
-            this.newItem.takeCourier = value;
-            this.accepted = false;
-            this.newCourierSet = 'takeCourier';
-            return;
-        }
-        this.newCourierSet = 'deliveryCourier';
-        this.newItem.deliveryCourier = value;
+        const gql = `mutation{
+              changeCourier(
+                id: "${this.newItem.id}",
+                courier: "${value}",
+               )
+              }`
+        graphqlPost(gql).then(r=> {
+                this.loadDetails();
+                this.saved = true;
+            }
+        );
     }
 
     loadCouriers() {
@@ -360,26 +423,26 @@ class CupioDrawer extends LitElement {
     }
 
     loadDetails() {
+        this.cantSave = true;
         const gql = `
             {
               getDetails(id:"${this.item.id}"){
-                id
-                service
                 takeAddress
                 deliveryAddress
+                description
                 phone
                 deliveryPhone
+                registerDate
+                takeDate
+                deliveryDate
+                id
+                service
                 client: clientName
                 clientEmail: client
                 status
                 takeCourier
                 deliveryCourier
-                registerDate
-                takeDate
-                deliveryDate
-                description
                 price
-                payed
               }
             }
         `;
@@ -387,44 +450,27 @@ class CupioDrawer extends LitElement {
         graphqlPost(gql).then(({data: {getDetails}}) => {
             this.item = {...getDetails};
             this.newItem = {...getDetails};
-            this.newItem.oldPayed = this.item.payed;
+            this.cantSave = false;
         })
     }
 
     save() {
-        let clientEmail;
-        if(this.panel) clientEmail = this.newItem.clientEmail;
-        else clientEmail = this.newItem.client;
         if(this.cantSave) return;
         this.cantSave = true;
-        if(this.item.status === 'ჩასაბარებელი') this.item.status = 'აღებული';
-        if(this.newItem.status === 'ჩასაბარებელი') this.newItem.status = 'აღებული';
         const gql = `mutation{
-              addData(
+              updateData(
                 id: "${this.newItem.id || ''}",
                 takeAddress: "${this.newItem.takeAddress || ''}",
-                service: "${this.newItem.service || ''}",
                 deliveryAddress: "${this.newItem.deliveryAddress || ''}",
                 deliveryPhone: "${this.newItem.deliveryPhone || ''}",
-                client: "${clientEmail ||  ''}",
-                status: "${this.newItem.status || ''}",
-                oldStatus: "${this.item.status || ''}",
-                oldPrice: ${this.item.price || 0},
-                takeCourier: "${this.newItem.takeCourier || ''}",
-                deliveryCourier: "${this.newItem.deliveryCourier || ''}",
                 takeDate: "${this.newItem.takeDate || ''}",
                 deliveryDate: "${this.newItem.deliveryDate || ''}",
                 description: "${this.newItem.description || ''}",
                 phone: "${this.newItem.phone || ''}",
-                price: ${this.newItem.price || 0},
-                courierChanged: "${this.newCourierSet || ''}",
-                payed: ${this.newItem.payed || false},
-                oldPayed: ${this.newItem.oldPayed || false},
               )
             }`
 
         graphqlPost(gql).then(()=> {
-            // window.location.reload();
             this.drawerClose('updated');
         })
             .catch(r=> console.warn(r) );
@@ -433,17 +479,24 @@ class CupioDrawer extends LitElement {
     cancel(){
         const gql = `
         mutation {
-            cancelOrder(id: "${this.item.id}",
-             status: "${this.item.status}",
-              client:"${this.item.clientEmail || ''}",
-              price: ${this.item.price || 0}
-              )
+            cancelOrder(id: "${this.item.id}")
         }`
         graphqlPost(gql).then(()=> {
             // window.location.reload();
             this.drawerClose('updated');
         })
             .catch(r=> console.warn(r));
+    }
+
+    _onStatusChange(value){
+        const gql = `mutation{
+              changeStatus(id: "${this.newItem.id}", status: "${value}")
+              }`
+        graphqlPost(gql).then(r=> {
+                if(this.panel) this.loadDetails();
+                this.saved = true;
+            }
+        );
     }
 }
 

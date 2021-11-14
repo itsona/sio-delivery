@@ -297,7 +297,7 @@ class CupioDetails extends LitElement {
     }
 
     _onClick(event) {
-        this.listShow = true
+        this.listShow = !this.listShow
         event.stopPropagation();
     }
 

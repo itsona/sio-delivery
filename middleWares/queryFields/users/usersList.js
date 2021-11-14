@@ -60,11 +60,7 @@ const usersList = {
     type: GraphQLList(UserType),
     description: 'List of All users',
     resolve: async (parent, args, request) => {
-        return userData().then(async ({res, db}) => {
-            const data = await res.find({}).toArray();
-            db.close();
-            return data;
-        })
+        return [];
     }
 }
 
@@ -79,8 +75,8 @@ const usersDetails = {
             status: args.status,
         }
         return userData().then(async ({res, db}) => {
-            const data = await res.find(query).toArray();
-            db.close();
+            const data = await res.find(query).sort({budget: 1}).toArray();
+            await db.close();
             return data;
         })
     }
@@ -101,7 +97,7 @@ const setCourier = {
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
         return userData().then(async ({res, db}) => {
             await res.updateOne(query, {$set: {status: status}}, {safe: true});
-            db.close()
+            await db.close()
             return true;
         })
         return false
@@ -128,7 +124,7 @@ const setBudget = {
             await res.updateOne(query,
                 {$set: {budget: parseFloat(budget.budget) + parseFloat(args.budget)}},
                 {safe: true});
-            db.close()
+            await db.close()
 
             if(budget.status === 'delivery') {
                 await logData().then(async ({res, db}) => {
@@ -139,7 +135,7 @@ const setBudget = {
                         newBudget: parseFloat(budget.budget) + parseFloat(args.budget),
                         date: new Date()
                     }, {safe: true})
-                    db.close();
+                    await db.close();
                 })
             }
             return true;
@@ -194,7 +190,7 @@ const singleUser = {
                 if (user != null) {
                     return jwt.sign({
                         id: user._id,
-                        status: user.status,
+                        status: user.status || 'client',
                         email: user.email,
                         name: user.name,
                     }, process.env.ACCESS_TOKEN_SECRET);

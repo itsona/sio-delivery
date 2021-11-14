@@ -298,6 +298,8 @@ class CupioMainLeft extends LitElement {
                         <option value="ჩასაბარებელი">ჩასაბარებელი</option>` : ''}
                     ${this.panel || !this.delivery ? html`
                         <option value="განხილვაშია">განხილვაშია</option>` : ''}
+                    ${this.panel || !this.delivery ? html`
+                        <option value="გაუქმებულია">გაუქმებულია</option>` : ''}
                 </select>
                 ${!this.delivery || this.panel ? html`
                     <label class="price">ფასი</label>
