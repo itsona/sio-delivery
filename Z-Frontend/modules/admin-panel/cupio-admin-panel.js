@@ -1,5 +1,6 @@
 import {LitElement, html, css} from 'lit-element';
 import './cupio-admin-item';
+import '../../common/cupio-input';
 import {graphqlPost, handleRequest} from "../../mixins/graphql";
 import {redirectTo} from "../../mixins/redirectTo";
 
@@ -127,8 +128,15 @@ class CupioAdminPanel extends LitElement {
                 `)}
                 <div class="title">
                     <span>კლიენტების რაოდენობა (${this.clients.length})</span>
+
+                    <cupio-input
+                            class="input"
+                            place-holder="Filter"
+                            name="filter"
+                            @value-changed="${(event) => this.filter(event)}"
+                    ></cupio-input>
                 </div>
-                ${this.clients.map((item, index) => html`
+                ${this.clientsFiltered.map((item, index) => html`
                     <div class="delivery-item">
                         <cupio-admin-item
                                 .value="0"
@@ -150,6 +158,9 @@ class CupioAdminPanel extends LitElement {
             clients: {
                 type: Array,
             },
+            clientsFiltered: {
+                type: Array,
+            },
         };
     }
 
@@ -161,6 +172,12 @@ class CupioAdminPanel extends LitElement {
         if(window.localStorage.getItem('isEmployee')) redirectTo('/panel')
         handleRequest(false).then(r=> {
             if(r !== 'admin')redirectTo('/client')
+        })
+    }
+
+    filter(event){
+        this.clientsFiltered = this.clients.filter((item)=> {
+            return item.email.includes(event.detail) || item.name.includes(event.detail)
         })
     }
 
@@ -192,12 +209,8 @@ class CupioAdminPanel extends LitElement {
             if (status === 'delivery') {
                 this.couriers = usersDetails || [];
             } else {
-                usersDetails = usersDetails || [];
-                this.clients = usersDetails.sort((first, second)=> {
-                    console.log(parseFloat(first.budget), parseFloat(second.budget))
-                    if(parseFloat(first.budget) > parseFloat(second.budget)) return 1;
-                    else return -1;
-                })
+                this.clients = usersDetails || [];
+                this.clientsFiltered = this.clients;
             }
         })
     }

@@ -347,13 +347,15 @@ const addUser = {
         delete user.passwordRepeat;
         user.rates = Config.rates;
         user.budget = 0;
+        console.log(user);
         return emailData().then(({res, db}) => {
-            return res.countDocuments({email: args.email}).then(contains => {
+            return res.countDocuments({email: args.email}).then(async contains => {
                 if (!contains) {
-                    res.insertOne({email: args.email}, {safe: true}).then(() => db.close());
+                    await res.insertOne({email: args.email}, {safe: true}).then(() => db.close());
                     return userData().then(async ({res, db}) => {
+                        console.log(user)
                         await res.insertOne(user, {safe: true})
-                        db.close();
+                        await db.close();
                         return 'success';
                     });
                 } else return 'contains';
