@@ -336,7 +336,7 @@ class CupioMainLeft extends LitElement {
                 </div>
                 ${this.delivery && !this.panel ? html`
                     <div class="title">
-                        <span>გამამუშავებული თანხა: ${this.budget}₾</span>
+                        <span>გამომუშავებული თანხა: ${this.budget}₾</span>
                     </div>
                 ` : ''}
                 ${this.panel ? html`
