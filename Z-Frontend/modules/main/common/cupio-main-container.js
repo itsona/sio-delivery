@@ -139,7 +139,7 @@ class CupioMainContainer extends LitElement {
                     </a>
                 </div>
                 <div class="title delivery">
-                    <span>${this.status || ''} ჩანაწერები ნაჩვენებია ${this.items.length}</span>
+                    <span>${this.status || ''} ჩანაწერების რაოდენობა ${this.count || 0}</span>
                 </div>
                 ${this.items.length ? html`
                     <cupio-main-table
@@ -201,6 +201,9 @@ class CupioMainContainer extends LitElement {
             delivery: {
                 type: Boolean,
             },
+            count: {
+                type: Number,
+            },
             drawerOpened: {
                 type: Boolean,
             },
@@ -224,7 +227,7 @@ class CupioMainContainer extends LitElement {
             setTimeout(()=> window.location.reload(true), 50);
         }
         this.loading = true;
-        this.loadedLength = 10;
+        this.loadedLength = 1;
         this.searchValues = {}
         this.skip = 0;
         this.limit = this.loadedLength;
@@ -324,6 +327,7 @@ class CupioMainContainer extends LitElement {
                     limit: ${this.limit}
                 )
                 {
+                    count
                     id
                     takeDate
                     deliveryDate
@@ -348,6 +352,7 @@ class CupioMainContainer extends LitElement {
                     skip: ${this.skip}
                     limit: ${this.limit}
                 ){
+                    count
                     id
                     takeDate
                     takeAddress
@@ -373,6 +378,7 @@ class CupioMainContainer extends LitElement {
                     skip: ${this.skip}
                     limit: ${this.limit}
                 ){
+                    count
                     id
                     deliveryDate
                     deliveryAddress
@@ -390,9 +396,13 @@ class CupioMainContainer extends LitElement {
         }
         graphqlPost(gql).then((res) => {
             let data = res.data.data;
+            if(data[0]) {
+                this.count = data[0] && data[0].count
+            }
             data.map((item) => {
                 if (this.delivery) item.description = item.clientName + ' - ' + item.description;
                 delete item.clientName;
+                delete item.count
                 return item;
             })
             if(this.skip){

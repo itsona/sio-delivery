@@ -23,6 +23,7 @@ const DataType = new GraphQLObjectType({
     name: 'data',
     description: 'returns all data',
     fields: () => ({
+        count: {type: GraphQLInt},
         client: {type: GraphQLString},
         clientName: {type: GraphQLString},
         takeAddress: {type: GraphQLNonNull(GraphQLString)},
@@ -244,7 +245,7 @@ const dataList = {
                         },
                         {$sort: {deliveryDate: 1, deliveryAddress: 1}}
                     ]).toArray()
-                    db.close();
+                    await db.close();
                     return data;
                 }
                 const sortQuery = {}
@@ -258,7 +259,8 @@ const dataList = {
 
                 const data = await res.find(query).sort(sortQuery).skip(args.skip || 0).limit(args.limit || 20)
                     .toArray()
-                db.close();
+                if(data.length) data[0].count =await res.count(query);
+                await db.close();
                 return data;
 
             }
