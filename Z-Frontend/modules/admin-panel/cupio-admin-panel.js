@@ -194,7 +194,7 @@ class CupioAdminPanel extends LitElement {
             } else {
                 usersDetails = usersDetails || [];
                 this.clients = usersDetails.sort((first, second)=> {
-                    if(first.budget > second.budget) return 1;
+                    if(parseFloat(first.budget) > parseFloat(second.budget)) return 1;
                     else return -1;
                 })
             }
