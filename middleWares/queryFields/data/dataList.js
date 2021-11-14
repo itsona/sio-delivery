@@ -507,6 +507,7 @@ const changeCourier = {
             }
             const updateObject = {};
             updateObject[courierType] = args.courier;
+            updateObject.accepted = false;
             await res.updateOne({id: args.id}, {$set: updateObject}, {safe: true});
             await db.close();
             return true;
