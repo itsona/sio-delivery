@@ -227,7 +227,7 @@ class CupioMainContainer extends LitElement {
             setTimeout(()=> window.location.reload(true), 50);
         }
         this.loading = true;
-        this.loadedLength = 1;
+        this.loadedLength = 10;
         this.searchValues = {}
         this.skip = 0;
         this.limit = this.loadedLength;
