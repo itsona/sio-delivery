@@ -238,7 +238,7 @@ class CupioDrawer extends LitElement {
                             }
                     </div>
                     ${Object.keys(this.item).map((key) => html`
-                        ${(key !== 'status' && key !== 'canceled') && (this.panel || (key !== 'client' && !key.includes('Courier'))) ? html`
+                        ${(key !== 'status' && key !== 'canceled') && (this.panel || (key !== 'client' &&key !== 'price' && !key.includes('Courier'))) ? html`
                             <div class="item">
                                 <span class="title">${localize(key)}</span>
                                 <cupio-input

@@ -77,7 +77,7 @@ class CupioMainContainer extends LitElement {
             }
 
             :host([delivery]) .table {
-                grid-template-columns: auto 96px 2fr 2fr 1fr 1fr auto;
+                grid-template-columns: auto 96px 2fr 2fr 1fr 1fr auto auto;
             }
 
             :host(:not([delivery])) .delivery {
@@ -131,7 +131,7 @@ class CupioMainContainer extends LitElement {
             <cupio-loading id="loading"></cupio-loading>
             <div class="column">
                 <div class="title main">
-                    <span>შეკვეთების ისტორია (${this.items.length})</span>
+                    <span>შეკვეთების ისტორია (${this.count || 0})</span>
                     <span>ხელმისაწვდომი თანხა (${this.budget})</span>
                     <a class="link" href="/new">
                         შეკვეთის დამატება
@@ -264,6 +264,7 @@ class CupioMainContainer extends LitElement {
                     'ტელეფონის ნომერი',
                     'სტატუსი',
                     '',
+                    '',
                 ];
             } else {
                 this.menu = [
@@ -273,6 +274,7 @@ class CupioMainContainer extends LitElement {
                     'დამატებითი ინფორმაცია',
                     'ტელეფონის ნომერი',
                     'სტატუსი',
+                    '',
                     '',
                 ];
             }
@@ -363,6 +365,7 @@ class CupioMainContainer extends LitElement {
                     canceled
                     clientName
                     client
+                    price
                 }
             }`
             } else {
@@ -389,6 +392,7 @@ class CupioMainContainer extends LitElement {
                     canceled
                     clientName
                     client
+                    price
                 }
             }
         `;

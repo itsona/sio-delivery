@@ -87,9 +87,9 @@ class CupioMainTable extends LitElement {
                                 item[key] === 'ასაღები' ? 'მიღებულია' : item[key]: 
                                 key === 'phone' || key ==='deliveryPhone' ? html`
                                     <a class="phone" href="tel:${item[key]}">${item[key]}</a>
-                                `: item[key]
+                                `: key === 'price' && this.delivery && !this.panel ? "" : item[key]
             }
-                            ${key === 'price' ? html`
+                            ${key === 'price' && (!this.delivery || (this.delivery && this.panel)) ? html`
                                 ₾ ` : ''}
                         </span>
                     ` : '')}

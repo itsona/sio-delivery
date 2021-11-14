@@ -240,6 +240,7 @@ const dataList = {
                                 canceled: 1,
                                 clientName: 1,
                                 client: 1,
+                                price: 1,
                                 payed: 1,
                             }
                         },
