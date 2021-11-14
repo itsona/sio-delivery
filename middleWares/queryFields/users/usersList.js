@@ -75,7 +75,7 @@ const usersDetails = {
             status: args.status,
         }
         return userData().then(async ({res, db}) => {
-            const data = await res.find(query).sort({budget: 1}).toArray();
+            const data = await res.find(query).toArray();
             await db.close();
             return data;
         })

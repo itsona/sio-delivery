@@ -190,8 +190,14 @@ class CupioAdminPanel extends LitElement {
             `
         graphqlPost(gql).then(({data: {usersDetails}}) => {
             if (status === 'delivery') {
-                this.couriers = usersDetails;
-            } else this.clients = usersDetails;
+                this.couriers = usersDetails || [];
+            } else {
+                usersDetails = usersDetails || [];
+                this.clients = usersDetails.sort((first, second)=> {
+                    if(first.budget > second.budget) return 1;
+                    else return -1;
+                })
+            }
         })
     }
 
