@@ -312,6 +312,7 @@ class CupioDetails extends LitElement {
         } else {
             this.values.takeDate = this.getDate(1);
             this.values.deliveryDate = this.getDate(1);
+            this.minDate = this.values.takeDate;
         }
         this.values = {...this.values}
     }

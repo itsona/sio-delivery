@@ -386,8 +386,10 @@ const changePrice = {
                 return false;
             }
             const item = await res.findOne({id: args.id});
-            const newPrice = item.price + args.priceDiff;
-            await handlePay({id: args.id, client: item.client, price: args.priceDiff})
+            const newPrice = parseFloat(item.price) + parseFloat(args.priceDiff);
+            if(!item.payed) {
+                await handlePay({id: args.id, client: item.client, price: parseFloat(args.priceDiff)})
+            }
             await res.updateOne({id: args.id}, {$set: {price: newPrice}}, {safe: true});
             await db.close();
             return true;
@@ -418,7 +420,7 @@ const addData = {
             }
             if (args.service === 'ექსპრესი') {
                 const dt = new Date();
-                if (dt.getHours() > 13) {
+                if (dt.getHours() > 9) {
                     await db.close();
                     return false;
                 }
@@ -454,6 +456,31 @@ const addData = {
         })
 
             .catch((r)=> console.log(r))
+    }
+}
+
+
+const changePayed = {
+    type: GraphQLBoolean,
+    args: {
+        payed: {type: GraphQLNonNull(GraphQLBoolean)},
+        id: {type: GraphQLNonNull(GraphQLString)},
+    },
+
+    resolve: async (parent, args, response) => {
+        const token = response.headers.token;
+        if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
+
+        const {res, db} = await pageData();
+        try {
+            const item = await res.findOne({id: args.id})
+            await handlePay(item, !args.payed)
+            await res.updateOne({id: args.id}, {$set: {payed: args.payed}}, {safe: true});
+            await db.close();
+            return true;
+        }catch (e){
+
+        }
     }
 }
 
@@ -654,7 +681,7 @@ const dayReport = {
                     income += item.price;
                 })
             })
-        const str = `დღის განმავლობაში შემოსულია ${length} შეკვეთა, გადახდილია ${income}₾`
+        const str = `დღის განმავლობაში შემოსულია ${length} შეკვეთა`
         await db.close();
         return str;
     }
@@ -759,6 +786,7 @@ module.exports = ({
     changeStatus,
     updateData,
     changePrice,
+    changePayed,
     changeCourier,
     sendEmail
 });

@@ -257,7 +257,14 @@ class CupioDrawer extends LitElement {
                             name="budget"
                             .value="${this.priceDiff}"
                             @add-request="${this.changePrice}"></cupio-input>
-                <div
+                    გადახდილია
+                    <input
+                        type="checkbox"
+                        id="check"
+                        name="check"
+                        ?checked="${!!this.item.payed}"
+                        @change="${this.changePayed}">
+                        <div
                         class="save"
                         @click="${this.save}"
                         ?disabled="${!this.changed}">
@@ -312,7 +319,8 @@ class CupioDrawer extends LitElement {
             'clientEmail',
             'takeCourier',
             'deliveryCourier',
-            'price'
+            'price',
+            'payed'
         ];
         this._alreadySent = false;
         this.item = {};
@@ -356,6 +364,19 @@ class CupioDrawer extends LitElement {
             case 'ჩაბარებული':
                 return 'deliveryCourier';
             }
+    }
+
+    changePayed(event) {
+            const payed = event.currentTarget.checked
+        const gql =` 
+            mutation {
+                changePayed(
+                    id: "${this.newItem.id}"
+                    payed: ${payed}
+            )
+            }
+        `
+        graphqlPost(gql).then(r=> this.loadDetails());
     }
 
     getStatus(status){
@@ -443,6 +464,7 @@ class CupioDrawer extends LitElement {
                 takeCourier
                 deliveryCourier
                 price
+                payed
               }
             }
         `;
