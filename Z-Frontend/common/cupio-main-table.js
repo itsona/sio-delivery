@@ -49,6 +49,7 @@ class CupioMainTable extends LitElement {
                 padding: 0 8px;
                 display: flex;
                 cursor: pointer;
+                align-items: center;
             }
 
             .id {
@@ -97,10 +98,11 @@ class CupioMainTable extends LitElement {
                 <span class="drop-down"
                       @click="${() => this.drawerToggle(item)}">
                     
+                    ...
+                
                         ${this.panel && item.payed ? html`
-                            <img class="img" src="/Z-Frontend/images/icons/payed.svg">
-                        ` : ''}
-                    ...</span>
+                            <img class="img" src="/Z-Frontend/images/icons/payed.svg" style="margin-left: 6px">
+                        ` : ''}</span>
             ` : item.payed ? html`
                 <span>
                     <img class="img item" src="/Z-Frontend/images/icons/payed.svg">

@@ -249,7 +249,7 @@ class CupioDrawer extends LitElement {
                         `}
                         </div>
                     `)}
-                    ${this.panel ? html`
+                    ${this.panel && this.opened ? html`
                     <span class="title">ფასი</span>
                     <cupio-input
                             style="width: 200px"
@@ -376,7 +376,10 @@ class CupioDrawer extends LitElement {
             )
             }
         `
-        graphqlPost(gql).then(r=> this.loadDetails());
+        graphqlPost(gql).then(r=> {
+            this.loadDetails();
+            this.saved = true;
+        });
     }
 
     getStatus(status){

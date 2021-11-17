@@ -338,6 +338,7 @@ class CupioMainContainer extends LitElement {
                     description
                     price
                     status
+                    payed
                 }
             }
         `;
@@ -366,6 +367,7 @@ class CupioMainContainer extends LitElement {
                     clientName
                     client
                     price
+                    payed
                 }
             }`
             } else {
@@ -393,6 +395,7 @@ class CupioMainContainer extends LitElement {
                     clientName
                     client
                     price
+                    payed
                 }
             }
         `;
