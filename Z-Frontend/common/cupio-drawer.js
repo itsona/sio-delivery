@@ -24,6 +24,11 @@ class CupioDrawer extends LitElement {
                 visibility: visible;
             }
 
+            :host([disabled]) .content{
+                opacity: 0.3;
+                pointer-events: none;
+            }
+
             .container {
                 position: absolute;
                 border: unset;
@@ -293,6 +298,10 @@ class CupioDrawer extends LitElement {
             disableds: {
                 type: Array,
             },
+            disabled: {
+                type: Boolean,
+                reflect: true,
+            },
             panel: {
                 type: Boolean,
             },
@@ -376,7 +385,7 @@ class CupioDrawer extends LitElement {
             )
             }
         `
-        graphqlPost(gql).then(r=> {
+        this.graphqlPost(gql).then(r=> {
             this.loadDetails();
             this.saved = true;
         });
@@ -408,7 +417,7 @@ class CupioDrawer extends LitElement {
                 priceDiff: ${this.priceDiff},
                )
               }`
-        graphqlPost(gql).then(r=> {
+        this.graphqlPost(gql).then(r=> {
                 this.loadDetails();
                 this.saved = true;
                 this.priceDiff = 0;
@@ -424,7 +433,7 @@ class CupioDrawer extends LitElement {
                 courier: "${value}",
                )
               }`
-        graphqlPost(gql).then(r=> {
+        this.graphqlPost(gql).then(r=> {
                 this.loadDetails();
                 this.saved = true;
             }
@@ -441,7 +450,7 @@ class CupioDrawer extends LitElement {
               }
             }
             `
-        graphqlPost(gql).then(({data: {usersDetails}}) => {
+        this.graphqlPost(gql).then(({data: {usersDetails}}) => {
             this.couriers = usersDetails;
         })
     }
@@ -472,7 +481,7 @@ class CupioDrawer extends LitElement {
             }
         `;
 
-        graphqlPost(gql).then(({data: {getDetails}}) => {
+        this.graphqlPost(gql).then(({data: {getDetails}}) => {
             this.item = {...getDetails};
             this.newItem = {...getDetails};
             this.cantSave = false;
@@ -495,7 +504,7 @@ class CupioDrawer extends LitElement {
               )
             }`
 
-        graphqlPost(gql).then(()=> {
+        this.graphqlPost(gql).then(()=> {
             this.drawerClose('updated');
         })
             .catch(r=> console.warn(r) );
@@ -506,7 +515,7 @@ class CupioDrawer extends LitElement {
         mutation {
             cancelOrder(id: "${this.item.id}")
         }`
-        graphqlPost(gql).then(()=> {
+        this.graphqlPost(gql).then(()=> {
             // window.location.reload();
             this.drawerClose('updated');
         })
@@ -517,11 +526,18 @@ class CupioDrawer extends LitElement {
         const gql = `mutation{
               changeStatus(id: "${this.newItem.id}", status: "${value}")
               }`
-        graphqlPost(gql).then(r=> {
+        this.graphqlPost(gql).then(r=> {
                 if(this.panel) this.loadDetails();
                 this.saved = true;
             }
         );
+    }
+
+    async graphqlPost(gql){
+        this.disabled = true;
+        const resp = await graphqlPost(gql);
+        this.disabled = false;
+        return resp;
     }
 }
 

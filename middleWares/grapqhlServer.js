@@ -16,6 +16,7 @@ const RootQueryType = new GraphQLObjectType({
         data: require('../middleWares/queryFields/data/dataList').dataList,
         getForAccept: require('../middleWares/queryFields/data/dataList').getForAccept,
         loadExcel: require('../middleWares/queryFields/data/dataList').loadExcel,
+        logExcel: require('../middleWares/queryFields/data/dataList').logExcelLoad,
         getDetails: require('../middleWares/queryFields/data/dataList').getDetails,
         dayReport: require('../middleWares/queryFields/data/dataList').dayReport,
         getLog: require('../middleWares/queryFields/data/dataList').getLog,

@@ -10,12 +10,16 @@ class CupioAdminItem extends LitElement {
         return css`
             :host {
                 display: grid;
-                grid-template-columns: 1fr 1fr 1fr 1fr 2fr auto;
+                grid-template-columns: 1fr 1fr 1fr 1fr 2fr 1fr;
                 border-bottom: 1px solid rgb(223, 223, 223);
                 max-width: 100%;
                 transition: all 0.2s;
                 gap: 24px;
                 padding: 12px;
+            }
+            
+            :host([show-times]) {
+                grid-template-columns: 1fr 1fr 1fr;
             }
 
             :host(:hover) {
@@ -112,6 +116,18 @@ class CupioAdminItem extends LitElement {
                         ${key === 'date'? new Date(this.item[key] * 1).toLocaleString() : this.item[key]}
                         
                     ${key === 'budget' ? html`
+
+                        ${this.showTimes ? html`
+                        <cupio-input
+                                name="date"
+                                .value="${this.getDate()}"
+                                @value-changed="${this.setDate}"
+                        ></cupio-input>
+                        <cupio-input
+                                name="time"
+                                .value="${new Date().toLocaleTimeString()}"
+                                @value-changed="${this.setTime}"
+                        ></cupio-input>`:''}
                         <cupio-input
                                 with-sign
                                 name="budget"
@@ -133,6 +149,7 @@ class CupioAdminItem extends LitElement {
                 ${this.needToSave ? html`
                     <div class="accept" @click="${this.saveRates}">შენახვა</div>
                 ` : ''}
+            </div>
         `
     }
 
@@ -144,6 +161,11 @@ class CupioAdminItem extends LitElement {
             },
             delivery: {
                 type: Boolean,
+            },
+            showTimes: {
+                type: Boolean,
+                reflect: true,
+                attribute: 'show-times'
             },
             value: {
                 type: Number,
@@ -183,11 +205,34 @@ class CupioAdminItem extends LitElement {
         });
     }
 
+    setDate(event){
+        this.date = event.detail;
+    }
+
+    setTime(event){
+        this.time = event.detail;
+    }
+
+    getDate(additional=0) {
+        const date = new Date();
+        date.setDate(date.getDate() + additional);
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1);
+        const day = date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate();
+        return year + '-' + month + '-' + day;
+    }
+
     setBudget(event) {
         this.value = parseFloat(event.detail)
+        if(this.date && !this.time) this.time = new Date().toLocaleTimeString();
         const gql = `
             mutation{
-                setBudget(client: "${this.item.email}", budget: ${this.value})
+                setBudget(
+                client: "${this.item.email}",
+                budget: ${this.value},
+                date: "${this.date || ''}",
+                time: "${this.time || ''}"
+                )
             }
         `
         graphqlPost(gql).then(({data: {setBudget}}) => {

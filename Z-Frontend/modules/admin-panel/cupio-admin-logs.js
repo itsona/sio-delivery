@@ -3,6 +3,7 @@ import './cupio-admin-item';
 import '../../common/cupio-input';
 import {graphqlPost, handleRequest} from "../../mixins/graphql";
 import {redirectTo} from "../../mixins/redirectTo";
+import './cupio-clients-details';
 
 class CupioAdminLogs extends LitElement {
     //Language=css
@@ -111,13 +112,20 @@ class CupioAdminLogs extends LitElement {
                         <img src="/Z-Frontend/images/icons/add.svg">
                     </a>
                 </div>
+                <div class="link" @click="${this.loadExcel}">ექსელის დაგენერირება</div>
+                <a class="link"
+                   href="https://138.201.104.132:443/middleWares/log-excel.xlsx"
+                   target="_blank"
+                >ექსელის ჩამოწერა</a>
                 <div class="links">
-                    Email:
-                    <cupio-input
-                        name="name"
-                        .placeholder="Email"
-                        @value-changed="${(value)=> this.filter(value, 'courier')}"
-                    ></cupio-input>
+                    <cupio-clients-details
+                            style="flex-grow: 1"
+                            .users="${this.users}"
+                            .clients="${this.users}"
+                            .listShow="${this.listShow}"
+                            @click="${this._onClick}"
+                            @client-changed="${this.setClient}"></cupio-clients-details>
+                    </cupio-input>
                     დან:
                     <cupio-input
                         name="date"
@@ -131,11 +139,25 @@ class CupioAdminLogs extends LitElement {
                         @value-changed="${(value)=> this.filter(value, 'to')}"
                     ></cupio-input>
                 </div>
+
+                ${this.client ? html`
+                    <cupio-admin-item 
+                        .item="${this.users.filter((item)=> this.client === item.email)[0]}"
+                        hideAction
+                        show-times
+                        @status-changed="${(event)=> this.setClient(event, true)}"
+                    >
+                    </cupio-admin-item>
+                    <br>
+                    <br>
+                    <br>
+                `: ''}
+                
                 ${this.logs.map((item)=> html`
 
                     <div class="delivery-item">
                         <cupio-admin-item
-                                style="width: 100%"
+                                style="width: 100%; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr"
                                 hideAction
                                 .item="${item}"></cupio-admin-item>
 
@@ -154,9 +176,15 @@ class CupioAdminLogs extends LitElement {
             logs: {
                 type: Array,
             },
+            users: {
+                type: Array,
+            },
             unfiltered: {
                 type: Array,
-            }
+            },
+            listShow: {
+                type: Boolean,
+            },
         };
     }
 
@@ -164,11 +192,17 @@ class CupioAdminLogs extends LitElement {
         super();
         this.loadAll();
         this.logs = [];
-        this.filters = {courier: '', from: 0, to: new Date()};
+        this.filters = {};
         if (window.localStorage.getItem('isEmployee')) redirectTo('/panel')
         handleRequest(false).then(r => {
             if (r !== 'admin') redirectTo('/client')
         })
+        this.users = [];
+        this.loadUsers();
+        document.addEventListener('click', () => {
+            this.listShow = false
+        })
+
     }
 
     loadAll() {
@@ -176,24 +210,29 @@ class CupioAdminLogs extends LitElement {
     }
 
     filter(value, type){
-        this.filters[type] = value.detail;
+        if(value && type) this.filters[type] = value.detail;
         this.logs = this.unfiltered.filter((item)=> {
-            let courierCheck = item.courier.includes(this.filters.courier);
-            let fromCheck = item.date >= new Date(this.filters.from).getTime();
-            let toCheck = item.date <= new Date(this.filters.to).getTime();
-            return courierCheck && fromCheck && toCheck;
+            let fromCheck = item.date >= new Date(this.filters.from||0).setHours(0);
+            let toCheck = item.date <= new Date(this.filters.to || 0).setHours(0)
+            if(!this.filter.to) toCheck = true;
+            return fromCheck && toCheck;
         })
     }
+
+
 
     loadCouriers() {
         const gql = `
         {
         getLog{
+            name
             courier
             date
             oldBudget
             change
             newBudget
+            changer
+            payDate
           }
         }
             `
@@ -201,6 +240,60 @@ class CupioAdminLogs extends LitElement {
             this.logs = getLog;
             this.unfiltered = getLog;
         })
+    }
+
+    _onClick(event) {
+        this.listShow = !this.listShow
+        event.stopPropagation();
+    }
+
+    loadExcel(){
+        const gql = `
+        { 
+        logExcel(
+            client: "${this.client || ''}", 
+            fromDate: "${this.filters.from || ''}" 
+            toDate: "${this.filters.to || ''}"
+        )
+        }
+        `
+        graphqlPost(gql);
+    }
+
+    setClient(event, outside= false){
+        if(!outside)this.client = event.detail.email;
+        const gql = `
+        { getLog(client: "${this.client}"){
+            name
+            courier
+            date
+            oldBudget
+            change
+            newBudget
+            changer
+            payDate
+          }
+        }
+        `
+        graphqlPost(gql).then(({data:{getLog}}) => {
+            this.logs = getLog;
+            this.unfiltered = getLog;
+            this.loadUsers();
+            this.filter();
+        })
+    }
+
+    loadUsers() {
+        const gql = `
+                {
+                  usersDetails{
+                    name
+                    email
+                    budget
+                  }
+                }
+        `
+        graphqlPost(gql).then(({data: {usersDetails}}) => this.users = usersDetails);
     }
 
 }

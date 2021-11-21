@@ -71,9 +71,8 @@ const usersDetails = {
         status: {type: GraphQLString},
     },
     resolve: async (parent, args, request) => {
-        const query = {
-            status: args.status,
-        }
+        const query = {};
+        if (args.status) query.status = args.status;
         return userData().then(async ({res, db}) => {
             const data = await res.find(query).toArray();
             await db.close();
@@ -110,6 +109,8 @@ const setBudget = {
     args: {
         budget: {type: GraphQLFloat},
         client: {type: GraphQLString},
+        date: {type: GraphQLString},
+        time: {type: GraphQLString},
     },
     resolve: async (parent, args, request) => {
         const token = request.headers.token;
@@ -118,26 +119,29 @@ const setBudget = {
         }
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
         return userData().then(async ({res, db}) => {
-            const budget = await res.findOne(query, {projection: {_id: 0, budget: 1, status: 1}}) || {}
-            if(!budget || !budget.budget) budget.budget = 0;
-            if(!args.budget) args.budget = 0;
+            const budget = await res.findOne(query, {projection: {_id: 0, budget: 1, status: 1, name: 1}}) || {}
+            if (!budget || !budget.budget) budget.budget = 0;
+            if (!args.budget) args.budget = 0;
+            const newBudget = parseFloat(budget.budget) + parseFloat(args.budget)
             await res.updateOne(query,
-                {$set: {budget: parseFloat(budget.budget) + parseFloat(args.budget)}},
+                {$set: {budget: newBudget}},
                 {safe: true});
             await db.close()
-
-            if(budget.status === 'delivery') {
-                await logData().then(async ({res, db}) => {
-                    await res.insertOne({
-                        courier: args.client,
-                        oldBudget: budget.budget,
-                        change: args.budget,
-                        newBudget: parseFloat(budget.budget) + parseFloat(args.budget),
-                        date: new Date()
-                    }, {safe: true})
-                    await db.close();
-                })
-            }
+            let dateString = new Date();
+            if(args.date || args.time) dateString = new Date(args.date + ' '+ args.time);
+            logData().then(async ({res, db}) => {
+                const b = await res.insertOne({
+                    name: budget.name,
+                    courier: args.client,
+                    oldBudget: budget.budget,
+                    change: args.budget,
+                    newBudget,
+                    date: new Date(),
+                    payDate: new Date(dateString).toLocaleString(),
+                    changer: jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).name,
+                }, {safe: true})
+                await db.close();
+            })
             return true;
         })
         return false
@@ -278,19 +282,19 @@ const resetPassword = {
         email: {type: GraphQLNonNull(GraphQLString)}
     },
     resolve: (parent, args) => {
-        return emailData().then(({res,db}) => {
+        return emailData().then(({res, db}) => {
             return res.countDocuments({email: args.email}).then(contains => {
 
                 db.close();
                 if (contains) {
                     const tok = jwt.sign({email: args.email}, process.env.ACCESS_TOKEN_SECRET);
-                    const href= 'https://siodelivery.ge/reset?'+tok
+                    const href = 'https://siodelivery.ge/reset?' + tok
                     sendEmail(
                         args.email,
                         'პაროლის აღდგენა',
                         'პაროლის აღდგენა',
                         'პაროლის აღსადგენად დააჭირეთ სისტემაში შესვლას',
-                         href );
+                        href);
                     return 'success'
                 } else {
                     return 'no-email';
@@ -347,13 +351,11 @@ const addUser = {
         delete user.passwordRepeat;
         user.rates = Config.rates;
         user.budget = 0;
-        console.log(user);
         return emailData().then(({res, db}) => {
             return res.countDocuments({email: args.email}).then(async contains => {
                 if (!contains) {
                     await res.insertOne({email: args.email}, {safe: true}).then(() => db.close());
                     return userData().then(async ({res, db}) => {
-                        console.log(user)
                         await res.insertOne(user, {safe: true})
                         await db.close();
                         return 'success';
@@ -382,7 +384,7 @@ const FbLogin = {
             url = `https://graph.facebook.com/${args.id}/accounts?access_token=${args.token}`
         }
         const callback = (req) => {
-            console.log(req.statusCode)
+
             if (req.statusCode !== 200) {
                 return '';
             }
@@ -435,7 +437,6 @@ const checkToken = async (channel, token) => {
     let ret = false;
     if (channel === 'google') {
         const req = await https.get(`https://www.googleapis.com/oauth2/v1/tokeninfo?access_token=${token}`, (req) => {
-            console.log(req.statusCode)
         })
         // req.then(r=> console.log(r))
     }
@@ -489,19 +490,19 @@ const modifyUser = {
                     delete args.newPassword;
                 }
                 let emailExists = false;
-                if(args.email !== args.oldEmail){
+                if (args.email !== args.oldEmail) {
                     await emailData().then(async ({res, db}) => {
                         await res.countDocuments({email: args.email}).then(async contains => {
                             if (!contains) {
                                 handleEmailChange(args.email, args.oldEmail)
                                 await res.insertOne({email: args.email}, {safe: true})
-                                await res.deleteOne({email: args.oldEmail}, {safe: true}).then(r=> {
+                                await res.deleteOne({email: args.oldEmail}, {safe: true}).then(r => {
                                 })
-                            }else emailExists = true;
+                            } else emailExists = true;
                         })
                     })
                 }
-                if(emailExists) return 'emailExists';
+                if (emailExists) return 'emailExists';
                 if (!args.password) args.password = user.password;
                 if (!user.status) args.status = 'client';
                 else args.status = user.status;
@@ -519,10 +520,10 @@ const modifyUser = {
     }
 }
 
-const handleEmailChange = async (email, oldEmail)=> {
+const handleEmailChange = async (email, oldEmail) => {
     pageData().then(async ({res, db}) => {
-      await res.updateMany({client: oldEmail}, {$set: {client: email}}, {safe: true});
-      db.close();
+        await res.updateMany({client: oldEmail}, {$set: {client: email}}, {safe: true});
+        db.close();
     })
 }
 

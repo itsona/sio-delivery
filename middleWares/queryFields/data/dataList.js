@@ -5,7 +5,8 @@ const fs = require('fs')
 const path = require('path')
 require('dotenv').config();
 const nodemailer = require('nodemailer');
-const loadFile = require('./createXcel')
+const loadFile = require('./createXcel');
+const logExcel = require('./logExcel');
 const {
     GraphQLList,
     GraphQLFloat,
@@ -246,7 +247,7 @@ const dataList = {
                         },
                         {$sort: {deliveryDate: 1, deliveryAddress: 1}}
                     ]).toArray();
-                    if(data.length) data[0].count =await res.count({...query, status: 'აღებული'});
+                    if (data.length) data[0].count = await res.count({...query, status: 'აღებული'});
                     await db.close();
                     return data;
                 }
@@ -261,7 +262,7 @@ const dataList = {
 
                 const data = await res.find(query).sort(sortQuery).skip(args.skip || 0).limit(args.limit || 20)
                     .toArray()
-                if(data.length) data[0].count =await res.count(query);
+                if (data.length) data[0].count = await res.count(query);
                 await db.close();
                 return data;
 
@@ -364,10 +365,10 @@ const updateData = {
     resolve: (parent, args, response) => {
         const token = response.headers.token;
         return pageData().then(async ({res, db}) => {
-            if(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin'){
+            if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') {
                 return false;
             }
-            await res.updateOne({id: args.id}, {$set:args}, {safe: true});
+            await res.updateOne({id: args.id}, {$set: args}, {safe: true});
             await db.close();
             return true;
         })
@@ -382,12 +383,12 @@ const changePrice = {
     resolve: (parent, args, response) => {
         const token = response.headers.token;
         return pageData().then(async ({res, db}) => {
-            if(jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin'){
+            if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') {
                 return false;
             }
             const item = await res.findOne({id: args.id});
             const newPrice = parseFloat(item.price) + parseFloat(args.priceDiff);
-            if(!item.payed) {
+            if (!item.payed) {
                 await handlePay({id: args.id, client: item.client, price: parseFloat(args.priceDiff)})
             }
             await res.updateOne({id: args.id}, {$set: {price: newPrice}}, {safe: true});
@@ -426,7 +427,7 @@ const addData = {
                 }
             }
             args.registerDate = getNewDate();
-            args.id = await res.count()+' ';
+            args.id = await res.count() + ' ';
             args.status = 'განხილვაშია';
             const query = {};
             if (!args.client) {
@@ -455,7 +456,7 @@ const addData = {
             });
         })
 
-            .catch((r)=> console.log(r))
+            .catch((r) => console.log(r))
     }
 }
 
@@ -478,7 +479,7 @@ const changePayed = {
             await res.updateOne({id: args.id}, {$set: {payed: args.payed}}, {safe: true});
             await db.close();
             return true;
-        }catch (e){
+        } catch (e) {
 
         }
     }
@@ -497,17 +498,17 @@ const changeStatus = {
         const {res, db} = await pageData();
         try {
             const item = await res.findOne({id: args.id})
-            if(args.status === 'გაუქმებულია') {
+            if (args.status === 'გაუქმებულია') {
                 await handlePay(item, false)
-            } else if(args.status === 'ასაღები' && item.status === 'გაუქმებულია') {
+            } else if (args.status === 'ასაღები' && item.status === 'გაუქმებულია') {
                 await handlePay(item)
-            }else {
+            } else {
                 await handleBudget(args.status, item)
             }
             await res.updateOne({id: args.id}, {$set: {status: args.status}}, {safe: true});
             await db.close();
             return true;
-        }catch (e){
+        } catch (e) {
             return false;
         }
     }
@@ -542,19 +543,19 @@ const changeCourier = {
             await res.updateOne({id: args.id}, {$set: updateObject}, {safe: true});
             await db.close();
             return true;
-        }catch (e){
+        } catch (e) {
             return false;
         }
     }
 }
 
-const handleBudget = async (status,item,) => {
+const handleBudget = async (status, item,) => {
     let minus = false;
-        if (status === 'ასაღები') {
-            if (item.status !== 'აღებული' && item.status !== 'ჩასაბარებელი') return;
-            minus = true;
-        }
-        if (status === 'აღებული' && item.status === 'ჩაბარებული') minus = true;
+    if (status === 'ასაღები') {
+        if (item.status !== 'აღებული' && item.status !== 'ჩასაბარებელი') return;
+        minus = true;
+    }
+    if (status === 'აღებული' && item.status === 'ჩაბარებული') minus = true;
     let rate = status === 'აღებული' ? 'takeRate' : 'delivery';
     if (minus) rate = status === 'აღებული' ? 'delivery' : 'takeRate';
     let courierType = status === 'აღებული' ? 'takeCourier' : 'deliveryCourier';
@@ -568,10 +569,10 @@ const handleBudget = async (status,item,) => {
         }
         const budgetList = user.budgetList || [];
         newRate = user.rates[rate];
-        if(minus) newRate = newRate * -1;
+        if (minus) newRate = newRate * -1;
         const obj = {date: getNewDate(), budget: newRate, id: item.id, status: status};
         budgetList.push(obj);
-        let newBudget = (parseFloat(user.budget) + parseFloat(newRate)).toFixed(2);
+        let newBudget = (parseFloat(user.budget) + parseFloat(newRate));
         await res.updateOne({email: item[courierType]},
             {
                 $set:
@@ -581,6 +582,18 @@ const handleBudget = async (status,item,) => {
                     }
             }, {safe: true}
         )
+        await logData().then(async ({res, db}) => {
+            await res.insertOne({
+                name: user.name,
+                courier: item[courierType],
+                oldBudget: user.budget,
+                change: user.rates[rate] * ((0 - 1) ** minus),
+                newBudget,
+                date: new Date(),
+                changer: 'system# ' + item.id,
+            }, {safe: true})
+            await db.close();
+        })
         await db.close();
     })
 }
@@ -597,9 +610,21 @@ const handlePay = async (args, minus = true) => {
         }
         await res.updateOne({email: args.client}, {
             $set: {
-                budget: (newVal).toFixed(2),
+                budget: (newVal),
             }
         }, {safe: true})
+        await logData().then(async ({res, db}) => {
+            await res.insertOne({
+                name: user.name,
+                courier: args.client,
+                oldBudget: user.budget,
+                change: args.price * ((0 - 1) ** minus),
+                newBudget: newVal,
+                date: new Date(),
+                changer: 'system# ' + args.id,
+            }, {safe: true})
+            await db.close();
+        })
         await db.close()
     })
 }
@@ -755,21 +780,65 @@ const logType = new GraphQLObjectType({
     fields: () => ({
         oldBudget: {type: GraphQLString},
         courier: {type: GraphQLString},
+        name: {type: GraphQLString},
         change: {type: GraphQLString},
         newBudget: {type: GraphQLString},
         date: {type: GraphQLString},
+        changer: {type: GraphQLString},
+        payDate: {type: GraphQLString},
     })
 })
 const getLog = {
     type: GraphQLList(logType),
+    args: {
+        client: {type: GraphQLString},
+    },
     resolve: async (parent, args, response) => {
         const token = response.headers.token;
-        if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return [];
-
+        const query = {};
+        if (args.client) {
+            query.courier = args.client;
+        }
+        if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return false;
         return logData().then(async ({res, db}) => {
-            const data = await res.find({}).sort({date: -1}).toArray();
+            const data = await res.find(query).sort({date: -1}).toArray();
             await db.close();
             return data;
+        })
+    }
+}
+
+const logExcelLoad = {
+    type: GraphQLList(GraphQLBoolean),
+    args: {
+        client: {type: GraphQLString},
+        fromDate: {type: GraphQLString},
+        toDate: {type: GraphQLString},
+    },
+    resolve: async (parent, args, response) => {
+        const token = response.headers.token;
+        const query = {};
+        if (args.fromDate) {
+            query.date['$gte'] = args.fromDate;
+        }
+        if (args.toDate) {
+            query.date['$lte'] = args.toDate;
+        }
+        if (args.client) {
+            query.courier = args.client;
+        }
+        if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return [false];
+        return logData().then(async ({res, db}) => {
+            const data = await res.find(query).sort({date: -1}).toArray();
+            await db.close();
+            const filePath = './middleWares/log-excel.xlsx';
+            try {
+                fs.unlinkSync(path.resolve(filePath))
+            } catch (e) {
+                console.log(e)
+            }
+            await logExcel(data)
+            return [true];
         })
     }
 }
@@ -782,6 +851,7 @@ module.exports = ({
     handleAccept,
     dayReport,
     loadExcel,
+    logExcelLoad,
     getLog,
     changeStatus,
     updateData,
