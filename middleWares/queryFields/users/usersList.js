@@ -137,7 +137,7 @@ const setBudget = {
                     change: args.budget,
                     newBudget,
                     date: new Date(),
-                    payDate: new Date(dateString).toISOString(),
+                    payDate: new Date(dateString).toLocaleString('en-US',{ timeZone: 'Asia/Tbilisi' }),
                     changer: jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).name,
                 }, {safe: true})
                 await db.close();

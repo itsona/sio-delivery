@@ -225,6 +225,12 @@ class CupioAdminItem extends LitElement {
     setBudget(event) {
         this.value = parseFloat(event.detail)
         if(this.date && !this.time) this.time = new Date().toLocaleTimeString();
+        if(!this.date && this.time) this.date = new Date().toLocaleDateString();
+        const dateString = new Date(this.date + ' '+ this.time);
+        if(isNaN(dateString.getTime()) && this.date) {
+            alert('არასწორი თარიღი')
+            return;
+        }
         const gql = `
             mutation{
                 setBudget(
