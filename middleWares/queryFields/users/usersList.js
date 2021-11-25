@@ -127,8 +127,8 @@ const setBudget = {
                 {$set: {budget: newBudget}},
                 {safe: true});
             await db.close()
-            let dateString = new Date();
-            if(args.date || args.time) dateString = new Date(args.date + ' '+ args.time);
+            let dateString = new Date().toLocaleString('en-US',{ timeZone: 'Asia/Tbilisi' });
+            if(args.date || args.time) dateString = new Date(args.date + ' '+ args.time).toLocaleString();
             logData().then(async ({res, db}) => {
                 const b = await res.insertOne({
                     name: budget.name,
@@ -137,7 +137,7 @@ const setBudget = {
                     change: args.budget,
                     newBudget,
                     date: new Date(),
-                    payDate: new Date(dateString).toLocaleString('en-US',{ timeZone: 'Asia/Tbilisi' }),
+                    payDate: dateString,
                     changer: jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).name,
                 }, {safe: true})
                 await db.close();

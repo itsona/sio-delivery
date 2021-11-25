@@ -185,6 +185,9 @@ class CupioAdminLogs extends LitElement {
             listShow: {
                 type: Boolean,
             },
+            client: {
+                type: String,
+            },
         };
     }
 
@@ -266,7 +269,9 @@ class CupioAdminLogs extends LitElement {
     }
 
     setClient(event, outside= false){
-        if(!outside)this.client = event.detail.email;
+        if(!outside) {
+            this.client = event.detail.email;
+        }
         const gql = `
         { getLog(client: "${this.client}"){
             name
@@ -280,11 +285,16 @@ class CupioAdminLogs extends LitElement {
           }
         }
         `
+
+        const client = this.client;
+        this.client = '';
         graphqlPost(gql).then(({data:{getLog}}) => {
             this.logs = getLog;
             this.unfiltered = getLog;
             this.loadUsers();
             this.filter();
+            console.log('aaaaaaaaa', client)
+            this.client = client + '';
         })
     }
 
