@@ -46,6 +46,10 @@ export const localize = (key)=> {
             return 'ექსპრესი';
         case 'newBudget':
             return 'ახალი';
+        case 'changer':
+            return 'ავტორი';
+        case 'payDate':
+            return 'ოფიციალური';
         case 'oldBudget':
             return 'ძველი';
         case 'change':

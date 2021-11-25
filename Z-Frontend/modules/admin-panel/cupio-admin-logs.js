@@ -159,7 +159,7 @@ class CupioAdminLogs extends LitElement {
                         <cupio-admin-item
                                 style="width: 100%; grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr 1fr 1fr"
                                 hideAction
-                                .item="${item}"></cupio-admin-item>
+                                .item="${{...item, payDate: this.setDate(item.payDate)}}"></cupio-admin-item>
 
                     </div>
                         `
@@ -203,6 +203,12 @@ class CupioAdminLogs extends LitElement {
             this.listShow = false
         })
 
+    }
+
+    setDate(d){
+        const date = new Date(d);
+        date.setHours(date.getHours() +4 );
+        return date.toLocaleString()
     }
 
     loadAll() {
