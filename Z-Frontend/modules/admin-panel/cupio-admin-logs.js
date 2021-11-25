@@ -207,7 +207,6 @@ class CupioAdminLogs extends LitElement {
 
     setDate(d){
         const date = new Date(d);
-        date.setHours(date.getHours() +4 );
         return date.toLocaleString()
     }
 
