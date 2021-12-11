@@ -58,6 +58,8 @@ class CupioMainTable extends LitElement {
 
             img {
                 margin-right: 4px;
+                width: 20px;
+                height: 20px;
             }
             .phone {
                 color: unset;
@@ -76,7 +78,7 @@ class CupioMainTable extends LitElement {
                 <span class="header">${item}</span>
             `)}
             ${this.items.map((item) => html`${Object.keys(item).map((key) =>
-                    !key.includes('Courier') && key !== 'canceled' && key !== 'payed' && key !=='client' && key !== 'clientEmail' ? html`
+                    !key.includes('Courier') && key !== 'canceled' && key !== 'payed' && key !== 'cashPayed' && key !== 'cashTransfered' && key !== 'cash' && key !=='client' && key !== 'clientEmail' ? html`
                         <span class="${key} item"
                               ?warning="${this.isWarning(item)}"
                               ?error="${this.panel && item.canceled}"
@@ -102,7 +104,15 @@ class CupioMainTable extends LitElement {
                 
                         ${this.panel && item.payed ? html`
                             <img class="img" src="/Z-Frontend/images/icons/payed.svg" style="margin-left: 6px">
-                        ` : ''}</span>
+                        ` : ''}
+                        ${this.delivery && item.cash ? (item.cashPayed ?( item.cashTransfered ? html`
+                            <img class="img" src="/Z-Frontend/images/icons/cash_transfered.svg" style="margin-left: 6px">
+                        `: html`
+                                    <img class="img" src="/Z-Frontend/images/icons/cash_taken.svg" style="margin-left: 6px">
+                                `):
+                                html`
+                            <img class="img" src="/Z-Frontend/images/icons/cash.svg" style="margin-left: 6px">
+                        `) : ''}</span>
             ` : item.payed ? html`
                 <span>
                     <img class="img item" src="/Z-Frontend/images/icons/payed.svg">

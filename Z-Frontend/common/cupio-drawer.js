@@ -242,19 +242,34 @@ class CupioDrawer extends LitElement {
                         </div>` :''
                             }
                     </div>
-                    ${Object.keys(this.item).map((key) => html`
-                        ${(key !== 'status' && key !== 'canceled') && (this.panel || (key !== 'client' &&key !== 'price' && !key.includes('Courier'))) ? html`
-                            <div class="item">
-                                <span class="title">${localize(key)}</span>
-                                <cupio-input
-                                        name="key"
-                                        ?disabled="${!this.panel || this.disableds.indexOf(key) !== -1}"
-                                        value="${this.item[key] || ''}"
-                                        @value-changed="${(event) => this.onValueChange(event, key)}"></cupio-input>` : html`
-                        `}
-                        </div>
-                    `)}
+                    <br>
+                    ${this.opened && this.item.cash ? html`
+                    <br>
+                    ქეში აღებულია
+                    <input
+                            type="checkbox"
+                            id="check"
+                            name="cash"
+                            ?checked="${!!this.item.cashPayed}"
+                            @change="${this.cashPay}">
+                    <br>
+                    `:''}
                     ${this.panel && this.opened ? html`
+                        გადაგზავნილია
+                        <input
+                                type="checkbox"
+                                id="check"
+                                name="cash"
+                                ?checked="${!!this.item.cashTransfered}"
+                                @change="${this.cashTransfer}">
+                        <br>
+
+                        <span class="title">შეკვეთის ფასი</span>
+                        <cupio-input
+                                name="key"
+                                ?disabled="${!this.panel || this.disableds.indexOf('price') !== -1}"
+                                value="${this.item['price'] || ''}"
+                                @value-changed="${(event) => this.onValueChange(event, 'price')}"></cupio-input>
                     <span class="title">ფასი</span>
                     <cupio-input
                             style="width: 200px"
@@ -269,13 +284,27 @@ class CupioDrawer extends LitElement {
                         name="check"
                         ?checked="${!!this.item.payed}"
                         @change="${this.changePayed}">
-                        <div
-                        class="save"
-                        @click="${this.save}"
-                        ?disabled="${!this.changed}">
-                    შენახვა
-                </div>
+
+                        <div style="width: 100%; border-bottom: 1px solid; margin: 48px 0"></div>
                 ` : ''}
+                    ${Object.keys(this.item).map((key) => html`
+                        ${(key !== 'status' && key !== 'canceled' && key !== 'cashPayed' && key !== 'cashTransfered') && (this.panel || (key !== 'client' &&key !== 'price'&& key !== 'payed' && !key.includes('Courier'))) ? html`
+                            <div class="item">
+                                <span class="title">${localize(key)}</span>
+                                <cupio-input
+                                        name="key"
+                                        ?disabled="${!this.panel || this.disableds.indexOf(key) !== -1}"
+                                        value="${this.item[key] || ''}"
+                                        @value-changed="${(event) => this.onValueChange(event, key)}"></cupio-input>` : html`
+                        `}
+                        </div>
+                    `)}
+                    <div
+                            class="save"
+                            @click="${this.save}"
+                            ?disabled="${!this.changed}">
+                        შენახვა
+                    </div>
                 </div>
             </div>
         `
@@ -391,6 +420,38 @@ class CupioDrawer extends LitElement {
         });
     }
 
+    cashPay(event) {
+        const payed = event.currentTarget.checked
+        const gql =` 
+            mutation {
+                cashPay(
+                    id: "${this.newItem.id}"
+                    cashPayed: ${payed}
+            )
+            }
+        `
+        this.graphqlPost(gql).then(r=> {
+            if(this.panel) this.loadDetails();
+            this.saved = true;
+        });
+    }
+
+    cashTransfer(event) {
+        const cashTransfered = event.currentTarget.checked
+        const gql =` 
+            mutation {
+                cashTransfer(
+                    id: "${this.newItem.id}"
+                    cashTransfered: ${cashTransfered}
+            )
+            }
+        `
+        this.graphqlPost(gql).then(r=> {
+            if(this.panel) this.loadDetails();
+            this.saved = true;
+        });
+    }
+
     getStatus(status){
         if(status=== 'აღებული' && this.item.deliveryCourier)
             return 'ჩასაბარებელი';
@@ -477,6 +538,9 @@ class CupioDrawer extends LitElement {
                 deliveryCourier
                 price
                 payed
+                cash
+                cashPayed
+                cashTransfered
               }
             }
         `;
@@ -496,6 +560,7 @@ class CupioDrawer extends LitElement {
                 id: "${this.newItem.id || ''}",
                 takeAddress: "${this.newItem.takeAddress || ''}",
                 deliveryAddress: "${this.newItem.deliveryAddress || ''}",
+                cash: ${this.newItem.cash || 0},
                 deliveryPhone: "${this.newItem.deliveryPhone || ''}",
                 takeDate: "${this.newItem.takeDate || ''}",
                 deliveryDate: "${this.newItem.deliveryDate || ''}",

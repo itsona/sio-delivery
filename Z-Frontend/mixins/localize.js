@@ -58,6 +58,10 @@ export const localize = (key)=> {
             return 'თარიღი';
         case 'courier':
             return 'მეილი';
+        case 'cash':
+            return 'ხელზე ასაღები';
+        case 'deliveryPhone':
+            return 'ჩამბარებლის ტელეფონი';
         default:
             return key;
     }

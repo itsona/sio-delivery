@@ -60,7 +60,12 @@ const usersList = {
     type: GraphQLList(UserType),
     description: 'List of All users',
     resolve: async (parent, args, request) => {
-        return [];
+        return userData().then(async ({res, db}) => {
+            const data = await res.find({}).toArray();
+            db.close();
+            return data;
+        })
+        // return [];
     }
 }
 

@@ -38,11 +38,14 @@ const DataType = new GraphQLObjectType({
         deliveryDate: {type: GraphQLString},
         description: {type: GraphQLNonNull(GraphQLString)},
         phone: {type: GraphQLString},
+        cash: {type: GraphQLFloat},
         deliveryPhone: {type: GraphQLString},
         price: {type: GraphQLFloat},
         id: {type: GraphQLString},
         accepted: {type: GraphQLBoolean},
         canceled: {type: GraphQLBoolean},
+        cashPayed: {type: GraphQLBoolean},
+        cashTransfered: {type: GraphQLBoolean},
         payed: {type: GraphQLBoolean},
     }),
 })
@@ -359,6 +362,7 @@ const updateData = {
         deliveryDate: {type: GraphQLNonNull(GraphQLString)},
         description: {type: GraphQLString},
         phone: {type: GraphQLString},
+        cash: {type: GraphQLFloat},
         deliveryPhone: {type: GraphQLString},
         id: {type: GraphQLString},
     },
@@ -409,6 +413,7 @@ const addData = {
         deliveryDate: {type: GraphQLNonNull(GraphQLString)},
         description: {type: GraphQLString},
         phone: {type: GraphQLString},
+        cash: {type: GraphQLFloat},
         deliveryPhone: {type: GraphQLString},
     },
     resolve: (parent, args, response) => {
@@ -477,6 +482,50 @@ const changePayed = {
             const item = await res.findOne({id: args.id})
             await handlePay(item, !args.payed)
             await res.updateOne({id: args.id}, {$set: {payed: args.payed}}, {safe: true});
+            await db.close();
+            return true;
+        } catch (e) {
+
+        }
+    }
+}
+const cashPay = {
+    type: GraphQLBoolean,
+    args: {
+        cashPayed: {type: GraphQLNonNull(GraphQLBoolean)},
+        id: {type: GraphQLNonNull(GraphQLString)},
+    },
+
+    resolve: async (parent, args, response) => {
+        const token = response.headers.token;
+        if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin' &&
+            jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'delivery') return;
+
+        const {res, db} = await pageData();
+        try {
+            await res.updateOne({id: args.id}, {$set: {cashPayed: args.cashPayed}}, {safe: true});
+            await db.close();
+            return true;
+        } catch (e) {
+
+        }
+    }
+}
+const cashTransfer = {
+    type: GraphQLBoolean,
+    args: {
+        cashTransfered: {type: GraphQLNonNull(GraphQLBoolean)},
+        id: {type: GraphQLNonNull(GraphQLString)},
+    },
+
+    resolve: async (parent, args, response) => {
+        const token = response.headers.token;
+        if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin' &&
+            jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'delivery') return;
+
+        const {res, db} = await pageData();
+        try {
+            await res.updateOne({id: args.id}, {$set: {cashTransfered: args.cashTransfered}}, {safe: true});
             await db.close();
             return true;
         } catch (e) {
@@ -857,6 +906,8 @@ module.exports = ({
     updateData,
     changePrice,
     changePayed,
+    cashPay,
+    cashTransfer,
     changeCourier,
     sendEmail
 });

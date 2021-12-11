@@ -359,9 +359,12 @@ class CupioMainContainer extends LitElement {
                     id
                     takeDate
                     takeAddress
+                    cash
                     description
                     phone
                     status
+                    cashPayed
+                    cashTransfered
                     takeCourier
                     canceled
                     clientName
@@ -387,9 +390,12 @@ class CupioMainContainer extends LitElement {
                     id
                     deliveryDate
                     deliveryAddress
+                    cash
                     description
                     deliveryPhone
                     status
+                    cashPayed
+                    cashTransfered
                     deliveryCourier
                     canceled
                     clientName

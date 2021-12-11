@@ -48,6 +48,17 @@ class CupioInput extends LitElement {
             #input::placeholder {
                 font-weight: 500;
             }
+            input[type="date"]::-webkit-calendar-picker-indicator {
+                cursor: pointer;
+                border-radius: 4px;
+                margin-right: 2px;
+                opacity: 0.4;
+                
+            }
+
+            .container:hover input[type="date"]::-webkit-calendar-picker-indicator {
+                opacity: 1
+            }
 
             #input:focus {
                 outline: none;

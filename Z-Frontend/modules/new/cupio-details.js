@@ -57,6 +57,10 @@ class CupioDetails extends LitElement {
                 width: 100%;
             }
 
+            .input[name=date] {
+                width: 40%;
+            }
+
 
             [disabled] {
                 pointer-events: none;
@@ -190,6 +194,7 @@ class CupioDetails extends LitElement {
                         name="date"
                         min="${this.minDate}"
                         value="${this.values.takeDate}"
+                        @keydown="${(event)=> event.preventDefault()}"
                         @value-changed="${(event) => this.setValue(event, 'takeDate')}"></cupio-input>
 
                 <label>ჩაბარების სავარაუდო თარიღი</label>
@@ -198,7 +203,16 @@ class CupioDetails extends LitElement {
                         name="date"
                         min="${this.minDate}"
                         value="${this.values.deliveryDate}"
+                        @keydown="${(event)=> event.preventDefault()}"
                         @value-changed="${(event) => this.setValue(event, 'deliveryDate')}"></cupio-input>
+                ${this.panel ? html`
+                <cupio-input
+                        class="input"
+                        value="${this.values.cash}"
+                        place-holder="ქეშად ასაღები"
+                        name="cash"
+                        @value-changed="${(event) => this.setValue(event, 'cash')}"
+                ></cupio-input>`:''}
                 <cupio-input
                         class="input"
                         disabled
@@ -285,6 +299,7 @@ class CupioDetails extends LitElement {
         this.values.deliveryDate = this.getDate(1);
         this.minDate = this.values.takeDate;
         this.values.service = 'სტანდარტი';
+        this.values.cash = '';
     }
 
     getDate(additional) {
@@ -396,12 +411,15 @@ class CupioDetails extends LitElement {
                 return;
             }
         }
+        this.canSend = false;
         const gql = `
             mutation {
                 addData(
                 ${this.panel ? `
                     client: "${this.values.client}"
-                    clientName: "${this.values.clientName}"` : ''}
+                    clientName: "${this.values.clientName}"
+                    cash: ${this.values.cash || 0}
+                    ` : ''}
                     takeAddress: "${this.values.takeAddress}"
                     deliveryAddress: "${this.values.deliveryAddress}"
                     deliveryPhone: "${this.values.deliveryPhone}"
@@ -415,6 +433,7 @@ class CupioDetails extends LitElement {
         `
         graphqlPost(gql).then((r) => {
             alert('წარმატებით დაემატა')
+            this.canSend = true;
             window.location.reload();
         }).catch(() => alert('!!! ხარვეზი იყო თავიდან სცადეთ !!!'))
     }
