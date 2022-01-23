@@ -52,6 +52,18 @@ class CupioAdminPanel extends LitElement {
                 padding-bottom: 12px;
                 display: flex;
                 justify-content: space-between;
+                align-items: end;
+            }
+
+            .accept {
+                background-color: green;
+                border-radius: 12px;
+                padding: 6px 12px;
+                cursor: pointer;
+                color: white;
+                text-align: center;
+                font-weight: bold;
+                margin-bottom: 24px;
             }
 
             .link {
@@ -127,7 +139,25 @@ class CupioAdminPanel extends LitElement {
                     </div>
                 `)}
                 <div class="title">
-                    <span>კლიენტების რაოდენობა (${this.clients.length})</span>
+                    <span>
+                        <div>
+                            
+                    <cupio-input
+                            class="input"
+                            place-holder="სტანდ"
+                            name="filter"
+                            @value-changed="${(event) => this.standard = event.detail}"
+                    ></cupio-input>
+                    <cupio-input
+                            class="input"
+                            place-holder="ექსპრესი"
+                            name="filter"
+                            @value-changed="${(event) => this.express = event.detail}"
+                    ></cupio-input>
+                            <div class="accept" @click="${this.saveRatesForAll}">შეცვლა</div>
+                        </div>
+                        კლიენტების რაოდენობა (${this.clients.length})
+                    </span>
 
                     <cupio-input
                             class="input"
@@ -168,6 +198,8 @@ class CupioAdminPanel extends LitElement {
         super();
         this.couriers = [];
         this.clients = [];
+        this.express = null;
+        this.standard = null;
         this.loadAll();
         if(window.localStorage.getItem('isEmployee')) redirectTo('/panel')
         handleRequest(false).then(r=> {
@@ -205,14 +237,85 @@ class CupioAdminPanel extends LitElement {
               }
             }
             `
-        graphqlPost(gql).then(({data: {usersDetails}}) => {
+        graphqlPost(gql).then(async ({data: {usersDetails}}) => {
             if (status === 'delivery') {
-                this.couriers = usersDetails || [];
+                this.couriers = await this.loadCouriersCounts(usersDetails || [])
             } else {
                 this.clients = usersDetails || [];
                 this.clientsFiltered = this.clients;
             }
         })
+    }
+
+    saveRatesForAll(){
+        const gql = `
+        mutation {
+            setRatesForAll(
+                express: ${this.express}
+                standard: ${this.standard}
+        )
+        }
+        `
+            graphqlPost(gql).then(()=> {
+                this.loadCouriers('client');
+            })
+    }
+    // PayWithPayze(){
+    //     axios.post('https://payze.io/api/v1', {
+    //         method: 'justPay',
+    //         apiKey: 'E2A930873E4E48B2B8319D7E8A75BB98',
+    //         apiSecret: '32AE2A765A4341E7AEB726D6E0BA8A23',
+    //         data: {
+    //             amount: "0.1",
+    //             currency: 'GEL',
+    //             callback: 'https://siodelivery.ge/',
+    //             callbackError: 'https://siodelivery.ge/fail',
+    //             info: {
+    //                 name: 'test',
+    //                 description: 'test',
+    //             },
+    //         }
+    //     },)
+    //         .then(r=> console.log(r.response))
+    //         .catch((error)=> {
+    //             if (error.response) {
+    //                 // The request was made and the server responded with a status code
+    //                 // that falls out of the range of 2xx
+    //                 console.log(error.response.data);
+    //                 console.log(error.response.status);
+    //                 console.log(error.response.headers);
+    //             } else if (error.request) {
+    //                 // The request was made but no response was received
+    //                 // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+    //                 // http.ClientRequest in node.js
+    //                 console.log(error.request);
+    //             } else {
+    //                 // Something happened in setting up the request that triggered an Error
+    //                 console.log('Error', error.message);
+    //             }
+    //             console.log(error.config);
+    //         })
+    // }
+
+    async loadCouriersCounts(couriers){
+        // this.PayWithPayze();
+        // return;
+        const mapFunction = async (item)=> {
+            const getDataCounts = await graphqlPost(`
+            {
+                    getDataCounts(courier: "${item.email}"){
+                        take
+                        delivering
+                    }
+                    }
+                `).then(({data: {getDataCounts}})=> getDataCounts)
+            return {
+                ...item,
+                getDataCounts,
+            }
+        }
+        const mappedCouriers =  await couriers.map(await mapFunction)
+        return await Promise.all(mappedCouriers)
     }
 
 }

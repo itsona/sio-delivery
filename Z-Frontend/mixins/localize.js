@@ -26,6 +26,8 @@ export const localize = (key)=> {
             return 'ამღები კურიერი';
         case 'deliveryCourier':
             return 'ჩამბარებელი კურიერი';
+        case 'getDataCounts':
+            return 'აქტიური ჩანაწერები';
         case 'registerDate':
             return 'რეგისტრაციის თარიღი';
         case 'price':

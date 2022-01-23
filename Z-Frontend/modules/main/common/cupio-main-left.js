@@ -318,6 +318,24 @@ class CupioMainLeft extends LitElement {
                                 name="to"
                                 @input="${this.requestData}">
                     </div>` : ''}
+                ${this.panel? html`
+                    <div class="item">
+                        <span class="title">კურიერი</span>
+                        <select
+                                name="searchWord"
+                                id="city"
+                                @change="${this.requestData}">
+                            <option
+                                    value="">ყველა
+                            </option>
+                            ${this.couriers.map((courier) => html`
+                                <option
+                                        value="${courier.email}">${courier.name}
+                                </option>
+                            `)}
+                        </select>
+                    </div>
+                    `:''}
                 <label class="price">თარიღი</label>
                 <div class="range column">
                     <input
@@ -367,6 +385,9 @@ class CupioMainLeft extends LitElement {
             delivery: {
                 type: Boolean,
             },
+            couriers: {
+                type: Array,
+            },
             panel: {
                 type: Boolean,
             },
@@ -387,6 +408,7 @@ class CupioMainLeft extends LitElement {
 
     constructor() {
         super();
+        this.couriers = [];
         this._alreadySent = false;
         this.loadBudget();
         this.isEmployee = window.localStorage.getItem('isEmployee');
@@ -395,7 +417,22 @@ class CupioMainLeft extends LitElement {
 
             this.loadDayReport();
         });
+        this.loadCouriers();
         this.searchWord = {};
+    }
+    loadCouriers() {
+        const gql = `
+            {
+              usersDetails(status: "delivery"){
+                status
+                email
+                name
+              }
+            }
+            `
+        graphqlPost(gql).then(({data: {usersDetails}}) => {
+            this.couriers = usersDetails;
+        })
     }
 
     drawerClose() {

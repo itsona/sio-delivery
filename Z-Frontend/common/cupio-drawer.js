@@ -243,7 +243,7 @@ class CupioDrawer extends LitElement {
                             }
                     </div>
                     <br>
-                    ${this.opened && this.item.cash ? html`
+                    ${this.opened && this.item.cash && !this.cantSave ? html`
                     <br>
                     ქეში აღებულია
                     <input
@@ -255,6 +255,7 @@ class CupioDrawer extends LitElement {
                     <br>
                     `:''}
                     ${this.panel && this.opened ? html`
+                        ${this.item.cash ? html`
                         გადაგზავნილია
                         <input
                                 type="checkbox"
@@ -263,6 +264,7 @@ class CupioDrawer extends LitElement {
                                 ?checked="${!!this.item.cashTransfered}"
                                 @change="${this.cashTransfer}">
                         <br>
+                        `:''}
 
                         <span class="title">შეკვეთის ფასი</span>
                         <cupio-input
@@ -433,6 +435,8 @@ class CupioDrawer extends LitElement {
         this.graphqlPost(gql).then(r=> {
             if(this.panel) this.loadDetails();
             this.saved = true;
+            this.item.cashPayed = payed;
+            this.newItem.cashPayed = payed;
         });
     }
 
@@ -588,6 +592,20 @@ class CupioDrawer extends LitElement {
     }
 
     _onStatusChange(value){
+        if(value === 'ჩაბარებული' && this.newItem.cash && !this.newItem.cashPayed){
+            this.cantSave = true;
+            if(window.confirm('თანხა აღებულია?')){
+                setTimeout(()=> this.cantSave = false, 60);
+                this.item.cashPayed = true;
+                this.newItem.cashPayed = true;
+                this.item.status = value;
+                this.newItem.status = value;
+                this.cashPay({currentTarget: {checked:true}});
+            }else {
+                setTimeout(()=> this.cantSave = false, 60);
+                return;
+            }
+        }
         const gql = `mutation{
               changeStatus(id: "${this.newItem.id}", status: "${value}")
               }`

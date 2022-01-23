@@ -196,7 +196,6 @@ class CupioDetails extends LitElement {
                         value="${this.values.takeDate}"
                         @keydown="${(event)=> event.preventDefault()}"
                         @value-changed="${(event) => this.setValue(event, 'takeDate')}"></cupio-input>
-
                 <label>ჩაბარების სავარაუდო თარიღი</label>
                 <cupio-input
                         class="input"

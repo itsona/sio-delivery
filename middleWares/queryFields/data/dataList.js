@@ -238,6 +238,7 @@ const dataList = {
                                 id: 1,
                                 deliveryDate: 1,
                                 deliveryAddress: 1,
+                                takeAddress: 1,
                                 deliveryCourier: 1,
                                 description: 1,
                                 deliveryPhone: 1,
@@ -246,6 +247,9 @@ const dataList = {
                                 client: 1,
                                 price: 1,
                                 payed: 1,
+                                cash:1,
+                                cashPayed:1,
+                                cashTransfer:1,
                             }
                         },
                         {$sort: {deliveryDate: 1, deliveryAddress: 1}}
@@ -430,6 +434,13 @@ const addData = {
                     await db.close();
                     return false;
                 }
+            }
+            const takeDate = new Date(args.takeDate).getDay();
+            const deliveryDate = new Date(args.deliveryDate).getDay();
+            const validates = takeDate && deliveryDate;
+            if(!validates) {
+                await db.close();
+                return false;
             }
             args.registerDate = getNewDate();
             args.id = await res.count() + ' ';
@@ -733,6 +744,30 @@ const getDetails = {
     }
 }
 
+const CountsType = new GraphQLObjectType({
+    name: 'counts',
+    description: 'countsWithCouriers',
+    fields: () => ({
+        take: {type: GraphQLInt},
+        delivering: {type: GraphQLInt},
+    }),
+})
+
+const getDataCounts = {
+    type: CountsType,
+    args: {
+        courier: {type: GraphQLNonNull(GraphQLString)}
+    },
+    resolve: (parent, args) => {
+        return pageData().then(async ({res, db}) => {
+            const take = await res.find({takeCourier: args.courier, status: 'ასაღები'}).toArray();
+            const delivering = await res.find({deliveryCourier: args.courier, status: 'აღებული'}).toArray()
+            await db.close();
+            return {take: take.length, delivering: take.length};
+        })
+    }
+}
+
 const dayReport = {
     type: GraphQLString,
     resolve: async (parent, args, response) => {
@@ -909,5 +944,6 @@ module.exports = ({
     cashPay,
     cashTransfer,
     changeCourier,
+    getDataCounts,
     sendEmail
 });

@@ -41,6 +41,18 @@ class CupioMainTable extends LitElement {
             .header, .status {
                 font-weight: bold;
                 color: grey;
+                pointer-events: none;
+            }
+            
+            .header[address] {
+                color: black;
+                cursor: pointer;
+                pointer-events: auto;
+            }
+            
+            .header[address]:hover {
+                background: rgb(230,230,230);
+                border-radius: 8px;
             }
 
             .drop-down {
@@ -75,7 +87,10 @@ class CupioMainTable extends LitElement {
     render() {
         return html`
             ${this.menu.map((item) => html`
-                <span class="header">${item}</span>
+                <span class="header" 
+                    ?address="${item.includes('მისამართი')}"
+                    @click="${()=> this.menuClick(item)}"
+                >${item}</span>
             `)}
             ${this.items.map((item) => html`${Object.keys(item).map((key) =>
                     !key.includes('Courier') && key !== 'canceled' && key !== 'payed' && key !== 'cashPayed' && key !== 'cashTransfered' && key !== 'cash' && key !=='client' && key !== 'clientEmail' ? html`
@@ -90,7 +105,10 @@ class CupioMainTable extends LitElement {
                                 item[key] === 'ასაღები' ? 'მიღებულია' : item[key]: 
                                 key === 'phone' || key ==='deliveryPhone' ? html`
                                     <a class="phone" href="tel:${item[key]}">${item[key]}</a>
-                                `: key === 'price' && this.delivery && !this.panel ? "" : item[key]
+                                `: key === 'price' && this.delivery && !this.panel ? "" :
+
+                                        key.includes('Address')? item[key] + "("+ this.items.filter((r)=> r[key] === item[key]).length +')': item[key]
+                                       
             }
                             ${key === 'price' && (!this.delivery || (this.delivery && this.panel)) ? html`
                                 ₾ ` : ''}
@@ -179,6 +197,16 @@ class CupioMainTable extends LitElement {
             this.dispatchEvent(new CustomEvent('updated'));
         }
         this.drawerOpened = !this.drawerOpened;
+    }
+
+    menuClick(item){
+        if(item === 'აღების მისამართი'){
+            this.items = this.items.sort((item1,item2)=> item1.takeAddress > item2.takeAddress ? 1: -1)
+        }
+        if(item === 'ჩაბარების მისამართი'){
+            this.items = this.items.sort((item1,item2)=> item1.deliveryAddress > item2.deliveryAddress ? 1: -1)
+        }
+        this.items= [...this.items]
     }
 
     isWarning(item) {

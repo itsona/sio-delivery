@@ -12,6 +12,7 @@ const {
     GraphQLFloat,
     GraphQLBoolean,
 } = require('graphql');
+// const axios = require("axios");
 
 const userData = require('../../authentication').userData;
 const logData = require('../../authentication').logData;
@@ -180,6 +181,81 @@ const setRates = {
         return false
     }
 }
+const setRatesForAll = {
+    type: GraphQLBoolean,
+    description: 'set rates for All',
+    args: {
+        express: {type: GraphQLFloat},
+        standard: {type: GraphQLFloat},
+    },
+    resolve: async (parent, args, request) => {
+        // PayWithPayze(request.headers.token);
+        const token = request.headers.token;
+        if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
+        const rates = Config.rates;
+        if(args.express) rates.expressRate = args.express;
+        if(args.standard) rates.normalRate = args.standard;
+        return userData().then(async ({res, db}) => {
+            await res.updateMany({status: 'client'}, {$set: {rates}}, {safe: true});
+            await db.close();
+            return true;
+        })
+        return false
+
+    }
+}
+// function PayWithPayze(token){
+//     axios.post('https://payze.io/api/v1', {
+//             method: 'justPay',
+//             apiKey: 'E2A930873E4E48B2B8319D7E8A75BB98',
+//             apiSecret: '32AE2A765A4341E7AEB726D6E0BA8A23',
+//             data: {
+//                 amount: "5",
+//                 currency: 'GEL',
+//                 callback: 'https://siodelivery.ge/',
+//                 callbackError: `https://siodelivery.ge/paymentError/${token}`,
+//                 info: {
+//                         name: 'test',
+//                         description: 'test',
+//                     },
+//             }
+//         },)
+//         .then(r=> console.log(r.data))
+//         .catch((error)=> {
+//             if (error.response) {
+//                 // The request was made and the server responded with a status code
+//                 // that falls out of the range of 2xx
+//                 console.log(error.response.data);
+//                 console.log(error.response.status);
+//                 console.log(error.response.headers);
+//             } else if (error.request) {
+//                 // The request was made but no response was received
+//                 // `error.request` is an instance of XMLHttpRequest in the browser and an instance of
+//                 // http.ClientRequest in node.js
+//                 console.log(error.request);
+//             } else {
+//                 // Something happened in setting up the request that triggered an Error
+//                 console.log('Error', error.message);
+//             }
+//             console.log(error.config);
+//         })
+// }
+
+
+
+//KEY:
+// E2A930873E4E48B2B8319D7E8A75BB98
+// SECRET:
+// 32AE2A765A4341E7AEB726D6E0BA8A23
+// Requests:
+// 38
+// Demo
+// KEY:
+// CD315531936E4FDAA0551E48EB047944
+// SECRET:
+// E16389030297450799A14D434EDA2AD1
+// Requests:
+// 61
 
 
 const singleUser = {
@@ -544,6 +620,7 @@ module.exports = ({
     loadBudget,
     setCourier,
     setBudget,
+    setRatesForAll,
     setRates,
     FbLogin,
     resetPassword

@@ -113,8 +113,13 @@ class CupioAdminItem extends LitElement {
                     `) : html`
                         <span claass="value ${key}"
                               style="color: ${key === 'status' ? this.getStatusColor(this.item.status) : 'black'}">
-                        ${key === 'date'? new Date(this.item[key] * 1).toLocaleString() : this.item[key]}
-                        
+                        ${key === 'date'? new Date(this.item[key] * 1).toLocaleString() : 
+                      key === 'getDataCounts' ? html`
+                          <div>
+                              <span> ასაღები: ${this.item[key].take}</span>
+                              <span> ჩასაბარებელი: ${this.item[key].delivering}</span>
+                          </div>
+                      `: this.item[key]}
                     ${key === 'budget' ? html`
 
                         ${this.showTimes ? html`

@@ -77,7 +77,7 @@ class CupioMainContainer extends LitElement {
             }
 
             :host([delivery]) .table {
-                grid-template-columns: auto 96px 2fr 2fr 1fr 1fr auto auto;
+                grid-template-columns: auto 96px 2fr 2fr 2fr 1fr 1fr auto auto;
             }
 
             :host(:not([delivery])) .delivery {
@@ -260,6 +260,7 @@ class CupioMainContainer extends LitElement {
                     'ID',
                     'აღების თარიღი',
                     'აღების მისამართი',
+                    'ჩაბარების მისამართი',
                     'დამატებითი ინფორმაცია',
                     'ტელეფონის ნომერი',
                     'სტატუსი',
@@ -270,6 +271,7 @@ class CupioMainContainer extends LitElement {
                 this.menu = [
                     'ID',
                     'ჩაბარების თარიღი',
+                    'აღების მისამართი',
                     'ჩაბარების მისამართი',
                     'დამატებითი ინფორმაცია',
                     'ტელეფონის ნომერი',
@@ -359,6 +361,7 @@ class CupioMainContainer extends LitElement {
                     id
                     takeDate
                     takeAddress
+                    deliveryAddress
                     cash
                     description
                     phone
@@ -389,6 +392,7 @@ class CupioMainContainer extends LitElement {
                     count
                     id
                     deliveryDate
+                    takeAddress
                     deliveryAddress
                     cash
                     description
