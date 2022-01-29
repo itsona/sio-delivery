@@ -227,8 +227,8 @@ function callPayWithPayze(token,price){
             data: {
                 amount: stringify(price),
                 currency: 'GEL',
-                callback: `https://siodelivery.ge/api/paymentSuccess/${client}/${price}`,
-                callbackError: `https://siodelivery.ge/api/paymentError/${client}/${price}`,
+                callback: `https://siodelivery.ge/payments/paymentSuccess/${client}/${price}`,
+                callbackError: `https://siodelivery.ge/payments/paymentError/${client}/${price}`,
                 info: {
                         name: 'test',
                         description: 'test',
