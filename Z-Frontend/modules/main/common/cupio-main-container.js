@@ -153,7 +153,7 @@ class CupioMainContainer extends LitElement {
                     </a>
                 </div>
                 
-                <div style="display: none; align-items: center">
+                <div style="display: flex; align-items: center">
                     <span style="font-weight: bold; display: flex; flex-grow: 1">გადახდა შესაძლებელია პირდაპირ ჩვენი სისტემიდან: </span>
                 <cupio-input
                         class="input"
