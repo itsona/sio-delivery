@@ -29,6 +29,7 @@ const RootMutationType = new GraphQLObjectType({
     description: 'Root Mutation',
     fields: () => ({
         addUser: require('../middleWares/queryFields/users/usersList').addUser,
+        payWithPayze: require('../middleWares/queryFields/users/usersList').payWithPayze,
         modifyUser: require('../middleWares/queryFields/users/usersList').modifyUser,
         addData: require('../middleWares/queryFields/data/dataList').addData,
         changeStatus: require('../middleWares/queryFields/data/dataList').changeStatus,

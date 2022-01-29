@@ -20,6 +20,20 @@ class CupioMainContainer extends LitElement {
                 justify-content: space-between;
             }
 
+
+            .save {
+                display: flex;
+                margin-left: 24px;
+                margin-top: 24px;
+                align-self: center;
+                padding: 12px;
+                background: dodgerblue;
+                border-radius: 12px;
+                color: white;
+                cursor: pointer;
+                margin-bottom: 24px;
+            }
+
             .column {
                 display: flex;
                 flex-direction: column;
@@ -138,6 +152,19 @@ class CupioMainContainer extends LitElement {
                         <img src="/Z-Frontend/images/icons/add.svg">
                     </a>
                 </div>
+                
+                <div style="display: none; align-items: center">
+                    <span style="font-weight: bold; display: flex; flex-grow: 1">გადახდა შესაძლებელია პირდაპირ ჩვენი სისტემიდან: </span>
+                <cupio-input
+                        class="input"
+                        place-holder="შეიყვანეთ თანხა"
+                        name="payment"
+                        value="${this.budget}"
+                        @value-changed="${(event) => this.payAmount = event.detail}"
+                ></cupio-input>
+                    <div class="save"
+                    @click="${this.onPaymentClick}">გადახდა ${this.payAmount || this.budget}</div>
+                </div>
                 <div class="title delivery">
                     <span>${this.status || ''} ჩანაწერების რაოდენობა ${this.count || 0}</span>
                 </div>
@@ -190,6 +217,9 @@ class CupioMainContainer extends LitElement {
             },
             status: {
                 type: String,
+            },
+            payAmount: {
+                type: Number,
             },
             loading: {
                 type: Boolean,
@@ -245,6 +275,23 @@ class CupioMainContainer extends LitElement {
             ''
         ];
         this.loadBudget();
+    }
+
+    onPaymentClick() {
+        const amount = parseFloat(this.payAmount) || this.budget;
+        const gql = `
+            mutation {
+                payWithPayze(amount: ${amount})
+            }
+        `
+        graphqlPost(gql).then(({data:{payWithPayze}})=> {
+            if(payWithPayze)
+                window.open(payWithPayze, "_blank");
+            else {
+                window.alert('ტექნიკური ხარვეზი')
+            }
+
+        })
     }
 
     connectedCallback() {

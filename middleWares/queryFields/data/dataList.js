@@ -658,7 +658,7 @@ const handleBudget = async (status, item,) => {
     })
 }
 
-const handlePay = async (args, minus = true) => {
+const handlePay = async (args, minus = true,changer = "") => {
     let newVal = 0;
     let user = {}
     await userData().then(async ({res, db}) => {
@@ -681,7 +681,7 @@ const handlePay = async (args, minus = true) => {
                 change: args.price * ((0 - 1) ** minus),
                 newBudget: newVal,
                 date: new Date(),
-                changer: 'system# ' + args.id,
+                changer: changer || 'system# ' + args.id,
             }, {safe: true})
             await db.close();
         })
@@ -945,5 +945,6 @@ module.exports = ({
     cashTransfer,
     changeCourier,
     getDataCounts,
+    handlePay,
     sendEmail
 });

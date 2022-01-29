@@ -4,18 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="sio 2.0, &#10;add payed icon to tables">
-      <change afterPath="$PROJECT_DIR$/middleWares/log-excel.xlsx" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/middleWares/queryFields/data/exportLog.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/middleWares/queryFields/data/logExcel.js" afterDir="false" />
+    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="sio 2.0, &#10;fix date format from backend">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/common/cupio-drawer.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/common/cupio-drawer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/mixins/graphql.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/mixins/graphql.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-item.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-item.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-logs.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-logs.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/main/common/cupio-main-container.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/main/common/cupio-main-container.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/middleWares/grapqhlServer.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/grapqhlServer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/middleWares/queryFields/data/dataList.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/queryFields/data/dataList.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/middleWares/queryFields/users/usersList.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/queryFields/users/usersList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -55,19 +50,19 @@
     <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/middleWares" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
     <property name="nodejs_package_manager_path" value="npm" />
     <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
-    <property name="ts.external.directory.path" value="C:\Program Files\JetBrains\WebStorm 2020.3\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
+    <property name="ts.external.directory.path" value="C:\Users\Iakobi\AppData\Local\JetBrains\WebStorm 2021.2.3\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
     <property name="vue.rearranger.settings.migration" value="true" />
   </component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Iakobi\sio\sio-delivery\Z-Frontend\images\icons" />
       <recent name="C:\Users\Iakobi\sio\sio-delivery\middleWares" />
       <recent name="C:\Users\Iakobi\sio\sio-delivery\middleWares\queryFields\data" />
       <recent name="C:\Users\user\Desktop\mitanis web\Z-Frontend\images\icons" />
       <recent name="C:\Users\user\Desktop\mitanis web\Z-Frontend\modules\delivery" />
-      <recent name="C:\Users\user\Desktop\mitanis web\Z-Frontend\modules" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\user\Desktop\mitanis web\Z-Frontend\modules" />
@@ -151,7 +146,15 @@
       <workItem from="1637008896864" duration="3827000" />
       <workItem from="1637150148130" duration="1928000" />
       <workItem from="1637160685356" duration="16000" />
-      <workItem from="1637406567544" duration="21811000" />
+      <workItem from="1637406567544" duration="21967000" />
+      <workItem from="1637862454385" duration="4807000" />
+      <workItem from="1639225856352" duration="12606000" />
+      <workItem from="1641367919025" duration="14218000" />
+      <workItem from="1641488149128" duration="16873000" />
+      <workItem from="1642311790887" duration="751000" />
+      <workItem from="1642352672858" duration="59000" />
+      <workItem from="1642968139837" duration="1509000" />
+      <workItem from="1643468823035" duration="6629000" />
     </task>
     <task id="LOCAL-00001" summary="add task list from word">
       <created>1622402455138</created>
@@ -433,7 +436,63 @@
       <option name="project" value="LOCAL" />
       <updated>1637150789557</updated>
     </task>
-    <option name="localTasksCounter" value="41" />
+    <task id="LOCAL-00041" summary="sio 2.0, &#10;add logs">
+      <created>1637514561540</created>
+      <option name="number" value="00041" />
+      <option name="presentableId" value="LOCAL-00041" />
+      <option name="project" value="LOCAL" />
+      <updated>1637514561540</updated>
+    </task>
+    <task id="LOCAL-00042" summary="sio 2.0, &#10;add logs">
+      <created>1637514618969</created>
+      <option name="number" value="00042" />
+      <option name="presentableId" value="LOCAL-00042" />
+      <option name="project" value="LOCAL" />
+      <updated>1637514618969</updated>
+    </task>
+    <task id="LOCAL-00043" summary="sio 2.0, &#10;fix date format from backend">
+      <created>1637855684257</created>
+      <option name="number" value="00043" />
+      <option name="presentableId" value="LOCAL-00043" />
+      <option name="project" value="LOCAL" />
+      <updated>1637855684257</updated>
+    </task>
+    <task id="LOCAL-00044" summary="sio 2.0, &#10;fix date format from backend">
+      <created>1637852881850</created>
+      <option name="number" value="00044" />
+      <option name="presentableId" value="LOCAL-00044" />
+      <option name="project" value="LOCAL" />
+      <updated>1637852881850</updated>
+    </task>
+    <task id="LOCAL-00045" summary="sio 2.0, &#10;fix date format from backend">
+      <created>1637843589384</created>
+      <option name="number" value="00045" />
+      <option name="presentableId" value="LOCAL-00045" />
+      <option name="project" value="LOCAL" />
+      <updated>1637843589384</updated>
+    </task>
+    <task id="LOCAL-00046" summary="sio 2.0, &#10;fix date format from backend">
+      <created>1637871089228</created>
+      <option name="number" value="00046" />
+      <option name="presentableId" value="LOCAL-00046" />
+      <option name="project" value="LOCAL" />
+      <updated>1637871089228</updated>
+    </task>
+    <task id="LOCAL-00047" summary="sio 2.0, &#10;fix date format from backend">
+      <created>1639242070888</created>
+      <option name="number" value="00047" />
+      <option name="presentableId" value="LOCAL-00047" />
+      <option name="project" value="LOCAL" />
+      <updated>1639242070888</updated>
+    </task>
+    <task id="LOCAL-00048" summary="sio 2.0.1,">
+      <created>1642968379223</created>
+      <option name="number" value="00048" />
+      <option name="presentableId" value="LOCAL-00048" />
+      <option name="project" value="LOCAL" />
+      <updated>1642968379223</updated>
+    </task>
+    <option name="localTasksCounter" value="49" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -462,9 +521,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="exchange service url" />
-    <MESSAGE value="fix init dates" />
-    <MESSAGE value="fix filters gte,lte" />
     <MESSAGE value="fix cash value" />
     <MESSAGE value="remove cash value" />
     <MESSAGE value="list update Pt 2" />
@@ -487,7 +543,10 @@
     <MESSAGE value="sio 2.0, &#10;add price to table" />
     <MESSAGE value="sio 2.0, &#10;add payed" />
     <MESSAGE value="sio 2.0, &#10;add payed icon to tables" />
-    <option name="LAST_COMMIT_MESSAGE" value="sio 2.0, &#10;add payed icon to tables" />
+    <MESSAGE value="sio 2.0, &#10;add logs" />
+    <MESSAGE value="sio 2.0, &#10;fix date format from backend" />
+    <MESSAGE value="sio 2.0.1," />
+    <option name="LAST_COMMIT_MESSAGE" value="sio 2.0.1," />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -496,6 +555,26 @@
           <url>file://$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-clients-details.js</url>
           <line>66</line>
           <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/middleWares/queryFields/data/dataList.js</url>
+          <line>384</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/middleWares/queryFields/users/usersList.js</url>
+          <line>156</line>
+          <option name="timeStamp" value="3" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/middleWares/queryFields/users/usersList.js</url>
+          <line>111</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="javascript">
+          <url>file://$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-panel.js</url>
+          <line>213</line>
+          <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>
