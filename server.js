@@ -12,7 +12,7 @@ app.use('/api',
     })
 )
 
-app.get('/paymentError/:client/:price/', (req,res)=> {
+app.get('/payments/paymentError/:client/:price/', (req,res)=> {
     const params = req.params;
     params.price = parseFloat(params.price);
     console.log(params, 'get')
@@ -20,7 +20,7 @@ app.get('/paymentError/:client/:price/', (req,res)=> {
     res.status(200);
     res.send();
 })
-app.post('/paymentError/:client/:price/', (req,res)=> {
+app.post('/payments/paymentError/:client/:price/', (req,res)=> {
     const params = req.params;
     params.price = parseFloat(params.price);
     // handlePay(params, true, `გადაიხადა ${params.price}`)
