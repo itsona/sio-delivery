@@ -152,7 +152,7 @@ class CupioMainContainer extends LitElement {
                         <img src="/Z-Frontend/images/icons/add.svg">
                     </a>
                 </div>
-                ${this.delivery && false? '' : html`
+                ${this.delivery ? '' : html`
                 <div style="display: flex; align-items: center">
                     <span style="font-weight: bold; display: flex; flex-grow: 1">გადახდა შესაძლებელია პირდაპირ ჩვენი სისტემიდან: </span>
                 <cupio-input
@@ -278,8 +278,6 @@ class CupioMainContainer extends LitElement {
     }
 
     onPaymentClick() {
-        window.alert('დროებითი შეფერხება')
-        return;
         const amount = parseFloat(this.payAmount) || this.budget;
         const gql = `
             mutation {

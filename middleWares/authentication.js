@@ -13,6 +13,11 @@ const emailData = async ()=> {
     const dbo = await db.db('delivery');
     return {res: dbo.collection("emails"), db};
 }
+const paymentsData = async ()=> {
+    const db = await MongoClient.connect(url, {useUnifiedTopology: true});
+    const dbo = await db.db('delivery');
+    return {res: dbo.collection("payments"), db};
+}
 const pageData = async ()=> {
     const db = await MongoClient.connect(url, {useUnifiedTopology: true});
     const dbo = await db.db('delivery');
@@ -24,5 +29,5 @@ const logData = async ()=> {
     return {res: dbo.collection("log"), db};
 }
 
-module.exports = ({userData, emailData, pageData, logData});
+module.exports = ({userData, emailData, pageData, logData, paymentsData});
 // module.exports = ({pageData});

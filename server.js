@@ -3,7 +3,7 @@ const app = express();
 const cors = require(`cors`);
 const expressGraphQL = require('express-graphql');
 const schema = require('./middleWares/grapqhlServer');
-const {handlePay} = require("./middleWares/queryFields/data/dataList");
+const {handlePayWithPayze} = require("./middleWares/queryFields/data/dataList");
 app.use(cors());
 app.use('/api',
     expressGraphQL({
@@ -16,10 +16,8 @@ app.get('/payments/paymentError/', (req,res)=> {
     res.redirect("https://siodelivery.ge/login");
 })
 
-app.get('/payments/paymentSuccess/:client/:price/', (req,res)=> {
-    const params = req.params;
-    params.price = parseFloat(params.price);
-    handlePay(params, false, `გადაიხადა ${params.price}`)
+app.get('/payments/paymentSuccess/:client/:price/:token', (req,res)=> {
+    handlePayWithPayze(req.params)
     res.redirect("https://siodelivery.ge/client");
 })
 

@@ -19,6 +19,7 @@ const {
 
 const userData = require('../../authentication').userData;
 const logData = require('../../authentication').logData;
+const paymentsData = require('../../authentication').paymentsData;
 
 const DataType = new GraphQLObjectType({
     name: 'data',
@@ -372,16 +373,35 @@ const updateData = {
     },
     resolve: (parent, args, response) => {
         const token = response.headers.token;
+        if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') {
+            return false;
+        }
         return pageData().then(async ({res, db}) => {
-            if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') {
-                return false;
-            }
             await res.updateOne({id: args.id}, {$set: args}, {safe: true});
             await db.close();
             return true;
         })
     }
 }
+
+function handlePayWithPayze(params) {
+    const paramsForCall = {
+        client: params.client,
+        price: parseFloat(params.price)
+    }
+    if(jwt.verify(params.token, process.env.ACCESS_TOKEN_SECRET).payed){
+        paymentsData().then(async ({res, db})=> {
+            const data = await res.findOne({token: params.token})
+                if(data === null){
+                    await handlePay(paramsForCall, false, `გადაიხადა ${params.price}₾`)
+                    await res.insertOne({token: params.token})
+                }
+            db.close()
+        })
+    }
+
+}
+
 const changePrice = {
     type: GraphQLBoolean,
     args: {
@@ -945,6 +965,6 @@ module.exports = ({
     cashTransfer,
     changeCourier,
     getDataCounts,
-    handlePay,
+    handlePayWithPayze,
     sendEmail
 });

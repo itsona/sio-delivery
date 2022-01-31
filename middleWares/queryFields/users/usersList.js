@@ -212,7 +212,6 @@ const payWithPayze = {
         amount: {type: GraphQLFloat},
     },
     resolve: async (parent, args, request) => {
-        return '';
         const token = request.headers.token;
         const response = await callPayWithPayze(token, args.amount)
         return response
@@ -221,6 +220,7 @@ const payWithPayze = {
 }
 function callPayWithPayze(token,price){
     const client = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).email
+    const payToken = jwt.sign({payed: true}, process.env.ACCESS_TOKEN_SECRET)
     return axios.post('https://payze.io/api/v1', {
             method: 'justPay',
             apiKey: 'E2A930873E4E48B2B8319D7E8A75BB98',
@@ -228,7 +228,7 @@ function callPayWithPayze(token,price){
             data: {
                 amount: stringify(price),
                 currency: 'GEL',
-                callback: `https://siodelivery.ge/payments/paymentSuccess/${client}/${price}`,
+                callback: `https://siodelivery.ge/payments/paymentSuccess/${client}/${price}/${payToken}`,
                 callbackError: `https://siodelivery.ge/payments/paymentError/`,
                 info: {
                         name: 'test',
