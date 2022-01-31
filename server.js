@@ -15,10 +15,11 @@ app.use('/api',
 app.get('/payments/paymentError/', (req,res)=> {
     res.redirect("https://siodelivery.ge/login");
 })
+
 app.get('/payments/paymentSuccess/:client/:price/', (req,res)=> {
     const params = req.params;
     params.price = parseFloat(params.price);
-    handlePay(params, true, `გადაიხადა ${params.price}`)
+    handlePay(params, false, `გადაიხადა ${params.price}`)
     res.redirect("https://siodelivery.ge/client");
 })
 
