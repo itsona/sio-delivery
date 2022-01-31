@@ -278,6 +278,8 @@ class CupioMainContainer extends LitElement {
     }
 
     onPaymentClick() {
+        window.alert('დროებითი შეფერხება')
+        return;
         const amount = parseFloat(this.payAmount) || this.budget;
         const gql = `
             mutation {

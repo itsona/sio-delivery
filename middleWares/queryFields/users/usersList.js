@@ -212,6 +212,7 @@ const payWithPayze = {
         amount: {type: GraphQLFloat},
     },
     resolve: async (parent, args, request) => {
+        return '';
         const token = request.headers.token;
         const response = await callPayWithPayze(token, args.amount)
         return response
