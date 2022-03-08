@@ -4,13 +4,13 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="sio 2.0, &#10;fix date format from backend">
+    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="sio 2.0, &#10;add">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/common/cupio-drawer.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/common/cupio-drawer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/mixins/graphql.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/mixins/graphql.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-logs.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-logs.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/main/common/cupio-main-container.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/main/common/cupio-main-container.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/middleWares/grapqhlServer.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/grapqhlServer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/middleWares/queryFields/data/dataList.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/queryFields/data/dataList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/middleWares/queryFields/users/usersList.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/queryFields/users/usersList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -155,41 +155,12 @@
       <workItem from="1642352672858" duration="59000" />
       <workItem from="1642968139837" duration="1509000" />
       <workItem from="1643468823035" duration="6629000" />
-    </task>
-    <task id="LOCAL-00001" summary="add task list from word">
-      <created>1622402455138</created>
-      <option name="number" value="00001" />
-      <option name="presentableId" value="LOCAL-00001" />
-      <option name="project" value="LOCAL" />
-      <updated>1622402455138</updated>
-    </task>
-    <task id="LOCAL-00002" summary="exchange service url">
-      <created>1622402892712</created>
-      <option name="number" value="00002" />
-      <option name="presentableId" value="LOCAL-00002" />
-      <option name="project" value="LOCAL" />
-      <updated>1622402892712</updated>
-    </task>
-    <task id="LOCAL-00003" summary="fix init dates">
-      <created>1622403777799</created>
-      <option name="number" value="00003" />
-      <option name="presentableId" value="LOCAL-00003" />
-      <option name="project" value="LOCAL" />
-      <updated>1622403777799</updated>
-    </task>
-    <task id="LOCAL-00004" summary="fix init dates">
-      <created>1622404253560</created>
-      <option name="number" value="00004" />
-      <option name="presentableId" value="LOCAL-00004" />
-      <option name="project" value="LOCAL" />
-      <updated>1622404253560</updated>
-    </task>
-    <task id="LOCAL-00005" summary="fix filters gte,lte">
-      <created>1622406898355</created>
-      <option name="number" value="00005" />
-      <option name="presentableId" value="LOCAL-00005" />
-      <option name="project" value="LOCAL" />
-      <updated>1622406898357</updated>
+      <workItem from="1643482521335" duration="3435000" />
+      <workItem from="1643558761610" duration="14000" />
+      <workItem from="1643648336064" duration="4976000" />
+      <workItem from="1645894821790" duration="3057000" />
+      <workItem from="1646728737728" duration="18000" />
+      <workItem from="1646737971368" duration="1519000" />
     </task>
     <task id="LOCAL-00006" summary="fix filters gte,lte">
       <created>1622407302346</created>
@@ -492,7 +463,49 @@
       <option name="project" value="LOCAL" />
       <updated>1642968379223</updated>
     </task>
-    <option name="localTasksCounter" value="49" />
+    <task id="LOCAL-00049" summary="sio 2.0, &#10;fix date format from backend">
+      <created>1643484363596</created>
+      <option name="number" value="00049" />
+      <option name="presentableId" value="LOCAL-00049" />
+      <option name="project" value="LOCAL" />
+      <updated>1643484363597</updated>
+    </task>
+    <task id="LOCAL-00050" summary="sio 2.0, &#10;fix date format from backend">
+      <created>1643485367168</created>
+      <option name="number" value="00050" />
+      <option name="presentableId" value="LOCAL-00050" />
+      <option name="project" value="LOCAL" />
+      <updated>1643485367168</updated>
+    </task>
+    <task id="LOCAL-00051" summary="sio 2.0, &#10;fix date format from backend">
+      <created>1643485738662</created>
+      <option name="number" value="00051" />
+      <option name="presentableId" value="LOCAL-00051" />
+      <option name="project" value="LOCAL" />
+      <updated>1643485738662</updated>
+    </task>
+    <task id="LOCAL-00052" summary="sio 2.0, &#10;add">
+      <created>1643648633436</created>
+      <option name="number" value="00052" />
+      <option name="presentableId" value="LOCAL-00052" />
+      <option name="project" value="LOCAL" />
+      <updated>1643648633436</updated>
+    </task>
+    <task id="LOCAL-00053" summary="sio 2.0, &#10;add">
+      <created>1643648867860</created>
+      <option name="number" value="00053" />
+      <option name="presentableId" value="LOCAL-00053" />
+      <option name="project" value="LOCAL" />
+      <updated>1643648867860</updated>
+    </task>
+    <task id="LOCAL-00054" summary="sio 2.0, &#10;fix payments check">
+      <created>1643651513216</created>
+      <option name="number" value="00054" />
+      <option name="presentableId" value="LOCAL-00054" />
+      <option name="project" value="LOCAL" />
+      <updated>1643651513216</updated>
+    </task>
+    <option name="localTasksCounter" value="55" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -521,8 +534,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="fix cash value" />
-    <MESSAGE value="remove cash value" />
     <MESSAGE value="list update Pt 2" />
     <MESSAGE value="add texts and tags" />
     <MESSAGE value="change backend link" />
@@ -544,9 +555,11 @@
     <MESSAGE value="sio 2.0, &#10;add payed" />
     <MESSAGE value="sio 2.0, &#10;add payed icon to tables" />
     <MESSAGE value="sio 2.0, &#10;add logs" />
-    <MESSAGE value="sio 2.0, &#10;fix date format from backend" />
     <MESSAGE value="sio 2.0.1," />
-    <option name="LAST_COMMIT_MESSAGE" value="sio 2.0.1," />
+    <MESSAGE value="sio 2.0, &#10;fix date format from backend" />
+    <MESSAGE value="sio 2.0, &#10;add" />
+    <MESSAGE value="sio 2.0, &#10;fix payments check" />
+    <option name="LAST_COMMIT_MESSAGE" value="sio 2.0, &#10;fix payments check" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -555,11 +568,6 @@
           <url>file://$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-clients-details.js</url>
           <line>66</line>
           <option name="timeStamp" value="1" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/middleWares/queryFields/data/dataList.js</url>
-          <line>384</line>
-          <option name="timeStamp" value="2" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/middleWares/queryFields/users/usersList.js</url>

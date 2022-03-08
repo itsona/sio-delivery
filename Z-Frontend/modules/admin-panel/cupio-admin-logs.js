@@ -293,7 +293,6 @@ class CupioAdminLogs extends LitElement {
             this.unfiltered = getLog;
             this.loadUsers();
             this.filter();
-            console.log('aaaaaaaaa', client)
             this.client = client + '';
         })
     }

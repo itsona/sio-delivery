@@ -281,7 +281,7 @@ class CupioMainContainer extends LitElement {
         const amount = parseFloat(this.payAmount) || this.budget;
         const gql = `
             mutation {
-                payWithPayze(amount: ${amount})
+                payWithPayze(amount: ${Math.abs(amount)})
             }
         `
         graphqlPost(gql).then(({data:{payWithPayze}})=> {

@@ -158,7 +158,7 @@ class CupioDrawer extends LitElement {
                     ${this.saved ? html`
                         <span class="title" style="padding: 8px 0; color: red">წარმატებით შევინახეთ</span>
                     ` : ''}
-                    ${this.opened && !this.cantSave ? html`
+                    ${this.panel && this.opened && !this.cantSave ? html`
                     <div class="item">
                         <span class="title">სტატუსი: ${this.getStatus(this.item.status)}</span>
                         ${this.item.status === 'განხილვაშია'  || this.item.status === 'გაუქმებულია' ? html`
@@ -241,6 +241,13 @@ class CupioDrawer extends LitElement {
                             შეკვეთის გაუქმება
                         </div>` :''
                             }
+                        ${!this.panel && this.item.status !== 'ჩაბარებული' && this.item.status !== 'აღებული'&& !this.saved ? html`
+                        <div
+                            class="save"
+                            @click="${()=> this._onStatusChange(this.item.status === 'ასაღები' ? 'აღებული' : 'ჩაბარებული')}">
+                            ${this.item.status === 'ასაღები' ? 'აღებულად მონიშვნა': 'ჩაბარებულად მონიშვნა'}
+                        </div>
+                        `: ''}
                     </div>
                     <br>
                     ${this.opened && this.item.cash && !this.cantSave ? html`
@@ -610,8 +617,10 @@ class CupioDrawer extends LitElement {
               changeStatus(id: "${this.newItem.id}", status: "${value}")
               }`
         this.graphqlPost(gql).then(r=> {
+                this.newItem.status = value
                 if(this.panel) this.loadDetails();
                 this.saved = true;
+                if(!this.panel) this.opened = false
             }
         );
     }
