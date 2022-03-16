@@ -783,7 +783,7 @@ const getDataCounts = {
             const take = await res.find({takeCourier: args.courier, status: 'ასაღები'}).toArray();
             const delivering = await res.find({deliveryCourier: args.courier, status: 'აღებული'}).toArray()
             await db.close();
-            return {take: take.length, delivering: take.length};
+            return {take: take.length, delivering: delivering.length};
         })
     }
 }
