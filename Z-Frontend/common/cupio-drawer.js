@@ -245,9 +245,9 @@ class CupioDrawer extends LitElement {
                         <div
                             class="save"
                             @click="${()=> {
-                                this.drawerClose('updated')
                                 this._onStatusChange(this.item.status === 'ასაღები' ? 'აღებული' : 'ჩაბარებული')
-        }}">
+                                this.drawerClose('updated')
+                            }}">
                             ${this.item.status === 'ასაღები' ? 'აღებულად მონიშვნა': 'ჩაბარებულად მონიშვნა'}
                         </div>
                         `: ''}

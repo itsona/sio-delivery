@@ -478,10 +478,7 @@ class CupioMainContainer extends LitElement {
                     this.limit = this.loadedLength;
                     this.needReload = false;
                     this.loading = false;
-                    if(!data.length || (data.length % this.loadedLength)) {
-                        this.shouldLoadMore = false;
-                    }
-                    else this.shouldLoadMore = true;
+                    this.shouldLoadMore = !(!data.length || (data.length % this.loadedLength));
                     return;
                 }
             }
