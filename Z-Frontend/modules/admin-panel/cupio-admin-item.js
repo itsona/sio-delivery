@@ -212,8 +212,8 @@ class CupioAdminItem extends LitElement {
     }
 
     sendDocument(){
-        alert('ხელმოწერის ფოტო აკლია და გადავიტან ^^');
-        return
+        // alert('ხელმოწერის ფოტო აკლია და გადავიტან ^^');
+        // return
         const gql = `
             mutation{
               sendDocument(
