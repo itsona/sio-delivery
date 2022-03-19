@@ -794,7 +794,6 @@ const dayReport = {
     resolve: async (parent, args, response) => {
         const token = response.headers.token;
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return '';
-
         const {res, db} = await pageData();
         const query = {registerDate: getNewDate()}
         let length = 0;
@@ -853,7 +852,7 @@ const sendDocument = {
 
 <span style="display: flex; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid">
     თბილისი
-    <span>05,01,2022 </span>
+    <span>${getNewDate()} </span>
 </span>
 <h2 style="text-align: center; font-weight: normal">მიღება ჩაბარება </h2>
 <h4 style="font-weight: normal; font-size: 18px">
@@ -869,11 +868,10 @@ const sendDocument = {
     </h4>
     <h4  style="font-weight: normal; font-size: 18px;">
         ვადგენთ მიღება ჩაბარების აქტს მასზედ,
-        რომ დანართი N1-ის თანახმად 2021 წლის ${startDate} - დან ${getNewDate()} - ჩათვლით
-         მომსახურების ღირებულება განისაზღვრა ${express+ normal}  ლარით.
+        რომ დანართი N1-ის თანახმად ${startDate} - დან ${getNewDate()} - ჩათვლით
+         მომსახურების ღირებულება განისაზღვრა ${express+ normal}  ლარით
         (ექსპრეს შეკვეთების საერთო ღირებულება: ${express} ლარი,
-         სტანდარტული შეკვეთების საერთო ღირებულება: ${normal} ლარი)
-
+         სტანდარტული შეკვეთების საერთო ღირებულება: ${normal} ლარი).
     </h4>
 
 
@@ -882,16 +880,16 @@ const sendDocument = {
 </h4>
 
 <div style="display: flex; padding: 24px 84px; justify-content: space-between; text-align: center">
-    <div style="display: flex; flex-direction: column; grid-gap: 12px; border-bottom: 1px solid; padding-bottom: 48px">
+    <div style="display: flex; flex-direction: column; grid-gap: 12px; border-bottom: 0.5px solid #bf7b73; padding-bottom: 48px">
         <span>(1) დამკვეთი</span>
         <span>${args.name}</span>
     </div>
-    <div style="display: grid;grid-gap: 12px;">
+    <div style="display: grid;grid-gap: 20px;">
         <span>(2) შემსრულებელი</span>
         <span>შპს სიო დელივერი</span>
         <span>ს/კ 402174927</span>
-        <span style=" padding-bottom: 68px">ამირან სამხარაძე</span>
-        <img src="https://siodelivery.ge/Z-Frontend/images/item1.jpg" width="150" height="50">
+        <span>ამირან სამხარაძე</span>
+        <img src="https://siodelivery.ge/Z-Frontend/images/signature.PNG" width="150" height="50" style="margin-bottom: -4px">
     </div>
 </div>
 
