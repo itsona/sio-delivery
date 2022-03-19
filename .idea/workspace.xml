@@ -4,13 +4,18 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="sio 2.0, &#10;add">
+    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/Z-Frontend/images/signature.PNG" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Z-Frontend/common/cupio-drawer.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/common/cupio-drawer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/mixins/graphql.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/mixins/graphql.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-logs.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-logs.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-item.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-item.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/main/common/cupio-main-container.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/main/common/cupio-main-container.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/middleWares/grapqhlServer.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/grapqhlServer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/middleWares/queryFields/data/dataList.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/queryFields/data/dataList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/mail.html" beforeDir="false" afterPath="$PROJECT_DIR$/views/mail.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -65,6 +70,8 @@
       <recent name="C:\Users\user\Desktop\mitanis web\Z-Frontend\modules\delivery" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\Iakobi\sio\sio-delivery\Z-Frontend\images" />
+      <recent name="C:\Users\Iakobi\sio\sio-delivery\middleWares\queryFields" />
       <recent name="C:\Users\user\Desktop\mitanis web\Z-Frontend\modules" />
       <recent name="C:\Users\user\Desktop\mitanis web\Z-Frontend\modules\delivery" />
       <recent name="C:\Users\user\Desktop\mitanis web\Z-Frontend\modules\main\view" />
@@ -160,14 +167,10 @@
       <workItem from="1643648336064" duration="4976000" />
       <workItem from="1645894821790" duration="3057000" />
       <workItem from="1646728737728" duration="18000" />
-      <workItem from="1646737971368" duration="1519000" />
-    </task>
-    <task id="LOCAL-00006" summary="fix filters gte,lte">
-      <created>1622407302346</created>
-      <option name="number" value="00006" />
-      <option name="presentableId" value="LOCAL-00006" />
-      <option name="project" value="LOCAL" />
-      <updated>1622407302346</updated>
+      <workItem from="1646737971368" duration="3907000" />
+      <workItem from="1646826057021" duration="45000" />
+      <workItem from="1647539927409" duration="781000" />
+      <workItem from="1647695413342" duration="16934000" />
     </task>
     <task id="LOCAL-00007" summary="fix cash value">
       <created>1622407748895</created>
@@ -505,7 +508,14 @@
       <option name="project" value="LOCAL" />
       <updated>1643651513216</updated>
     </task>
-    <option name="localTasksCounter" value="55" />
+    <task id="LOCAL-00055" summary="sio 2.0.1, &#10;add status button and fix payze">
+      <created>1646743555678</created>
+      <option name="number" value="00055" />
+      <option name="presentableId" value="LOCAL-00055" />
+      <option name="project" value="LOCAL" />
+      <updated>1646743555678</updated>
+    </task>
+    <option name="localTasksCounter" value="56" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -534,7 +544,6 @@
     <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="list update Pt 2" />
     <MESSAGE value="add texts and tags" />
     <MESSAGE value="change backend link" />
     <MESSAGE value="add fb fot test" />
@@ -559,7 +568,8 @@
     <MESSAGE value="sio 2.0, &#10;fix date format from backend" />
     <MESSAGE value="sio 2.0, &#10;add" />
     <MESSAGE value="sio 2.0, &#10;fix payments check" />
-    <option name="LAST_COMMIT_MESSAGE" value="sio 2.0, &#10;fix payments check" />
+    <MESSAGE value="sio 2.0.1, &#10;add status button and fix payze" />
+    <option name="LAST_COMMIT_MESSAGE" value="sio 2.0.1, &#10;add status button and fix payze" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

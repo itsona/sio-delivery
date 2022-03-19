@@ -147,6 +147,7 @@ class CupioAdminItem extends LitElement {
 
                 ${!this.delivery ? html`
                     <div class="accept" @click="${() => this.setCourier(true)}">დანიშვნა</div>
+                    <div class="accept" @click="${() => this.sendDocument()}">დოკუმენტი</div>
                 ` : html`
                     <div class="decline" @click="${() => this.setCourier(false)}">მოხსნა</div>
                     </div>
@@ -208,6 +209,20 @@ class CupioAdminItem extends LitElement {
         graphqlPost(gql).then(() => {
             this.dispatchEvent(new CustomEvent('status-changed'));
         });
+    }
+
+    sendDocument(){
+        alert('ხელმოწერის ფოტო აკლია და გადავიტან ^^');
+        return
+        const gql = `
+            mutation{
+              sendDocument(
+                email: "${this.item.email}",
+                receiver: "${this.item.email}",
+                name:"${this.item.name}")
+            }
+        `
+        graphqlPost(gql).then(r=> alert('გაიგზავნა'))
     }
 
     setDate(event){

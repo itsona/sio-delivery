@@ -16,6 +16,7 @@ const {
     GraphQLNonNull,
     GraphQLInt,
 } = require('graphql');
+const html_to_pdf = require("html-pdf-node");
 
 const userData = require('../../authentication').userData;
 const logData = require('../../authentication').logData;
@@ -821,7 +822,102 @@ const sendNotificationToClient = (client, title, text) => {
     sendEmail(client, title, title, text);
 }
 
-const sendEmail = (receiver, subject, title, text, href = 'https://siodelivery.ge/login') => {
+
+const sendDocument = {
+    type: GraphQLString,
+    args: {
+        email: {type: GraphQLNonNull(GraphQLString)},
+        receiver: {type: GraphQLNonNull(GraphQLString)},
+        name: {type: GraphQLNonNull(GraphQLString)},
+    },
+    resolve: (parent, args) => {
+
+        return pageData().then(async ({res, db})=> {
+            const date = getNewDate();
+            const dateArr = date.split('-');
+            dateArr[2] = '01'
+            const startDate = dateArr.join('-')
+            const data = await res.find({client: args.email, registerDate: {$gte: startDate}}).toArray();
+            db.close();
+            let express = 0;
+            let normal = 0;
+            data.forEach((item)=> {
+                if(item.service === 'სტანდარტი') normal += item.price
+                if(item.service === 'ექსპრესი') express += item.price
+            })
+            var html_to_pdf = require('html-pdf-node');
+
+            let options = { format: 'A4' };
+            const content =  `
+                    <div style="padding: 64px">
+
+<span style="display: flex; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid">
+    თბილისი
+    <span>05,01,2022 </span>
+</span>
+<h2 style="text-align: center; font-weight: normal">მიღება ჩაბარება </h2>
+<h4 style="font-weight: normal; font-size: 18px">
+    ერთის მხრივ, ${args.name}, შემდეგში: „დამკვეთი“,
+</h4>
+    <h4 style="font-weight: normal">და</h4>
+    <h4  style="font-weight: normal; font-size: 18px; text-align: right">
+        მეორეს მხრივ, შპს სიო დელივერი ს/კ 402174927, მისამართი: საქართველო, ქ. თბილისი, დიდუბის რაიონი,
+        აკაკი წერეთლის გამზირი, N 117ა,
+        ტელ. 551031717, ელ. ფოსტა archil@buk.ge,
+        წარმოდგენილი მისი დირექტორის ამირან სამხარაძის მიერ,
+        შემდეგში: „შემსრულებელი“.
+    </h4>
+    <h4  style="font-weight: normal; font-size: 18px;">
+        ვადგენთ მიღება ჩაბარების აქტს მასზედ,
+        რომ დანართი N1-ის თანახმად 2021 წლის ${startDate} - დან ${getNewDate()} - ჩათვლით
+         მომსახურების ღირებულება განისაზღვრა ${express+ normal}  ლარით.
+        (ექსპრეს შეკვეთების საერთო ღირებულება: ${express} ლარი,
+         სტანდარტული შეკვეთების საერთო ღირებულება: ${normal} ლარი)
+
+    </h4>
+
+
+<h4  style="font-weight: normal; font-size: 18px">
+    აქტი სწორია და ვადასტურებთ ხელმოწერით.
+</h4>
+
+<div style="display: flex; padding: 24px 84px; justify-content: space-between; text-align: center">
+    <div style="display: flex; flex-direction: column; grid-gap: 12px; border-bottom: 1px solid; padding-bottom: 48px">
+        <span>(1) დამკვეთი</span>
+        <span>${args.name}</span>
+    </div>
+    <div style="display: grid;grid-gap: 12px;">
+        <span>(2) შემსრულებელი</span>
+        <span>შპს სიო დელივერი</span>
+        <span>ს/კ 402174927</span>
+        <span style=" padding-bottom: 68px">ამირან სამხარაძე</span>
+        <img src="https://siodelivery.ge/Z-Frontend/images/item1.jpg" width="150" height="50">
+    </div>
+</div>
+
+
+</div>`;
+            let file = { content, name: 'deliveryAccept.pdf' };
+            const pdf = await html_to_pdf.generatePdf(file, options)
+            sendEmail(
+                args.receiver,
+                'შემაჯამებელი დოკუმენტი',
+                'მიღება ჩაბარების დოკუმენტი',
+                'თვის შემაჯამებელი დოკუმენტი',
+                'https://siodelivery.ge/login',
+                [
+                    {
+                        filename: 'deliveryAccept.pdf',
+                        content: pdf,
+                    }
+                ]);
+            return 'success'
+        })
+    }
+}
+
+
+const sendEmail = async (receiver, subject, title, text, href = 'https://siodelivery.ge/login', attachments= []) => {
     let transporter = nodemailer.createTransport({
         service: 'zoho',
         auth: {
@@ -829,11 +925,12 @@ const sendEmail = (receiver, subject, title, text, href = 'https://siodelivery.g
             pass: process.env.EMAIL_TOKEN_SECRET,
         }
     });
-
+    console.log('bbb')
     let mailOptions = {
         from: 'info@siodelivery.ge',
         to: receiver,
         subject: subject,
+        attachments,
         html: `<div style="padding: 64px;background: rgb(244,244,244);">
 
 <img 
@@ -953,6 +1050,7 @@ module.exports = ({
     cancelOrder,
     getDetails,
     handleAccept,
+    sendDocument,
     dayReport,
     loadExcel,
     logExcelLoad,

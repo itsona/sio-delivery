@@ -244,9 +244,9 @@ class CupioDrawer extends LitElement {
                         ${!this.panel && this.item.status !== 'ჩაბარებული' && this.item.status !== 'აღებული'&& !this.saved ? html`
                         <div
                             class="save"
+                            ?disabled="${this.statusUpdated}"
                             @click="${()=> {
-                                this._onStatusChange(this.item.status === 'ასაღები' ? 'აღებული' : 'ჩაბარებული')
-                                this.drawerClose('updated')
+                                this._onStatusChange(this.item.status === 'ასაღები' ? 'აღებული' : 'ჩაბარებული', true)
                             }}">
                             ${this.item.status === 'ასაღები' ? 'აღებულად მონიშვნა': 'ჩაბარებულად მონიშვნა'}
                         </div>
@@ -328,6 +328,9 @@ class CupioDrawer extends LitElement {
                 type: Object,
             },
             opened: {
+                type: Boolean,
+            },
+            statusUpdated: {
                 type: Boolean,
             },
             priceDiff: {
@@ -601,7 +604,7 @@ class CupioDrawer extends LitElement {
             .catch(r=> console.warn(r));
     }
 
-    _onStatusChange(value){
+    _onStatusChange(value, needToClose){
         if(value === 'ჩაბარებული' && this.newItem.cash && !this.newItem.cashPayed){
             this.cantSave = true;
             if(window.confirm('თანხა აღებულია?')){
@@ -619,11 +622,13 @@ class CupioDrawer extends LitElement {
         const gql = `mutation{
               changeStatus(id: "${this.newItem.id}", status: "${value}")
               }`
+        this.statusUpdated = true
         this.graphqlPost(gql).then(r=> {
                 this.newItem.status = value
                 if(this.panel) this.loadDetails();
                 this.saved = true;
                 if(!this.panel) this.opened = false
+                if(needToClose)this.drawerClose()
             }
         );
     }
