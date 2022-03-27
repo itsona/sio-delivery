@@ -30,6 +30,7 @@
     "multer-gridfs-storage": "^4.2.0",
     "nodemailer": "^6.4.14",
     "polymer-cli": "^1.9.11",
+    "puppeteer": "^3.3.0",
     "xlsx": "^0.17.0"
   },
   "devDependencies": {
