@@ -147,6 +147,13 @@ class CupioAdminItem extends LitElement {
 
                 ${!this.delivery ? html`
                     <div class="accept" @click="${() => this.setCourier(true)}">დანიშვნა</div>
+                    <cupio-input
+                            name="date"
+                            @value-changed="${this.onStartDateChange}"></cupio-input>
+                    <cupio-input
+                            name="date"
+                            @value-changed="${this.onEndDateChange}"></cupio-input>
+
                     <div class="accept" @click="${() => this.sendDocument()}">დოკუმენტი</div>
                 ` : html`
                     <div class="decline" @click="${() => this.setCourier(false)}">მოხსნა</div>
@@ -167,6 +174,12 @@ class CupioAdminItem extends LitElement {
             },
             delivery: {
                 type: Boolean,
+            },
+            startDate: {
+                type: String,
+            },
+            endDate: {
+                type: String,
             },
             showTimes: {
                 type: Boolean,
@@ -195,6 +208,14 @@ class CupioAdminItem extends LitElement {
         return 'grey'
     }
 
+    onStartDateChange(value){
+        this.startDate = value.detail;
+    }
+
+    onEndDateChange(value){
+        this.endDate = value.detail;
+    }
+
     setCourier(isCourier) {
         const gql = `
             mutation {
@@ -219,6 +240,8 @@ class CupioAdminItem extends LitElement {
               sendDocument(
                 email: "${this.item.email}",
                 receiver: "${this.item.email}",
+                startDate: "${this.startDate}"
+                endDate: "${this.endDate}"
                 name:"${this.item.name}")
             }
         `

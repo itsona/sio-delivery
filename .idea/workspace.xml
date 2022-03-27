@@ -5,17 +5,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/Z-Frontend/images/signature.PNG" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/common/cupio-drawer.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/common/cupio-drawer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-item.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-item.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/main/common/cupio-main-container.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/main/common/cupio-main-container.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/middleWares/grapqhlServer.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/grapqhlServer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/middleWares/queryFields/data/dataList.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/queryFields/data/dataList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/mail.html" beforeDir="false" afterPath="$PROJECT_DIR$/views/mail.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -170,35 +163,9 @@
       <workItem from="1646737971368" duration="3907000" />
       <workItem from="1646826057021" duration="45000" />
       <workItem from="1647539927409" duration="781000" />
-      <workItem from="1647695413342" duration="16934000" />
-    </task>
-    <task id="LOCAL-00007" summary="fix cash value">
-      <created>1622407748895</created>
-      <option name="number" value="00007" />
-      <option name="presentableId" value="LOCAL-00007" />
-      <option name="project" value="LOCAL" />
-      <updated>1622407748895</updated>
-    </task>
-    <task id="LOCAL-00008" summary="fix cash value">
-      <created>1622407934288</created>
-      <option name="number" value="00008" />
-      <option name="presentableId" value="LOCAL-00008" />
-      <option name="project" value="LOCAL" />
-      <updated>1622407934289</updated>
-    </task>
-    <task id="LOCAL-00009" summary="remove cash value">
-      <created>1622408838754</created>
-      <option name="number" value="00009" />
-      <option name="presentableId" value="LOCAL-00009" />
-      <option name="project" value="LOCAL" />
-      <updated>1622408838755</updated>
-    </task>
-    <task id="LOCAL-00010" summary="remove cash value">
-      <created>1622409005124</created>
-      <option name="number" value="00010" />
-      <option name="presentableId" value="LOCAL-00010" />
-      <option name="project" value="LOCAL" />
-      <updated>1622409005124</updated>
+      <workItem from="1647695413342" duration="23863000" />
+      <workItem from="1647753688627" duration="1206000" />
+      <workItem from="1648365951840" duration="2475000" />
     </task>
     <task id="LOCAL-00011" summary="list update Pt 2">
       <created>1622477019466</created>
@@ -515,7 +482,35 @@
       <option name="project" value="LOCAL" />
       <updated>1646743555678</updated>
     </task>
-    <option name="localTasksCounter" value="56" />
+    <task id="LOCAL-00056" summary="sio 2.0.1, &#10;add status button and fix payze">
+      <created>1647717611344</created>
+      <option name="number" value="00056" />
+      <option name="presentableId" value="LOCAL-00056" />
+      <option name="project" value="LOCAL" />
+      <updated>1647717611345</updated>
+    </task>
+    <task id="LOCAL-00057" summary="sio 2.0.1, &#10;add status button and fix payze">
+      <created>1647717662243</created>
+      <option name="number" value="00057" />
+      <option name="presentableId" value="LOCAL-00057" />
+      <option name="project" value="LOCAL" />
+      <updated>1647717662243</updated>
+    </task>
+    <task id="LOCAL-00058" summary="sio 2.0.1, &#10;add status button and fix payze">
+      <created>1647719753832</created>
+      <option name="number" value="00058" />
+      <option name="presentableId" value="LOCAL-00058" />
+      <option name="project" value="LOCAL" />
+      <updated>1647719753832</updated>
+    </task>
+    <task id="LOCAL-00059" summary="sio 2.0.1, &#10;add status button and fix payze">
+      <created>1647719826649</created>
+      <option name="number" value="00059" />
+      <option name="presentableId" value="LOCAL-00059" />
+      <option name="project" value="LOCAL" />
+      <updated>1647719826649</updated>
+    </task>
+    <option name="localTasksCounter" value="60" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">

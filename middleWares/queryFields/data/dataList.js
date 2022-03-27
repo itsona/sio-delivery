@@ -828,15 +828,13 @@ const sendDocument = {
         email: {type: GraphQLNonNull(GraphQLString)},
         receiver: {type: GraphQLNonNull(GraphQLString)},
         name: {type: GraphQLNonNull(GraphQLString)},
+        endDate: {type: GraphQLNonNull(GraphQLString)},
+        startDate: {type: GraphQLNonNull(GraphQLString)},
     },
     resolve: (parent, args) => {
 
         return pageData().then(async ({res, db})=> {
-            const date = getNewDate();
-            const dateArr = date.split('-');
-            dateArr[2] = '01'
-            const startDate = dateArr.join('-')
-            const data = await res.find({client: args.email, registerDate: {$gte: startDate}}).toArray();
+            const data = await res.find({client: args.email, registerDate: {$gte: args.startDate, $lte: args.endDate}}).toArray();
             db.close();
             let express = 0;
             let normal = 0;
@@ -852,7 +850,7 @@ const sendDocument = {
 
 <span style="display: flex; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid">
     თბილისი
-    <span>${getNewDate()} </span>
+    <span>${args.endDate} </span>
 </span>
 <h2 style="text-align: center; font-weight: normal">მიღება ჩაბარება </h2>
 <h4 style="font-weight: normal; font-size: 18px">
@@ -868,7 +866,7 @@ const sendDocument = {
     </h4>
     <h4  style="font-weight: normal; font-size: 18px;">
         ვადგენთ მიღება ჩაბარების აქტს მასზედ,
-        რომ დანართი N1-ის თანახმად ${startDate} - დან ${getNewDate()} - ჩათვლით
+        რომ ${args.startDate} - დან ${args.endDate} - ჩათვლით
          მომსახურების ღირებულება განისაზღვრა ${express+ normal}  ლარით
         (ექსპრეს შეკვეთების საერთო ღირებულება: ${express} ლარი,
          სტანდარტული შეკვეთების საერთო ღირებულება: ${normal} ლარი).
@@ -901,7 +899,7 @@ const sendDocument = {
                 args.receiver,
                 'შემაჯამებელი დოკუმენტი',
                 'მიღება ჩაბარების დოკუმენტი',
-                'თვის შემაჯამებელი დოკუმენტი',
+                'შემაჯამებელი დოკუმენტი  '+args.startDate + ' : ' + args.endDate,
                 'https://siodelivery.ge/login',
                 [
                     {
