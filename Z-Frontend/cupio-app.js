@@ -9,6 +9,7 @@ import './modules/landing/cupio-landing';
 import './modules/authentication/cupio-company-registration';
 import './modules/authentication/cupio-authorization';
 import './modules/authentication/cupio-reset';
+import './modules/moderator/cupio-moderator';
 const outlet = document.getElementById('outlet');
 const router = new Router(outlet);
 router.setRoutes([
@@ -23,5 +24,6 @@ router.setRoutes([
     {path: '/login', component: 'cupio-authorization'},
     {path: '/register', component: 'cupio-authorization'},
     {path: '/reset', component: 'cupio-reset'},
+    {path: '/moder', component: 'cupio-moderator'},
     {path: '(.*)', component: 'cupio-landing'},
 ]);

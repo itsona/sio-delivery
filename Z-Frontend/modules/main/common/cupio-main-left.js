@@ -272,7 +272,15 @@ class CupioMainLeft extends LitElement {
                         <img src="/Z-Frontend/images/icons/next-svgrepo-com.svg">
                     </a>
                 </div>
-                `: ''}
+                `: html`
+
+                    <div class="user-console">
+                        <a class="link" href="/moder">
+                            პირადი კაბინეტი
+                            <img src="/Z-Frontend/images/icons/next-svgrepo-com.svg">
+                        </a>
+                    </div>
+                `}
             </div>
 
             <div class="filter">

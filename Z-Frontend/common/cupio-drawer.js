@@ -241,7 +241,7 @@ class CupioDrawer extends LitElement {
                             შეკვეთის გაუქმება
                         </div>` :''
                             }
-                        ${!this.panel && this.item.status !== 'ჩაბარებული' && this.item.status !== 'აღებული'&& !this.saved ? html`
+                        ${!this.panel && this.opened && this.item.status !== 'ჩაბარებული' && this.item.status !== 'აღებული'&& !this.saved ? html`
                         <div
                             class="save"
                             ?disabled="${this.statusUpdated}"
@@ -384,6 +384,7 @@ class CupioDrawer extends LitElement {
     drawerClose(event = 'closed') {
         this.item = {};
         this.dispatchEvent(new CustomEvent(event));
+        this.statusUpdated = false;
     }
 
     updated(_changedProperties) {
@@ -627,7 +628,6 @@ class CupioDrawer extends LitElement {
                 this.newItem.status = value
                 if(this.panel) this.loadDetails();
                 this.saved = true;
-                if(!this.panel) this.opened = false
                 if(needToClose)this.drawerClose()
             }
         );

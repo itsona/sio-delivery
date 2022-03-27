@@ -201,7 +201,7 @@ class CupioAdminPanel extends LitElement {
         this.express = null;
         this.standard = null;
         this.loadAll();
-        if(window.localStorage.getItem('isEmployee')) redirectTo('/panel')
+        if(window.localStorage.getItem('isEmployee')) redirectTo('/moder')
         handleRequest(false).then(r=> {
             if(r !== 'admin')redirectTo('/client')
         })
