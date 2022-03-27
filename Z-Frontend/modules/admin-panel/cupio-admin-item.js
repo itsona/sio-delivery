@@ -34,6 +34,11 @@ class CupioAdminItem extends LitElement {
                 flex-grow: 1;
                 gap: 12px;
             }
+            
+            .accept[disabled]{
+                pointer-events: none;
+                opacity: 0.3;
+            }
 
             .title {
                 font-weight: bold;
@@ -154,7 +159,10 @@ class CupioAdminItem extends LitElement {
                             name="date"
                             @value-changed="${this.onEndDateChange}"></cupio-input>
 
-                    <div class="accept" @click="${() => this.sendDocument()}">დოკუმენტი</div>
+                    <div 
+                            class="accept" 
+                            @click="${() => this.sendDocument()}" 
+                            ?disabled="${!this.endDate || !this.startDate}">დოკუმენტი</div>
                 ` : html`
                     <div class="decline" @click="${() => this.setCourier(false)}">მოხსნა</div>
                     </div>
