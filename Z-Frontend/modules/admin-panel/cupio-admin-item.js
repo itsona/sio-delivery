@@ -2,6 +2,7 @@ import {LitElement, html, css} from 'lit-element';
 import {localize} from "../../mixins/localize";
 import '../../common/cupio-input';
 import {graphqlPost} from "../../mixins/graphql";
+// import * as Buffer from "buffer";
 
 class CupioAdminItem extends LitElement {
     //Language=css
@@ -161,8 +162,12 @@ class CupioAdminItem extends LitElement {
 
                     <div 
                             class="accept" 
-                            @click="${() => this.sendDocument()}" 
+                            @click="${()=> this.sendDocument()}" 
                             ?disabled="${!this.endDate || !this.startDate}">დოკუმენტი</div>
+                    <div 
+                            class="accept" 
+                            @click="${() => this.sendDocument(true)}" 
+                            ?disabled="${!this.endDate || !this.startDate}">გაგზავნა</div>
                 ` : html`
                     <div class="decline" @click="${() => this.setCourier(false)}">მოხსნა</div>
                     </div>
@@ -240,7 +245,7 @@ class CupioAdminItem extends LitElement {
         });
     }
 
-    sendDocument(){
+    sendDocument(send = false){
         // alert('ხელმოწერის ფოტო აკლია და გადავიტან ^^');
         // return
         const gql = `
@@ -250,10 +255,21 @@ class CupioAdminItem extends LitElement {
                 receiver: "${this.item.email}",
                 startDate: "${this.startDate}"
                 endDate: "${this.endDate}"
-                name:"${this.item.name}")
+                name:"${this.item.name}"
+                sendEmail: ${send})
             }
         `
-        graphqlPost(gql).then(r=> alert('გაიგზავნა'))
+        graphqlPost(gql).then(()=> {
+            const a = document.createElement('a')
+            a.href = 'https://siodelivery.ge/middleWares/document.pdf'
+            // a.href = 'http://localhost:8000/middleWares/document.pdf'
+            a.target = '_blank'
+            a.download = document.pdf
+            document.body.appendChild(a)
+            a.style.display = 'none'
+            a.click()
+            a.remove()
+        })
     }
 
     setDate(event){

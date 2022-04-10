@@ -830,6 +830,7 @@ const sendDocument = {
         name: {type: GraphQLNonNull(GraphQLString)},
         endDate: {type: GraphQLNonNull(GraphQLString)},
         startDate: {type: GraphQLNonNull(GraphQLString)},
+        sendEmail: {type: GraphQLBoolean}
     },
     resolve: (parent, args) => {
 
@@ -886,6 +887,9 @@ const sendDocument = {
         <span>(2) შემსრულებელი</span>
         <span>შპს სიო დელივერი</span>
         <span>ს/კ 402174927</span>
+        <span style="font-weight: bold">ანგარიშები:</span>
+        <span>GE22TB7967436070100001</span>
+        <span>GE94BG0000000498414897</span>
         <span>ამირან სამხარაძე</span>
         <img src="https://siodelivery.ge/Z-Frontend/images/signature.PNG" width="150" height="50" style="margin-bottom: -4px">
     </div>
@@ -895,19 +899,23 @@ const sendDocument = {
 </div>`;
             let file = { content, name: 'deliveryAccept.pdf' };
             const pdf = await html_to_pdf.generatePdf(file, options)
-            sendEmail(
-                args.receiver,
-                'შემაჯამებელი დოკუმენტი',
-                'მიღება ჩაბარების დოკუმენტი',
-                'შემაჯამებელი დოკუმენტი  '+args.startDate + ' : ' + args.endDate,
-                'https://siodelivery.ge/login',
-                [
-                    {
-                        filename: 'deliveryAccept.pdf',
-                        content: pdf,
-                    }
-                ]);
-            return 'success'
+            await fs.appendFileSync('./middleWares/document.pdf', Buffer.from(pdf));
+
+            if(args.sendEmail) {
+                sendEmail(
+                    args.receiver,
+                    'შემაჯამებელი დოკუმენტი',
+                    'მიღება ჩაბარების დოკუმენტი',
+                    'შემაჯამებელი დოკუმენტი  ' + args.startDate + ' : ' + args.endDate,
+                    'https://siodelivery.ge/login',
+                    [
+                        {
+                            filename: 'deliveryAccept.pdf',
+                            content: pdf,
+                        }
+                    ]);
+            }
+            return JSON.stringify(pdf)
         })
     }
 }
@@ -921,7 +929,6 @@ const sendEmail = async (receiver, subject, title, text, href = 'https://siodeli
             pass: process.env.EMAIL_TOKEN_SECRET,
         }
     });
-    console.log('bbb')
     let mailOptions = {
         from: 'info@siodelivery.ge',
         to: receiver,
