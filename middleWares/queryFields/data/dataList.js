@@ -846,6 +846,7 @@ const sendDocument = {
             var html_to_pdf = require('html-pdf-node');
 
             let options = { format: 'A4' };
+
             const content =  `
                     <div style="padding: 64px">
 
@@ -859,10 +860,9 @@ const sendDocument = {
 </h4>
     <h4 style="font-weight: normal">და</h4>
     <h4  style="font-weight: normal; font-size: 18px; text-align: right">
-        მეორეს მხრივ, შპს სიო დელივერი ს/კ 402174927, მისამართი: საქართველო, ქ. თბილისი, დიდუბის რაიონი,
-        აკაკი წერეთლის გამზირი, N 117ა,
-        ტელ. 551031717, ელ. ფოსტა archil@buk.ge,
-        წარმოდგენილი მისი დირექტორის ამირან სამხარაძის მიერ,
+        მეორეს მხრივ, შპს სიო დელივერი ს/კ 402174927 
+        ტელ. 577058610, ელ. ფოსტა info@siodelivery.ge,
+        წარმოდგენილი მისი დირექტორის ნუგზარი სხულუხიას მიერ,
         შემდეგში: „შემსრულებელი“.
     </h4>
     <h4  style="font-weight: normal; font-size: 18px;">
@@ -890,7 +890,7 @@ const sendDocument = {
         <span style="font-weight: bold">ანგარიშები:</span>
         <span>GE22TB7967436070100001</span>
         <span>GE94BG0000000498414897</span>
-        <span>ამირან სამხარაძე</span>
+        <span>ნუგზარი სხულუხია</span>
         <img src="https://siodelivery.ge/Z-Frontend/images/signature.PNG" width="150" height="50" style="margin-bottom: -4px">
     </div>
 </div>

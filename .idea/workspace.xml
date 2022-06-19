@@ -4,11 +4,14 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="add document">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-item.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-item.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-panel.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-panel.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/middleWares/queryFields/data/dataList.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/queryFields/data/dataList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/middleWares/queryFields/users/usersList.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/queryFields/users/usersList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/mail.html" beforeDir="false" afterPath="$PROJECT_DIR$/views/mail.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -38,22 +41,24 @@
       <filtered-out-file-type name="COMMIT_BY_MESSAGE" />
     </file-type-list>
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectId" id="1qprbPqvOmGLZOjBKWkW7m4mVXq" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
-    <property name="nodejs_package_manager_path" value="npm" />
-    <property name="settings.editor.selected.configurable" value="reference.settingsdialog.IDE.editor.colors" />
-    <property name="ts.external.directory.path" value="C:\Users\Iakobi\AppData\Local\JetBrains\WebStorm 2021.2.3\plugins\JavaScriptLanguage\jsLanguageServicesImpl\external" />
-    <property name="vue.rearranger.settings.migration" value="true" />
-  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Iakobi/sio/sio-delivery&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Iakobi\\AppData\\Local\\JetBrains\\WebStorm 2021.2.3\\plugins\\JavaScriptLanguage\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Iakobi\sio\sio-delivery\Z-Frontend\images\icons" />
@@ -166,27 +171,18 @@
       <workItem from="1647695413342" duration="23863000" />
       <workItem from="1647753688627" duration="1206000" />
       <workItem from="1648365951840" duration="2475000" />
-    </task>
-    <task id="LOCAL-00011" summary="list update Pt 2">
-      <created>1622477019466</created>
-      <option name="number" value="00011" />
-      <option name="presentableId" value="LOCAL-00011" />
-      <option name="project" value="LOCAL" />
-      <updated>1622477019466</updated>
-    </task>
-    <task id="LOCAL-00012" summary="list update Pt 2">
-      <created>1622477087389</created>
-      <option name="number" value="00012" />
-      <option name="presentableId" value="LOCAL-00012" />
-      <option name="project" value="LOCAL" />
-      <updated>1622477087389</updated>
-    </task>
-    <task id="LOCAL-00013" summary="add texts and tags">
-      <created>1622535984059</created>
-      <option name="number" value="00013" />
-      <option name="presentableId" value="LOCAL-00013" />
-      <option name="project" value="LOCAL" />
-      <updated>1622535984059</updated>
+      <workItem from="1648378965587" duration="414000" />
+      <workItem from="1649087064268" duration="435000" />
+      <workItem from="1649099072879" duration="432000" />
+      <workItem from="1649580473914" duration="7865000" />
+      <workItem from="1649673901255" duration="24000" />
+      <workItem from="1649696908508" duration="610000" />
+      <workItem from="1649745364904" duration="629000" />
+      <workItem from="1649768543125" duration="3371000" />
+      <workItem from="1649772892537" duration="32000" />
+      <workItem from="1650220389896" duration="650000" />
+      <workItem from="1654710953319" duration="262000" />
+      <workItem from="1655665777522" duration="2521000" />
     </task>
     <task id="LOCAL-00014" summary="add texts and tags">
       <created>1622556780151</created>
@@ -510,7 +506,28 @@
       <option name="project" value="LOCAL" />
       <updated>1647719826649</updated>
     </task>
-    <option name="localTasksCounter" value="60" />
+    <task id="LOCAL-00060" summary="brah">
+      <created>1648369742617</created>
+      <option name="number" value="00060" />
+      <option name="presentableId" value="LOCAL-00060" />
+      <option name="project" value="LOCAL" />
+      <updated>1648369742617</updated>
+    </task>
+    <task id="LOCAL-00061" summary="add moder page">
+      <created>1648372392245</created>
+      <option name="number" value="00061" />
+      <option name="presentableId" value="LOCAL-00061" />
+      <option name="project" value="LOCAL" />
+      <updated>1648372392245</updated>
+    </task>
+    <task id="LOCAL-00062" summary="add document send and preview">
+      <created>1649623271571</created>
+      <option name="number" value="00062" />
+      <option name="presentableId" value="LOCAL-00062" />
+      <option name="project" value="LOCAL" />
+      <updated>1649623271571</updated>
+    </task>
+    <option name="localTasksCounter" value="63" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -536,12 +553,8 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add texts and tags" />
-    <MESSAGE value="change backend link" />
-    <MESSAGE value="add fb fot test" />
     <MESSAGE value="add terms and conditions" />
     <MESSAGE value="fix login" />
     <MESSAGE value="add email sending" />
@@ -564,7 +577,10 @@
     <MESSAGE value="sio 2.0, &#10;add" />
     <MESSAGE value="sio 2.0, &#10;fix payments check" />
     <MESSAGE value="sio 2.0.1, &#10;add status button and fix payze" />
-    <option name="LAST_COMMIT_MESSAGE" value="sio 2.0.1, &#10;add status button and fix payze" />
+    <MESSAGE value="brah" />
+    <MESSAGE value="add moder page" />
+    <MESSAGE value="add document send and preview" />
+    <option name="LAST_COMMIT_MESSAGE" value="add document send and preview" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

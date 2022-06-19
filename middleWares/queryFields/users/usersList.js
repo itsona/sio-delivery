@@ -223,8 +223,8 @@ function callPayWithPayze(token,price){
     const payToken = jwt.sign({payed: true}, process.env.ACCESS_TOKEN_SECRET)
     return axios.post('https://payze.io/api/v1', {
             method: 'justPay',
-            apiKey: 'E2A930873E4E48B2B8319D7E8A75BB98',
-            apiSecret: '32AE2A765A4341E7AEB726D6E0BA8A23',
+            apiKey: '00D4933F4EAA45BA83A4F15D649453A5',
+            apiSecret: 'A771CD4B0C224B31BD2F738C070FAEBA',
             data: {
                 amount: stringify(price),
                 currency: 'GEL',
