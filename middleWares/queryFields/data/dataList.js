@@ -821,7 +821,7 @@ const sendNotificationToClient = (client, title, text) => {
     sendEmail(client, title, title, text);
 }
 
-
+let documentGenerating = false;
 const sendDocument = {
     type: GraphQLString,
     args: {
@@ -833,7 +833,8 @@ const sendDocument = {
         sendEmail: {type: GraphQLBoolean}
     },
     resolve: (parent, args) => {
-
+        if(documentGenerating) return '';
+        documentGenerating = true
         return pageData().then(async ({res, db})=> {
             const data = await res.find({client: args.email, registerDate: {$gte: args.startDate, $lte: args.endDate}}).toArray();
             db.close();
@@ -915,6 +916,7 @@ const sendDocument = {
                         }
                     ]);
             }
+            documentGenerating = false;
             return JSON.stringify(pdf)
         })
     }

@@ -259,12 +259,13 @@ class CupioAdminItem extends LitElement {
                 sendEmail: ${send})
             }
         `
-        graphqlPost(gql).then(()=> {
+        graphqlPost(gql).then((result)=> {
+            if(!result.data.sendDocument) return
             const a = document.createElement('a')
-            a.href = 'https://siodelivery.ge/middleWares/document.pdf'
+            a.href = '/middleWares/document.pdf'
             // a.href = 'http://localhost:8000/middleWares/document.pdf'
             a.target = '_blank'
-            a.download = document.pdf
+            a.download = 'document.pdf'
             document.body.appendChild(a)
             a.style.display = 'none'
             a.click()

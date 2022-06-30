@@ -6,12 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="add document">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-panel.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-panel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/images/signature.PNG" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/images/signature.PNG" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/mixins/graphql.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/mixins/graphql.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-item.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-item.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/middleWares/queryFields/data/dataList.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/queryFields/data/dataList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/middleWares/queryFields/users/usersList.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/queryFields/users/usersList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/views/mail.html" beforeDir="false" afterPath="$PROJECT_DIR$/views/mail.html" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,22 +48,22 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Iakobi/sio/sio-delivery&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Iakobi\\AppData\\Local\\JetBrains\\WebStorm 2021.2.3\\plugins\\JavaScriptLanguage\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/Iakobi/sio/sio-delivery/Z-Frontend/images",
+    "nodejs_package_manager_path": "npm",
+    "ts.external.directory.path": "C:\\Users\\Iakobi\\AppData\\Local\\JetBrains\\WebStorm 2021.2.3\\plugins\\JavaScriptLanguage\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\Iakobi\sio\sio-delivery\Z-Frontend\images" />
       <recent name="C:\Users\Iakobi\sio\sio-delivery\Z-Frontend\images\icons" />
       <recent name="C:\Users\Iakobi\sio\sio-delivery\middleWares" />
       <recent name="C:\Users\Iakobi\sio\sio-delivery\middleWares\queryFields\data" />
       <recent name="C:\Users\user\Desktop\mitanis web\Z-Frontend\images\icons" />
-      <recent name="C:\Users\user\Desktop\mitanis web\Z-Frontend\modules\delivery" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\Iakobi\sio\sio-delivery\Z-Frontend\images" />
@@ -183,6 +181,8 @@
       <workItem from="1650220389896" duration="650000" />
       <workItem from="1654710953319" duration="262000" />
       <workItem from="1655665777522" duration="2521000" />
+      <workItem from="1655700392784" duration="7000" />
+      <workItem from="1656567923912" duration="1548000" />
     </task>
     <task id="LOCAL-00014" summary="add texts and tags">
       <created>1622556780151</created>
