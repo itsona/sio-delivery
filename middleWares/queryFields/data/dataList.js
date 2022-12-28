@@ -390,16 +390,22 @@ function handlePayWithPayze(params) {
         client: params.client,
         price: parseFloat(params.price)
     }
-    if(jwt.verify(params.token, process.env.ACCESS_TOKEN_SECRET).payed){
-        paymentsData().then(async ({res, db})=> {
+
+    paymentsData().then(async ({res, db})=> {
+        if(jwt.verify(params.token, process.env.ACCESS_TOKEN_SECRET).payed){
             const data = await res.findOne({token: params.token})
                 if(data === null){
                     await handlePay(paramsForCall, false, `გადაიხადა ${params.price}₾`)
                     await res.insertOne({token: params.token})
+                }else {
+                    await res.insertOne({failed: true, params, notNUll: true})
                 }
-            db.close()
-        })
-    }
+        }
+        else {
+            await res.insertOne({failed: true, params})
+        }
+        await db.close()
+    })
 
 }
 
