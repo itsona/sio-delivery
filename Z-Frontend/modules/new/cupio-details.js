@@ -192,7 +192,7 @@ class CupioDetails extends LitElement {
                 <cupio-input
                         class="input"
                         name="date"
-                        min="${this.minDate}"
+                        min="2023-04-24"
                         value="${this.values.takeDate}"
                         @keydown="${(event)=> event.preventDefault()}"
                         @value-changed="${(event) => this.setValue(event, 'takeDate')}"></cupio-input>
@@ -200,7 +200,7 @@ class CupioDetails extends LitElement {
                 <cupio-input
                         class="input"
                         name="date"
-                        min="${this.minDate}"
+                        min="2023-04-24"
                         value="${this.values.deliveryDate}"
                         @keydown="${(event)=> event.preventDefault()}"
                         @value-changed="${(event) => this.setValue(event, 'deliveryDate')}"></cupio-input>
@@ -226,7 +226,14 @@ class CupioDetails extends LitElement {
                     </div>
                 </div>
             </div>
+            <div>
             <cupio-logo></cupio-logo>
+            <div>
+                მოგესალმებით ჩვენო ძვირფასო მომხმარებლებო 🥰 <br>
+                📣გაცნობებთ 16 აპრილიდან 23 აპრილის ჩათვლით არ ვიმუშავებთ 🙏❤️ <br>
+                მუშაობას განვაახლებთ <b> 24 აპრილიდან </b>, რა თქმა უნდა შეკვეთების გაფორმება შეგეძლებათ წინა დღეებში 24 რიცხვისთვის 🙌❤️
+            </div>
+            </div>
         `
     }
 
@@ -294,8 +301,8 @@ class CupioDetails extends LitElement {
 
     init() {
         this.values = {city: 'თბილისი'};
-        this.values.takeDate = this.getDate(1);
-        this.values.deliveryDate = this.getDate(1);
+        this.values.takeDate = '2023-04-24';
+        this.values.deliveryDate = '2023-04-24';
         this.minDate = this.values.takeDate;
         this.values.service = 'სტანდარტი';
         this.values.cash = '';
