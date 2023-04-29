@@ -4,12 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="add document">
+    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="add easter warning">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/images/signature.PNG" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/images/signature.PNG" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/mixins/graphql.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/mixins/graphql.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-item.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-item.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/middleWares/queryFields/data/dataList.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/queryFields/data/dataList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/landing/cupio-landing.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/landing/cupio-landing.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -51,7 +48,7 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/Iakobi/sio/sio-delivery/Z-Frontend/images",
+    "last_opened_file_path": "C:/Users/Iakobi/sio/sio-delivery",
     "nodejs_package_manager_path": "npm",
     "ts.external.directory.path": "C:\\Users\\Iakobi\\AppData\\Local\\JetBrains\\WebStorm 2021.2.3\\plugins\\JavaScriptLanguage\\jsLanguageServicesImpl\\external",
     "vue.rearranger.settings.migration": "true"
@@ -182,28 +179,14 @@
       <workItem from="1654710953319" duration="262000" />
       <workItem from="1655665777522" duration="2521000" />
       <workItem from="1655700392784" duration="7000" />
-      <workItem from="1656567923912" duration="1548000" />
-    </task>
-    <task id="LOCAL-00014" summary="add texts and tags">
-      <created>1622556780151</created>
-      <option name="number" value="00014" />
-      <option name="presentableId" value="LOCAL-00014" />
-      <option name="project" value="LOCAL" />
-      <updated>1622556780151</updated>
-    </task>
-    <task id="LOCAL-00015" summary="change backend link">
-      <created>1622902184457</created>
-      <option name="number" value="00015" />
-      <option name="presentableId" value="LOCAL-00015" />
-      <option name="project" value="LOCAL" />
-      <updated>1622902184457</updated>
-    </task>
-    <task id="LOCAL-00016" summary="change backend link">
-      <created>1622902468091</created>
-      <option name="number" value="00016" />
-      <option name="presentableId" value="LOCAL-00016" />
-      <option name="project" value="LOCAL" />
-      <updated>1622902468091</updated>
+      <workItem from="1656567923912" duration="2914000" />
+      <workItem from="1659954288274" duration="24000" />
+      <workItem from="1672246777953" duration="3204000" />
+      <workItem from="1672856107165" duration="664000" />
+      <workItem from="1672963623825" duration="27000" />
+      <workItem from="1681543726525" duration="1220000" />
+      <workItem from="1682317338703" duration="23000" />
+      <workItem from="1682747323171" duration="194000" />
     </task>
     <task id="LOCAL-00017" summary="add fb fot test">
       <created>1622920566591</created>
@@ -527,7 +510,28 @@
       <option name="project" value="LOCAL" />
       <updated>1649623271571</updated>
     </task>
-    <option name="localTasksCounter" value="63" />
+    <task id="LOCAL-00063" summary="add document signature">
+      <created>1656569555105</created>
+      <option name="number" value="00063" />
+      <option name="presentableId" value="LOCAL-00063" />
+      <option name="project" value="LOCAL" />
+      <updated>1656569555106</updated>
+    </task>
+    <task id="LOCAL-00064" summary="add logs to failed transactions">
+      <created>1672250297982</created>
+      <option name="number" value="00064" />
+      <option name="presentableId" value="LOCAL-00064" />
+      <option name="project" value="LOCAL" />
+      <updated>1672250297982</updated>
+    </task>
+    <task id="LOCAL-00065" summary="add easter warning">
+      <created>1681544316254</created>
+      <option name="number" value="00065" />
+      <option name="presentableId" value="LOCAL-00065" />
+      <option name="project" value="LOCAL" />
+      <updated>1681544316254</updated>
+    </task>
+    <option name="localTasksCounter" value="66" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -555,9 +559,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add terms and conditions" />
-    <MESSAGE value="fix login" />
-    <MESSAGE value="add email sending" />
     <MESSAGE value="add fb login" />
     <MESSAGE value="remove fb login check" />
     <MESSAGE value="add authorizations excel etc" />
@@ -580,7 +581,10 @@
     <MESSAGE value="brah" />
     <MESSAGE value="add moder page" />
     <MESSAGE value="add document send and preview" />
-    <option name="LAST_COMMIT_MESSAGE" value="add document send and preview" />
+    <MESSAGE value="add document signature" />
+    <MESSAGE value="add logs to failed transactions" />
+    <MESSAGE value="add easter warning" />
+    <option name="LAST_COMMIT_MESSAGE" value="add easter warning" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
