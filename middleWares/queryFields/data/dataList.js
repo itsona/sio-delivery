@@ -101,7 +101,7 @@ const loadExcel = {
                     $project: {_id: 0, accepted: 0, courierChanged: 0, oldPayed: 0, counted: 0}
                 }]).toArray()
 
-            const filePath = './middleWares/excel-from-js.xlsx';
+            const filePath = './middleWares/excel-data.xlsx';
             try {
                 fs.unlinkSync(path.resolve(filePath))
             } catch (e) {
