@@ -133,6 +133,11 @@ class CupioDeliveryView extends LitElement {
                     <img src="/Z-Frontend/images/icons/search.svg">
                 </div>
                 ${this.panel ? html`
+                    <div class="excel" @click="${this.loadExcel}">ახლის დაგენერირება</div>
+                    <a class="excel" 
+                       href="https://138.201.104.132:443/middleWares/excel-data.xlsx" 
+                       target="_blank">ფაილის ჩამოწერა</a>
+
                     <a class="link" href="/new">
                         შეკვეთის დამატება
                         <img src="/Z-Frontend/images/icons/add.svg">
