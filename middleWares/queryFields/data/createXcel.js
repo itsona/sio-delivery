@@ -25,12 +25,12 @@ const workSheetColumnName = [
 
 const loadFile  =async (items)=> {
     const workSheetName = 'items';
-    const filePath = './middleWares/excel-data.xlsx';
+    const filePath = './middleWares/excel-from-js.xlsx';
     await exportUsersToExcel(items, workSheetColumnName, workSheetName, filePath);
 }
 
 // const workSheetName = 'items';
-// const filePath = './middleWares/excel-data.xlsx';
+// const filePath = './middleWares/excel-from-js.xlsx';
 //
 // console.log(users, workSheetColumnName, workSheetName)
 // exportUsersToExcel(users, workSheetColumnName, workSheetName, filePath);
