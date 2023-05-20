@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="add easter warning">
+    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="document.pdf">
+      <change afterPath="$PROJECT_DIR$/middleWares/document.pdf" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/landing/cupio-landing.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/landing/cupio-landing.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -45,15 +45,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/Iakobi/sio/sio-delivery",
-    "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "C:\\Users\\Iakobi\\AppData\\Local\\JetBrains\\WebStorm 2021.2.3\\plugins\\JavaScriptLanguage\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Iakobi/sio/sio-delivery&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Iakobi\\AppData\\Local\\JetBrains\\WebStorm 2021.2.3\\plugins\\JavaScriptLanguage\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Iakobi\sio\sio-delivery\Z-Frontend\images" />
@@ -187,13 +187,6 @@
       <workItem from="1681543726525" duration="1220000" />
       <workItem from="1682317338703" duration="23000" />
       <workItem from="1682747323171" duration="194000" />
-    </task>
-    <task id="LOCAL-00017" summary="add fb fot test">
-      <created>1622920566591</created>
-      <option name="number" value="00017" />
-      <option name="presentableId" value="LOCAL-00017" />
-      <option name="project" value="LOCAL" />
-      <updated>1622920566591</updated>
     </task>
     <task id="LOCAL-00018" summary="add terms and conditions">
       <created>1622924177684</created>
@@ -531,7 +524,14 @@
       <option name="project" value="LOCAL" />
       <updated>1681544316254</updated>
     </task>
-    <option name="localTasksCounter" value="66" />
+    <task id="LOCAL-00066" summary="document.pdf">
+      <created>1684596104087</created>
+      <option name="number" value="00066" />
+      <option name="presentableId" value="LOCAL-00066" />
+      <option name="project" value="LOCAL" />
+      <updated>1684596104087</updated>
+    </task>
+    <option name="localTasksCounter" value="67" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -559,7 +559,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="add fb login" />
     <MESSAGE value="remove fb login check" />
     <MESSAGE value="add authorizations excel etc" />
     <MESSAGE value="one more try" />
@@ -584,7 +583,8 @@
     <MESSAGE value="add document signature" />
     <MESSAGE value="add logs to failed transactions" />
     <MESSAGE value="add easter warning" />
-    <option name="LAST_COMMIT_MESSAGE" value="add easter warning" />
+    <MESSAGE value="document.pdf" />
+    <option name="LAST_COMMIT_MESSAGE" value="document.pdf" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
