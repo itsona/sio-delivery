@@ -470,7 +470,7 @@ const addData = {
                 return false;
             }
             args.registerDate = getNewDate();
-            args.id = await res.count() + ' ';
+            args.id = await res.count() + 52925+ ' ';
             args.status = 'განხილვაშია';
             const query = {};
             if (!args.client) {
