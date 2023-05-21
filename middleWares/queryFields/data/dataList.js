@@ -839,22 +839,26 @@ const sendDocument = {
         sendEmail: {type: GraphQLBoolean}
     },
     resolve: (parent, args) => {
-        if(documentGenerating) return '';
-        documentGenerating = true
-        return pageData().then(async ({res, db})=> {
-            const data = await res.find({client: args.email, registerDate: {$gte: args.startDate, $lte: args.endDate}}).toArray();
-            db.close();
-            let express = 0;
-            let normal = 0;
-            data.forEach((item)=> {
-                if(item.service === 'სტანდარტი') normal += item.price
-                if(item.service === 'ექსპრესი') express += item.price
-            })
-            var html_to_pdf = require('html-pdf-node');
+        try {
+            if (documentGenerating) return '';
+            documentGenerating = true
+            return pageData().then(async ({res, db}) => {
+                const data = await res.find({
+                    client: args.email,
+                    registerDate: {$gte: args.startDate, $lte: args.endDate}
+                }).toArray();
+                db.close();
+                let express = 0;
+                let normal = 0;
+                data.forEach((item) => {
+                    if (item.service === 'სტანდარტი') normal += item.price
+                    if (item.service === 'ექსპრესი') express += item.price
+                })
+                var html_to_pdf = require('html-pdf-node');
 
-            let options = { format: 'A4' };
+                let options = {format: 'A4'};
 
-            const content =  `
+                const content = `
                     <div style="padding: 64px">
 
 <span style="display: flex; justify-content: space-between; padding-bottom: 12px; border-bottom: 1px solid">
@@ -875,7 +879,7 @@ const sendDocument = {
     <h4  style="font-weight: normal; font-size: 18px;">
         ვადგენთ მიღება ჩაბარების აქტს მასზედ,
         რომ ${args.startDate} - დან ${args.endDate} - ჩათვლით
-         მომსახურების ღირებულება განისაზღვრა ${express+ normal}  ლარით
+         მომსახურების ღირებულება განისაზღვრა ${express + normal}  ლარით
         (ექსპრეს შეკვეთების საერთო ღირებულება: ${express} ლარი,
          სტანდარტული შეკვეთების საერთო ღირებულება: ${normal} ლარი).
     </h4>
@@ -904,45 +908,49 @@ const sendDocument = {
 
 
 </div>`;
-            let file = { content, name: 'deliveryAccept.pdf' };
-            const pdf = await html_to_pdf.generatePdf(file, options)
-            await fs.appendFileSync('./middleWares/document.pdf', Buffer.from(pdf));
+                let file = {content, name: 'deliveryAccept.pdf'};
+                const pdf = await html_to_pdf.generatePdf(file, options)
+                await fs.appendFileSync('./middleWares/document.pdf', Buffer.from(pdf));
 
-            if(args.sendEmail) {
-                sendEmail(
-                    args.receiver,
-                    'შემაჯამებელი დოკუმენტი',
-                    'მიღება ჩაბარების დოკუმენტი',
-                    'შემაჯამებელი დოკუმენტი  ' + args.startDate + ' : ' + args.endDate,
-                    'https://siodelivery.ge/login',
-                    [
-                        {
-                            filename: 'deliveryAccept.pdf',
-                            content: pdf,
-                        }
-                    ]);
-            }
-            documentGenerating = false;
-            return JSON.stringify(pdf)
-        })
+                if (args.sendEmail) {
+                    sendEmail(
+                        args.receiver,
+                        'შემაჯამებელი დოკუმენტი',
+                        'მიღება ჩაბარების დოკუმენტი',
+                        'შემაჯამებელი დოკუმენტი  ' + args.startDate + ' : ' + args.endDate,
+                        'https://siodelivery.ge/login',
+                        [
+                            {
+                                filename: 'deliveryAccept.pdf',
+                                content: pdf,
+                            }
+                        ]);
+                }
+                documentGenerating = false;
+                return JSON.stringify(pdf)
+            })
+        } catch (e) {
+            console.log(e)
+        }
     }
 }
 
-
 const sendEmail = async (receiver, subject, title, text, href = 'https://siodelivery.ge/login', attachments= []) => {
-    let transporter = nodemailer.createTransport({
-        service: 'zoho',
-        auth: {
-            user: 'info@siodelivery.ge',
-            pass: process.env.EMAIL_TOKEN_SECRET,
-        }
-    });
-    let mailOptions = {
-        from: 'info@siodelivery.ge',
-        to: receiver,
-        subject: subject,
-        attachments,
-        html: `<div style="padding: 64px;background: rgb(244,244,244);">
+    if(!receiver || !subject || !title|| !text) return;
+    try {
+        let transporter = nodemailer.createTransport({
+            service: 'zoho',
+            auth: {
+                user: 'info@siodelivery.ge',
+                pass: process.env.EMAIL_TOKEN_SECRET,
+            }
+        });
+        let mailOptions = {
+            from: 'info@siodelivery.ge',
+            to: receiver,
+            subject: subject,
+            attachments,
+            html: `<div style="padding: 64px;background: rgb(244,244,244);">
 
 <img 
 style="height: 64px;
@@ -975,15 +983,18 @@ text-decoration: none;
     ან მოგვწერეთ <a href="mailto:info@siodelivery.ge">
                             info@siodelivery.ge</a>
  </h3>`
-    };
+        };
 
-    transporter.sendMail(mailOptions, function (error, info) {
-        if (error) {
-            console.log(error);
-        } else {
-            console.log('Email sent: ' + info.response);
-        }
-    });
+        transporter.sendMail(mailOptions, function (error, info) {
+            if (error) {
+                console.log(error);
+            } else {
+                console.log('Email sent: ' + info.response);
+            }
+        });
+    }catch(e){
+        console.log(e)
+    }
 }
 
 const logType = new GraphQLObjectType({
