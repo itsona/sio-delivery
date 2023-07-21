@@ -155,6 +155,12 @@ class CupioDrawer extends LitElement {
                     დეტალები
                 </span>
                 <div class="content">
+
+                    <div
+                            class="save"
+                            @click="${this.onDuplicate}">
+                        დუპლიკაცია
+                    </div>
                     ${this.saved ? html`
                         <span class="title" style="padding: 8px 0; color: red">წარმატებით შევინახეთ</span>
                     ` : ''}
@@ -631,6 +637,16 @@ class CupioDrawer extends LitElement {
                 if(needToClose)this.drawerClose()
             }
         );
+    }
+
+    onDuplicate(){
+        const gql = `
+            mutation {
+                onDuplicate(
+                    id: "${this.newItem.id}"
+            )
+            }`
+        this.graphqlPost(gql)
     }
 
     async graphqlPost(gql){

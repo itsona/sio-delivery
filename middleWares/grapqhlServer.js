@@ -37,6 +37,7 @@ const RootMutationType = new GraphQLObjectType({
         updateData: require('../middleWares/queryFields/data/dataList').updateData,
         changePrice: require('../middleWares/queryFields/data/dataList').changePrice,
         changePayed: require('../middleWares/queryFields/data/dataList').changePayed,
+        onDuplicate: require('../middleWares/queryFields/data/dataList').onDuplicate,
         cashPay: require('../middleWares/queryFields/data/dataList').cashPay,
         cashTransfer: require('../middleWares/queryFields/data/dataList').cashTransfer,
         handleAccept: require('../middleWares/queryFields/data/dataList').handleAccept,

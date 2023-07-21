@@ -527,6 +527,33 @@ const changePayed = {
         }
     }
 }
+const onDuplicate = {
+    type: GraphQLBoolean,
+    args: {
+        id: {type: GraphQLString},
+    },
+
+    resolve: async (parent, args, response) => {
+        const token = response.headers.token;
+        if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
+        const query = {id: args.id}
+
+        return pageData().then(async ({res, db}) => {
+            const items = (await res.find({id: args.id}).sort({_id: 1}).toArray()).slice(1)
+            if(!items || !items.length) return false
+            items.forEach(async (item)=> {
+            await res.updateOne(item, {$set: {status: 'გაუქმებულია'}}, {safe: true}).then(async () => {
+                await handlePay(item, false)
+                await db.close();
+                return true
+            })
+                return true
+            }).catch(() => {
+                return false
+            })
+        });
+    }
+}
 const cashPay = {
     type: GraphQLBoolean,
     args: {
@@ -1081,6 +1108,7 @@ module.exports = ({
     updateData,
     changePrice,
     changePayed,
+    onDuplicate,
     cashPay,
     cashTransfer,
     changeCourier,
