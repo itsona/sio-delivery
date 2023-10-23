@@ -152,19 +152,6 @@ class CupioMainContainer extends LitElement {
                         <img src="/Z-Frontend/images/icons/add.svg">
                     </a>
                 </div>
-                ${this.delivery ? '' : html`
-                <div style="display: flex; align-items: center">
-                    <span style="font-weight: bold; display: flex; flex-grow: 1">გადახდა შესაძლებელია პირდაპირ ჩვენი სისტემიდან: </span>
-                <cupio-input
-                        class="input"
-                        place-holder="შეიყვანეთ თანხა"
-                        name="payment"
-                        value="${this.budget}"
-                        @value-changed="${(event) => this.payAmount = event.detail}"
-                ></cupio-input>
-                    <div class="save"
-                    @click="${this.onPaymentClick}">გადახდა ${this.payAmount || this.budget}</div>
-                </div>`}
                 <div class="title delivery">
                     <span>${this.status || ''} ჩანაწერების რაოდენობა ${this.count || 0}</span>
                 </div>
