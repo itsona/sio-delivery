@@ -166,7 +166,7 @@ class CupioAdminPanel extends LitElement {
                             @value-changed="${(event) => this.filter(event)}"
                     ></cupio-input>
                 </div>
-                ${this.clientsFiltered.map((item, index) => html`
+                ${(this.clientsFiltered || []).map((item, index) => html`
                     <div class="delivery-item">
                         <cupio-admin-item
                                 .value="0"
@@ -208,7 +208,7 @@ class CupioAdminPanel extends LitElement {
     }
 
     filter(event){
-        this.clientsFiltered = this.clients.filter((item)=> {
+        this.clientsFiltered = (this.clients || []).filter((item)=> {
             return item.email.includes(event.detail) || item.name.includes(event.detail)
         })
     }
