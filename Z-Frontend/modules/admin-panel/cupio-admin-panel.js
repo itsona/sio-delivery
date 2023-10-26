@@ -3,7 +3,6 @@ import './cupio-admin-item';
 import '../../common/cupio-input';
 import {graphqlPost, handleRequest} from "../../mixins/graphql";
 import {redirectTo} from "../../mixins/redirectTo";
-import {loadCursor} from "mongodb/lib/dynamic_loaders";
 
 class CupioAdminPanel extends LitElement {
     //Language=css
