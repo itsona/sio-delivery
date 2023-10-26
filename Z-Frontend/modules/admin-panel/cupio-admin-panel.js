@@ -3,6 +3,7 @@ import './cupio-admin-item';
 import '../../common/cupio-input';
 import {graphqlPost, handleRequest} from "../../mixins/graphql";
 import {redirectTo} from "../../mixins/redirectTo";
+import {loadCursor} from "mongodb/lib/dynamic_loaders";
 
 class CupioAdminPanel extends LitElement {
     //Language=css
@@ -238,9 +239,14 @@ class CupioAdminPanel extends LitElement {
             }
             `
         graphqlPost(gql).then(async ({data: {usersDetails}}) => {
+
             if (status === 'delivery') {
                 this.couriers = await this.loadCouriersCounts(usersDetails || [])
             } else {
+                if(!usersDetails){
+                    this.loadCursor(status)
+                    return
+                }
                 this.clients = usersDetails || [];
                 this.clientsFiltered = this.clients;
             }
