@@ -214,9 +214,9 @@ class CupioAdminPanel extends LitElement {
         })
     }
 
-    loadAll() {
-        this.loadCouriers('delivery');
-        this.loadCouriers('client');
+    async loadAll() {
+        await this.loadCouriers('delivery');
+        await this.loadCouriers('client');
     }
 
     loadCouriers(status) {
@@ -238,7 +238,7 @@ class CupioAdminPanel extends LitElement {
               }
             }
             `
-        graphqlPost(gql).then(async ({data: {usersDetails}}) => {
+        return graphqlPost(gql).then(async ({data: {usersDetails}}) => {
 
             if (status === 'delivery') {
                 this.couriers = await this.loadCouriersCounts(usersDetails || [])
