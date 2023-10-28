@@ -118,8 +118,7 @@ class CupioAdminPanel extends LitElement {
                         უკან დაბრუნება
                     </a>
 
-                    <a class="link" href="/admin/log">
-                        ჩანაწერები
+                    <a class="link" >
                     </a>
                     <a class="link" href="/new">
                         შეკვეთის დამატება
