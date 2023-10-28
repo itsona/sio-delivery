@@ -696,18 +696,6 @@ const handleBudget = async (status, item,) => {
                     }
             }, {safe: true}
         )
-        await logData().then(async ({res, db}) => {
-            await res.insertOne({
-                name: user.name,
-                courier: item[courierType],
-                oldBudget: user.budget,
-                change: user.rates[rate] * ((0 - 1) ** minus),
-                newBudget,
-                date: new Date(),
-                changer: 'system# ' + item.id,
-            }, {safe: true})
-            await db.close();
-        })
         await db.close();
     })
 }
@@ -727,18 +715,6 @@ const handlePay = async (args, minus = true,changer = "") => {
                 budget: (newVal),
             }
         }, {safe: true})
-        await logData().then(async ({res, db}) => {
-            await res.insertOne({
-                name: user.name,
-                courier: args.client,
-                oldBudget: user.budget,
-                change: args.price * ((0 - 1) ** minus),
-                newBudget: newVal,
-                date: new Date(),
-                changer: changer || 'system# ' + args.id,
-            }, {safe: true})
-            await db.close();
-        })
         await db.close()
     })
 }

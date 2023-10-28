@@ -17,7 +17,6 @@ const axios = require("axios");
 // const axios = require("axios");
 
 const userData = require('../../authentication').userData;
-const logData = require('../../authentication').logData;
 const pageData = require('../../authentication').pageData;
 const emailData = require('../../authentication').emailData;
 const sendEmail = require('../data/dataList').sendEmail;
@@ -137,19 +136,7 @@ const setBudget = {
             await db.close()
             let dateString = new Date().toLocaleString('en-US',{ timeZone: 'Asia/Tbilisi' });
             if(args.date || args.time) dateString = new Date(args.date + ' '+ args.time).toLocaleString();
-            logData().then(async ({res, db}) => {
-                const b = await res.insertOne({
-                    name: budget.name,
-                    courier: args.client,
-                    oldBudget: budget.budget,
-                    change: args.budget,
-                    newBudget,
-                    date: new Date(),
-                    payDate: dateString,
-                    changer: jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).name,
-                }, {safe: true})
-                await db.close();
-            })
+
             return true;
         })
         return false
