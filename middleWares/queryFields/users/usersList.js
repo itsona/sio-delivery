@@ -82,9 +82,14 @@ const usersDetails = {
         const query = {};
         if (args.status) query.status = args.status;
         return userData().then(async ({res, db}) => {
-            const data = await res.find(query).toArray();
-            db.close();
-            return data;
+            console.log(1)
+            const data = await res.find(query);
+            console.log(2)
+            const returnData = data.toArray()
+            console.log(3)
+            await db.close();
+            console.log(4)
+            return returnData;
         })
     }
 }
