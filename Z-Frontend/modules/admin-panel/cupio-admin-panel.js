@@ -252,8 +252,8 @@ class CupioAdminPanel extends LitElement {
                     this.clientsFiltered = this.clients;
                 }
             }, 100)
-        }).catch(async ()=> {
-            await this.loadCouriers(status)
+        }).catch(async (e)=> {
+            console.log(e)
         })
     }
 

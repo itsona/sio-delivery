@@ -15,8 +15,8 @@ export const graphqlPost = (gqlString) => {
         },
         body: JSON.stringify({query: gqlString})
     }).then(r => r.json())
-        .catch(()=> {
-            throw 'error'
+        .catch((e)=> {
+            throw e
         })
 }
 
