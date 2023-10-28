@@ -78,12 +78,12 @@ const usersDetails = {
     args: {
         status: {type: GraphQLString},
     },
-    resolve: async (parent, args, request) => {
+    resolve: async (parent, args) => {
         const query = {};
         if (args.status) query.status = args.status;
         return userData().then(async ({res, db}) => {
             const data = await res.find(query).toArray();
-            await db.close();
+            setTimeout(db.close, 0);
             return data;
         })
     }
