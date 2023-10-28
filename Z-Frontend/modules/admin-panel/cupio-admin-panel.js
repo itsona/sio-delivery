@@ -214,9 +214,9 @@ class CupioAdminPanel extends LitElement {
         })
     }
 
-    loadAll() {
+    async loadAll() {
+        await this.loadCouriers('delivery');
         this.loadCouriers('client');
-        this.loadCouriers('delivery');
     }
 
     loadCouriers(status) {
@@ -238,16 +238,13 @@ class CupioAdminPanel extends LitElement {
               }
             }
             `
-        graphqlPost(gql).then(async ({data: {usersDetails}}) => {
-            setTimeout(async () => {
-                console.log(usersDetails)
+        return graphqlPost(gql).then(async ({data: {usersDetails}}) => {
                 if (status === 'delivery') {
                     this.couriers = await this.loadCouriersCounts(usersDetails || [])
                 } else {
                     this.clients = usersDetails || [];
                     this.clientsFiltered = this.clients;
                 }
-            }, 100)
         }).catch(async (e)=> {
             console.log(e)
         })
