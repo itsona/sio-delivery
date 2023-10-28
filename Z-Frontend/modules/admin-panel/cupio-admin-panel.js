@@ -238,18 +238,22 @@ class CupioAdminPanel extends LitElement {
               }
             }
             `
-        return graphqlPost(gql).then(async ({data: {usersDetails}}) => {
-            console.log(usersDetails)
-            if (status === 'delivery') {
-                this.couriers = await this.loadCouriersCounts(usersDetails || [])
-            } else {
-                if(!usersDetails){
-                    await this.loadCouriers(status)
-                    return
+        graphqlPost(gql).then(async ({data: {usersDetails}}) => {
+            setTimeout(async () => {
+                console.log(usersDetails)
+                if (status === 'delivery') {
+                    this.couriers = await this.loadCouriersCounts(usersDetails || [])
+                } else {
+                    if (!usersDetails) {
+                        await this.loadCouriers(status)
+                        return
+                    }
+                    this.clients = usersDetails || [];
+                    this.clientsFiltered = this.clients;
                 }
-                this.clients = usersDetails || [];
-                this.clientsFiltered = this.clients;
-            }
+            }, 100)
+        }).catch(async ()=> {
+            await this.loadCouriers(status)
         })
     }
 
