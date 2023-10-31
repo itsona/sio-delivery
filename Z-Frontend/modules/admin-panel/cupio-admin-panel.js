@@ -214,7 +214,7 @@ class CupioAdminPanel extends LitElement {
     }
 
     async loadAll() {
-        // await this.loadCouriers('delivery');
+        await this.loadCouriers('delivery');
         setTimeout(()=> {
             this.loadCouriers('client');
 
@@ -222,7 +222,6 @@ class CupioAdminPanel extends LitElement {
     }
 
     loadCouriers(status) {
-        console.log(status)
         const gql = `
             {
               usersDetails(status: "${status}"){
@@ -241,11 +240,7 @@ class CupioAdminPanel extends LitElement {
               }
             }
             `
-        if(status !== 'delivery'){
-            console.log(1)
-        }
         return graphqlPost(gql).then(async ({data: {usersDetails}}) => {
-            console.log(usersDetails)
                 if (status === 'delivery') {
                     this.couriers = await this.loadCouriersCounts(usersDetails || [])
                 } else {
