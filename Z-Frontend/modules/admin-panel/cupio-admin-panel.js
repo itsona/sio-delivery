@@ -258,7 +258,7 @@ class CupioAdminPanel extends LitElement {
         })
     }
     setClients(number){
-        this.clientsFiltered = [...this.clientsFiltered, ...this.clients.slice(number * 20, (number+1)*20)];
+        this.clientsFiltered = [...(this.clientsFiltered || []), ...this.clients.slice(number * 20, (number+1)*20)];
         if((number +1) * 20 < this.clients.length) {
             setTimeout(()=> this.setClients(number + 1), 200)
         }
