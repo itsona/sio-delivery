@@ -244,9 +244,8 @@ class CupioAdminPanel extends LitElement {
                 if (status === 'delivery') {
                     this.couriers = await this.loadCouriersCounts(usersDetails || [])
                 } else {
-                    console.log(2)
                     this.clients = usersDetails || [];
-                    this.setClients(0)
+                    setTimeout(()=> this.setClients(0), 200)
                 }
         }).catch(async (e)=> {
             console.log(e)
