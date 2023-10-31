@@ -153,21 +153,6 @@ class CupioAdminItem extends LitElement {
 
                 ${!this.delivery ? html`
                     <div class="accept" @click="${() => this.setCourier(true)}">დანიშვნა</div>
-                    <cupio-input
-                            name="date"
-                            @value-changed="${this.onStartDateChange}"></cupio-input>
-                    <cupio-input
-                            name="date"
-                            @value-changed="${this.onEndDateChange}"></cupio-input>
-
-                    <div 
-                            class="accept" 
-                            @click="${()=> this.sendDocument()}" 
-                            ?disabled="${!this.endDate || !this.startDate}">დოკუმენტი</div>
-                    <div 
-                            class="accept" 
-                            @click="${() => this.sendDocument(true)}" 
-                            ?disabled="${!this.endDate || !this.startDate}">გაგზავნა</div>
                 ` : html`
                     <div class="decline" @click="${() => this.setCourier(false)}">მოხსნა</div>
                     </div>
