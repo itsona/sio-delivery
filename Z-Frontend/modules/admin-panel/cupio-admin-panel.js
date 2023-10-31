@@ -244,12 +244,13 @@ class CupioAdminPanel extends LitElement {
             console.log(1)
         }
         return graphqlPost(gql).then(async ({data: {usersDetails}}) => {
+            console.log(usersDetails)
                 if (status === 'delivery') {
                     this.couriers = await this.loadCouriersCounts(usersDetails || [])
                 } else {
                     console.log(2)
-                    this.clients = usersDetails || [];
-                    this.clientsFiltered = this.clients;
+                    // this.clients = usersDetails || [];
+                    // this.clientsFiltered = this.clients;
                 }
         }).catch(async (e)=> {
             console.log(e)
