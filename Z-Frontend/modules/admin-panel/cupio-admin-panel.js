@@ -222,6 +222,7 @@ class CupioAdminPanel extends LitElement {
     }
 
     loadCouriers(status) {
+        console.log(status)
         const gql = `
             {
               usersDetails(status: "${status}"){
@@ -249,8 +250,8 @@ class CupioAdminPanel extends LitElement {
                     this.couriers = await this.loadCouriersCounts(usersDetails || [])
                 } else {
                     console.log(2)
-                    // this.clients = usersDetails || [];
-                    // this.clientsFiltered = this.clients;
+                    this.clients = usersDetails || [];
+                    this.clientsFiltered = [...this.clients];
                 }
         }).catch(async (e)=> {
             console.log(e)
