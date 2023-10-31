@@ -217,6 +217,7 @@ class CupioAdminPanel extends LitElement {
         // await this.loadCouriers('delivery');
         setTimeout(()=> {
             this.loadCouriers('client');
+
         }, 1000)
     }
 
