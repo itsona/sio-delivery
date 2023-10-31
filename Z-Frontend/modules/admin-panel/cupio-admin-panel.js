@@ -155,7 +155,7 @@ class CupioAdminPanel extends LitElement {
                     ></cupio-input>
                             <div class="accept" @click="${this.saveRatesForAll}">შეცვლა</div>
                         </div>
-                        კლიენტების რაოდენობა (${this.clients?.length})
+                        კლიენტების რაოდენობა (${this.clients.length})
                     </span>
 
                     <cupio-input
@@ -240,7 +240,7 @@ class CupioAdminPanel extends LitElement {
               }
             }
             `
-        if(this.status !== 'delivery'){
+        if(status !== 'delivery'){
             console.log(1)
         }
         return graphqlPost(gql).then(async ({data: {usersDetails}}) => {
@@ -248,7 +248,6 @@ class CupioAdminPanel extends LitElement {
                     this.couriers = await this.loadCouriersCounts(usersDetails || [])
                 } else {
                     console.log(2)
-
                     this.clients = usersDetails || [];
                     this.clientsFiltered = this.clients;
                 }
