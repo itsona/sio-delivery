@@ -226,7 +226,7 @@ class CupioAdminPanel extends LitElement {
         this.clients = [];
         this.express = null;
         this.standard = null;
-        this.loadedLength = 1;
+        this.loadedLength = 20;
         this.skip = 0;
         this.limit = this.loadedLength;
         this.shouldLoadMore = true;
