@@ -128,6 +128,7 @@ class CupioAdminPanel extends LitElement {
                 <div class="title">
                     <span>კურიერების რაოდენობა (${this.couriers.length})</span>
                 </div>
+
                 ${this.couriers.map((item, index) => html`
                     <div class="delivery-item">
                         <cupio-admin-item
@@ -165,15 +166,29 @@ class CupioAdminPanel extends LitElement {
                             @value-changed="${(event) => this.filter(event)}"
                     ></cupio-input>
                 </div>
+
+                <div
+                        class="link load"
+                        @click="${()=>this.loadCouriers('client', true)}">
+                    დალაგება
+                </div>
                 ${(this.clientsFiltered || []).map((item, index) => html`
                     <div class="delivery-item">
                         <cupio-admin-item
                                 .value="0"
                                 .item="${item}"
+                                @clients-deleted="${()=>this.deleteClient(item,index)}"
                                 @status-changed="${this.loadAll}"></cupio-admin-item>
 
                     </div>
                 `)}
+
+                ${this.shouldLoadMore ? html`
+                    <div
+                            class="link load"
+                            @click="${()=>this.loadCouriers('client')}">
+                        მეტის ნახვა
+                    </div>` : ''}
             </div>
 
         `
@@ -190,6 +205,18 @@ class CupioAdminPanel extends LitElement {
             clientsFiltered: {
                 type: Array,
             },
+            skip: {
+                type: Number,
+            },
+            limit: {
+                type: Number
+            },
+            loadedLength: {
+                type: Number
+            },
+            shouldLoadMore: {
+                type: Boolean
+            }
         };
     }
 
@@ -199,6 +226,10 @@ class CupioAdminPanel extends LitElement {
         this.clients = [];
         this.express = null;
         this.standard = null;
+        this.loadedLength = 1;
+        this.skip = 0;
+        this.limit = this.loadedLength;
+        this.shouldLoadMore = true;
         if(window.localStorage.getItem('isEmployee')) redirectTo('/moder')
         handleRequest(false).then(r=> {
             if(r !== 'admin')redirectTo('/client')
@@ -208,9 +239,9 @@ class CupioAdminPanel extends LitElement {
     }
 
     filter(event){
-        this.clientsFiltered = (this.clients || []).filter((item)=> {
-            return item.email.includes(event.detail) || item.name.includes(event.detail)
-        })
+        this.skip = 0
+        this.searchText = event.detail
+        this.loadCouriers('client')
     }
 
     async loadAll() {
@@ -218,10 +249,22 @@ class CupioAdminPanel extends LitElement {
         this.loadCouriers('client');
     }
 
-    loadCouriers(status) {
+    loadCouriers(status, sort=false) {
+        this.sort = this.sort || sort
+        if(sort){
+            this.skip= 0
+        }
         const gql = `
             {
-              usersDetails(status: "${status}"){
+              usersDetails(
+              status: "${status}",
+              ${status === 'delivery' ? '' : `
+                  skip: ${this.skip},
+                  limit: ${this.limit}
+                  searchText: "${this.searchText || ''}",
+                  sort: ${this.sort}
+              `}
+              ){
                 rates{
                     ${status === 'delivery' ?
                     `delivery
@@ -241,18 +284,38 @@ class CupioAdminPanel extends LitElement {
                 if (status === 'delivery') {
                     this.couriers = await this.loadCouriersCounts(usersDetails || [])
                 } else {
-                    this.clients = usersDetails || [];
-                    setTimeout(()=> this.setClients(0), 200)
+                    if(this.skip){
+                        this.clients = [...this.clients, ...usersDetails]
+                    }else {
+                        this.clients = usersDetails || [];
+                    }
+
+                    if ((usersDetails|| []).length >= this.loadedLength) {
+                        this.shouldLoadMore = true;
+                        this.skip += this.loadedLength;
+                    } else {
+                        this.shouldLoadMore = false;
+                    }
+                    this.clientsFiltered = [...this.clients]
                 }
         }).catch(async (e)=> {
             console.log(e)
         })
     }
-    setClients(number){
-        this.clientsFiltered = [...(this.clientsFiltered || []), ...this.clients.slice(number * 20, (number+1)*20)];
-        if((number +1) * 20 < this.clients.length) {
-            setTimeout(()=> this.setClients(number + 1), 200)
+
+    deleteClient(item, index){
+        this.clientsFiltered.splice(index,1);
+        this.clientsFiltered = [...this.clientsFiltered];
+        const gql = `
+        mutation {
+            deleteClient(
+                email: "${item.email}"
+        )
         }
+        `
+        graphqlPost(gql).then(()=> {
+            this.skip = 0
+        })
     }
     saveRatesForAll(){
         const gql = `
@@ -264,6 +327,7 @@ class CupioAdminPanel extends LitElement {
         }
         `
             graphqlPost(gql).then(()=> {
+                this.skip = 0;
                 this.loadCouriers('client');
             })
     }

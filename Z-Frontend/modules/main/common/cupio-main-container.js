@@ -456,7 +456,6 @@ class CupioMainContainer extends LitElement {
                 delete item.count
                 return item;
             })
-            console.log(this.skip, this.status)
             if(this.skip){
                 this.items = [...this.items, ...data];
             } else {

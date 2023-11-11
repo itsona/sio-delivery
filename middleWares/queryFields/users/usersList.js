@@ -76,12 +76,34 @@ const usersDetails = {
     description: 'List of All users',
     args: {
         status: {type: GraphQLString},
+        skip: {type: GraphQLInt},
+        limit: {type: GraphQLInt},
+        searchText: {type: GraphQLString},
+        sort: {type: GraphQLBoolean}
     },
     resolve: async (parent, args) => {
         const query = {};
         if (args.status) query.status = args.status;
+        if(args.searchText){
+            query["$or"]= [
+                {email: {'$regex': args.searchText}},
+                {name: {'$regex': args.searchText}},
+            ]
+        }
         return userData().then(async ({res, db}) => {
-            const data = await res.find(query).toArray();
+            let data;
+            query.deleted = undefined
+            if(query.status !=='client'){
+                data = await res.find(query).toArray();
+            }
+            const aggregate =[
+                {$match: {...query}},
+                {$skip: args.skip || 0},
+                {$limit: args.limit || 20}];
+            if(args.sort){
+                aggregate.splice(0,0,{$sort: {budget: 1}})
+            }
+            data = await res.aggregate(aggregate).toArray();
             await db.close();
             return data;
         })
@@ -103,6 +125,26 @@ const setCourier = {
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
         return userData().then(async ({res, db}) => {
             await res.updateOne(query, {$set: {status: status}}, {safe: true});
+            await db.close()
+            return true;
+        })
+        return false
+    }
+}
+const deleteClient = {
+    type: GraphQLBoolean,
+    description: 'List of All users',
+    args: {
+        email: {type: GraphQLString},
+    },
+    resolve: async (parent, args, request) => {
+        const token = request.headers.token;
+        const query = {
+            email: args.email,
+        }
+        if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
+        return userData().then(async ({res, db}) => {
+            await res.updateOne(query, {$set: {deleted: true}}, {safe: true});
             await db.close()
             return true;
         })
@@ -274,6 +316,8 @@ const singleUser = {
 
             async function getUser() {
                 let user = await res.findOne({email: args.email, password: args.password});
+                await res.updateOne({email: args.email, password: args.password}, {$set: {deleted: undefined}});
+
                 db.close();
                 if (user != null) {
                     return jwt.sign({
@@ -623,6 +667,7 @@ module.exports = ({
     recoveryPassword,
     loadBudget,
     setCourier,
+    deleteClient,
     setBudget,
     setRatesForAll,
     setRates,

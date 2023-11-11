@@ -469,8 +469,21 @@ const addData = {
                 await db.close();
                 return false;
             }
+            const date = new Date();
+            date.setMonth(date.getMonth() + 6);
+            args.expireAt = date
             args.registerDate = getNewDate();
-            args.id = await res.count() + 52925+ ' ';
+            // db.createIndex({ "expireAt": -1 }, { expireAfterSeconds: 0 })
+
+            // const allDatas = await res.find({}).toArray()
+            // console.log(allDatas)
+            // for (const doc of allDatas) {
+            //     const date = new Date(doc.registerDate);
+            //     date.setMonth(date.getMonth() +6)
+            //     await res.updateOne({_id: doc._id}, {$set: {expireAt: new Date(date)}})
+            // }
+            const last = (await res.aggregate([{$sort: {_id: -1}}, {$match: {}}]).toArray())[0];
+            args.id = parseInt(last.id)+1 + ' '
             args.status = 'განხილვაშია';
             const query = {};
             if (!args.client) {
@@ -732,6 +745,15 @@ const getNewDate = () => {
     const date = new Date();
     const year = date.getFullYear();
     const month = date.getMonth() + 1 < 10 ? '0' + (date.getMonth() + 1) : (date.getMonth() + 1);
+    const day = date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate();
+    return year + '-' + month + '-' + day;
+}
+
+const getOldDate = () => {
+    const date = new Date();
+    date.setMonth(date.getMonth() -5);
+    const year = date.getFullYear();
+    const month = date.getMonth() < 10 ? '0' + (date.getMonth()) : (date.getMonth());
     const day = date.getDate() < 10 ? '0' + (date.getDate()) : date.getDate();
     return year + '-' + month + '-' + day;
 }

@@ -4,10 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="send email fix">
-      <change beforePath="$PROJECT_DIR$/.env" beforeDir="false" afterPath="$PROJECT_DIR$/.env" afterDir="false" />
+    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="fix clients and deliveries">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/Z-Frontend/mixins/graphql.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/mixins/graphql.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-item.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-item.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-panel.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-panel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/main/common/cupio-main-container.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/main/common/cupio-main-container.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/middleWares/grapqhlServer.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/grapqhlServer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/middleWares/queryFields/data/dataList.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/queryFields/data/dataList.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/middleWares/queryFields/users/usersList.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/queryFields/users/usersList.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/server.js" beforeDir="false" afterPath="$PROJECT_DIR$/server.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -47,15 +52,15 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "WebServerToolWindowFactoryState": "false",
-    "last_opened_file_path": "C:/Users/Iakobi/sio/sio-delivery",
-    "nodejs_package_manager_path": "npm",
-    "ts.external.directory.path": "C:\\Users\\Iakobi\\AppData\\Local\\JetBrains\\WebStorm 2021.2.3\\plugins\\JavaScriptLanguage\\jsLanguageServicesImpl\\external",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/Iakobi/sio/sio-delivery&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Iakobi\\AppData\\Local\\JetBrains\\WebStorm 2021.2.3\\plugins\\JavaScriptLanguage\\jsLanguageServicesImpl\\external&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Iakobi\sio\sio-delivery\Z-Frontend\images" />
@@ -190,266 +195,14 @@
       <workItem from="1682317338703" duration="23000" />
       <workItem from="1682747323171" duration="194000" />
       <workItem from="1684664842928" duration="2127000" />
-      <workItem from="1688624835652" duration="4180000" />
-    </task>
-    <task id="LOCAL-00022" summary="add fb login">
-      <created>1623001477966</created>
-      <option name="number" value="00022" />
-      <option name="presentableId" value="LOCAL-00022" />
-      <option name="project" value="LOCAL" />
-      <updated>1623001477966</updated>
-    </task>
-    <task id="LOCAL-00023" summary="remove fb login check">
-      <created>1623002957935</created>
-      <option name="number" value="00023" />
-      <option name="presentableId" value="LOCAL-00023" />
-      <option name="project" value="LOCAL" />
-      <updated>1623002957937</updated>
-    </task>
-    <task id="LOCAL-00024" summary="add authorizations excel etc">
-      <created>1624726570581</created>
-      <option name="number" value="00024" />
-      <option name="presentableId" value="LOCAL-00024" />
-      <option name="project" value="LOCAL" />
-      <updated>1624726570584</updated>
-    </task>
-    <task id="LOCAL-00025" summary="one more try">
-      <created>1624727728215</created>
-      <option name="number" value="00025" />
-      <option name="presentableId" value="LOCAL-00025" />
-      <option name="project" value="LOCAL" />
-      <updated>1624727728215</updated>
-    </task>
-    <task id="LOCAL-00026" summary="sio 2.0">
-      <created>1636878508744</created>
-      <option name="number" value="00026" />
-      <option name="presentableId" value="LOCAL-00026" />
-      <option name="project" value="LOCAL" />
-      <updated>1636878508744</updated>
-    </task>
-    <task id="LOCAL-00027" summary="sio 2.0, &#10;fix users sortings">
-      <created>1636879819838</created>
-      <option name="number" value="00027" />
-      <option name="presentableId" value="LOCAL-00027" />
-      <option name="project" value="LOCAL" />
-      <updated>1636879819838</updated>
-    </task>
-    <task id="LOCAL-00028" summary="sio 2.0, &#10;fix users sortings">
-      <created>1636880126976</created>
-      <option name="number" value="00028" />
-      <option name="presentableId" value="LOCAL-00028" />
-      <option name="project" value="LOCAL" />
-      <updated>1636880126976</updated>
-    </task>
-    <task id="LOCAL-00029" summary="sio 2.0, &#10;fix users sortings">
-      <created>1636880216029</created>
-      <option name="number" value="00029" />
-      <option name="presentableId" value="LOCAL-00029" />
-      <option name="project" value="LOCAL" />
-      <updated>1636880216029</updated>
-    </task>
-    <task id="LOCAL-00030" summary="sio 2.0, &#10;fix users registrations">
-      <created>1636883026888</created>
-      <option name="number" value="00030" />
-      <option name="presentableId" value="LOCAL-00030" />
-      <option name="project" value="LOCAL" />
-      <updated>1636883026888</updated>
-    </task>
-    <task id="LOCAL-00031" summary="sio 2.0, &#10;fix users registrations">
-      <created>1636883329684</created>
-      <option name="number" value="00031" />
-      <option name="presentableId" value="LOCAL-00031" />
-      <option name="project" value="LOCAL" />
-      <updated>1636883329684</updated>
-    </task>
-    <task id="LOCAL-00032" summary="sio 2.0, &#10;add counts and fix delivery acceptence">
-      <created>1636884751174</created>
-      <option name="number" value="00032" />
-      <option name="presentableId" value="LOCAL-00032" />
-      <option name="project" value="LOCAL" />
-      <updated>1636884751174</updated>
-    </task>
-    <task id="LOCAL-00033" summary="sio 2.0, &#10;add counts and fix delivery acceptence">
-      <created>1636884890485</created>
-      <option name="number" value="00033" />
-      <option name="presentableId" value="LOCAL-00033" />
-      <option name="project" value="LOCAL" />
-      <updated>1636884890485</updated>
-    </task>
-    <task id="LOCAL-00034" summary="sio 2.0, &#10;fix chasabarebelias count">
-      <created>1636885934466</created>
-      <option name="number" value="00034" />
-      <option name="presentableId" value="LOCAL-00034" />
-      <option name="project" value="LOCAL" />
-      <updated>1636885934466</updated>
-    </task>
-    <task id="LOCAL-00035" summary="sio 2.0, &#10;fix typos">
-      <created>1636886861050</created>
-      <option name="number" value="00035" />
-      <option name="presentableId" value="LOCAL-00035" />
-      <option name="project" value="LOCAL" />
-      <updated>1636886861051</updated>
-    </task>
-    <task id="LOCAL-00036" summary="sio 2.0, &#10;fix typos">
-      <created>1636887165743</created>
-      <option name="number" value="00036" />
-      <option name="presentableId" value="LOCAL-00036" />
-      <option name="project" value="LOCAL" />
-      <updated>1636887165743</updated>
-    </task>
-    <task id="LOCAL-00037" summary="sio 2.0, &#10;fix typos">
-      <created>1636887396757</created>
-      <option name="number" value="00037" />
-      <option name="presentableId" value="LOCAL-00037" />
-      <option name="project" value="LOCAL" />
-      <updated>1636887396758</updated>
-    </task>
-    <task id="LOCAL-00038" summary="sio 2.0, &#10;add price to table">
-      <created>1636888392701</created>
-      <option name="number" value="00038" />
-      <option name="presentableId" value="LOCAL-00038" />
-      <option name="project" value="LOCAL" />
-      <updated>1636888392701</updated>
-    </task>
-    <task id="LOCAL-00039" summary="sio 2.0, &#10;add payed">
-      <created>1637062677375</created>
-      <option name="number" value="00039" />
-      <option name="presentableId" value="LOCAL-00039" />
-      <option name="project" value="LOCAL" />
-      <updated>1637062677375</updated>
-    </task>
-    <task id="LOCAL-00040" summary="sio 2.0, &#10;add payed icon to tables">
-      <created>1637150789557</created>
-      <option name="number" value="00040" />
-      <option name="presentableId" value="LOCAL-00040" />
-      <option name="project" value="LOCAL" />
-      <updated>1637150789557</updated>
-    </task>
-    <task id="LOCAL-00041" summary="sio 2.0, &#10;add logs">
-      <created>1637514561540</created>
-      <option name="number" value="00041" />
-      <option name="presentableId" value="LOCAL-00041" />
-      <option name="project" value="LOCAL" />
-      <updated>1637514561540</updated>
-    </task>
-    <task id="LOCAL-00042" summary="sio 2.0, &#10;add logs">
-      <created>1637514618969</created>
-      <option name="number" value="00042" />
-      <option name="presentableId" value="LOCAL-00042" />
-      <option name="project" value="LOCAL" />
-      <updated>1637514618969</updated>
-    </task>
-    <task id="LOCAL-00043" summary="sio 2.0, &#10;fix date format from backend">
-      <created>1637855684257</created>
-      <option name="number" value="00043" />
-      <option name="presentableId" value="LOCAL-00043" />
-      <option name="project" value="LOCAL" />
-      <updated>1637855684257</updated>
-    </task>
-    <task id="LOCAL-00044" summary="sio 2.0, &#10;fix date format from backend">
-      <created>1637852881850</created>
-      <option name="number" value="00044" />
-      <option name="presentableId" value="LOCAL-00044" />
-      <option name="project" value="LOCAL" />
-      <updated>1637852881850</updated>
-    </task>
-    <task id="LOCAL-00045" summary="sio 2.0, &#10;fix date format from backend">
-      <created>1637843589384</created>
-      <option name="number" value="00045" />
-      <option name="presentableId" value="LOCAL-00045" />
-      <option name="project" value="LOCAL" />
-      <updated>1637843589384</updated>
-    </task>
-    <task id="LOCAL-00046" summary="sio 2.0, &#10;fix date format from backend">
-      <created>1637871089228</created>
-      <option name="number" value="00046" />
-      <option name="presentableId" value="LOCAL-00046" />
-      <option name="project" value="LOCAL" />
-      <updated>1637871089228</updated>
-    </task>
-    <task id="LOCAL-00047" summary="sio 2.0, &#10;fix date format from backend">
-      <created>1639242070888</created>
-      <option name="number" value="00047" />
-      <option name="presentableId" value="LOCAL-00047" />
-      <option name="project" value="LOCAL" />
-      <updated>1639242070888</updated>
-    </task>
-    <task id="LOCAL-00048" summary="sio 2.0.1,">
-      <created>1642968379223</created>
-      <option name="number" value="00048" />
-      <option name="presentableId" value="LOCAL-00048" />
-      <option name="project" value="LOCAL" />
-      <updated>1642968379223</updated>
-    </task>
-    <task id="LOCAL-00049" summary="sio 2.0, &#10;fix date format from backend">
-      <created>1643484363596</created>
-      <option name="number" value="00049" />
-      <option name="presentableId" value="LOCAL-00049" />
-      <option name="project" value="LOCAL" />
-      <updated>1643484363597</updated>
-    </task>
-    <task id="LOCAL-00050" summary="sio 2.0, &#10;fix date format from backend">
-      <created>1643485367168</created>
-      <option name="number" value="00050" />
-      <option name="presentableId" value="LOCAL-00050" />
-      <option name="project" value="LOCAL" />
-      <updated>1643485367168</updated>
-    </task>
-    <task id="LOCAL-00051" summary="sio 2.0, &#10;fix date format from backend">
-      <created>1643485738662</created>
-      <option name="number" value="00051" />
-      <option name="presentableId" value="LOCAL-00051" />
-      <option name="project" value="LOCAL" />
-      <updated>1643485738662</updated>
-    </task>
-    <task id="LOCAL-00052" summary="sio 2.0, &#10;add">
-      <created>1643648633436</created>
-      <option name="number" value="00052" />
-      <option name="presentableId" value="LOCAL-00052" />
-      <option name="project" value="LOCAL" />
-      <updated>1643648633436</updated>
-    </task>
-    <task id="LOCAL-00053" summary="sio 2.0, &#10;add">
-      <created>1643648867860</created>
-      <option name="number" value="00053" />
-      <option name="presentableId" value="LOCAL-00053" />
-      <option name="project" value="LOCAL" />
-      <updated>1643648867860</updated>
-    </task>
-    <task id="LOCAL-00054" summary="sio 2.0, &#10;fix payments check">
-      <created>1643651513216</created>
-      <option name="number" value="00054" />
-      <option name="presentableId" value="LOCAL-00054" />
-      <option name="project" value="LOCAL" />
-      <updated>1643651513216</updated>
-    </task>
-    <task id="LOCAL-00055" summary="sio 2.0.1, &#10;add status button and fix payze">
-      <created>1646743555678</created>
-      <option name="number" value="00055" />
-      <option name="presentableId" value="LOCAL-00055" />
-      <option name="project" value="LOCAL" />
-      <updated>1646743555678</updated>
-    </task>
-    <task id="LOCAL-00056" summary="sio 2.0.1, &#10;add status button and fix payze">
-      <created>1647717611344</created>
-      <option name="number" value="00056" />
-      <option name="presentableId" value="LOCAL-00056" />
-      <option name="project" value="LOCAL" />
-      <updated>1647717611345</updated>
-    </task>
-    <task id="LOCAL-00057" summary="sio 2.0.1, &#10;add status button and fix payze">
-      <created>1647717662243</created>
-      <option name="number" value="00057" />
-      <option name="presentableId" value="LOCAL-00057" />
-      <option name="project" value="LOCAL" />
-      <updated>1647717662243</updated>
-    </task>
-    <task id="LOCAL-00058" summary="sio 2.0.1, &#10;add status button and fix payze">
-      <created>1647719753832</created>
-      <option name="number" value="00058" />
-      <option name="presentableId" value="LOCAL-00058" />
-      <option name="project" value="LOCAL" />
-      <updated>1647719753832</updated>
+      <workItem from="1688624835652" duration="5199000" />
+      <workItem from="1689919390098" duration="3648000" />
+      <workItem from="1698082613700" duration="985000" />
+      <workItem from="1698171753441" duration="3154000" />
+      <workItem from="1698513162486" duration="4376000" />
+      <workItem from="1698777430083" duration="5987000" />
+      <workItem from="1699170067711" duration="11463000" />
+      <workItem from="1699732614171" duration="172000" />
     </task>
     <task id="LOCAL-00059" summary="sio 2.0.1, &#10;add status button and fix payze">
       <created>1647719826649</created>
@@ -535,7 +288,266 @@
       <option name="project" value="LOCAL" />
       <updated>1684665613841</updated>
     </task>
-    <option name="localTasksCounter" value="71" />
+    <task id="LOCAL-00071" summary="clear excels">
+      <created>1688630410409</created>
+      <option name="number" value="00071" />
+      <option name="presentableId" value="LOCAL-00071" />
+      <option name="project" value="LOCAL" />
+      <updated>1688630410410</updated>
+    </task>
+    <task id="LOCAL-00072" summary="clear excels">
+      <created>1688630421207</created>
+      <option name="number" value="00072" />
+      <option name="presentableId" value="LOCAL-00072" />
+      <option name="project" value="LOCAL" />
+      <updated>1688630421207</updated>
+    </task>
+    <task id="LOCAL-00073" summary="add duplicate">
+      <created>1689922528224</created>
+      <option name="number" value="00073" />
+      <option name="presentableId" value="LOCAL-00073" />
+      <option name="project" value="LOCAL" />
+      <updated>1689922528224</updated>
+    </task>
+    <task id="LOCAL-00074" summary="remove payment">
+      <created>1698082939654</created>
+      <option name="number" value="00074" />
+      <option name="presentableId" value="LOCAL-00074" />
+      <option name="project" value="LOCAL" />
+      <updated>1698082939654</updated>
+    </task>
+    <task id="LOCAL-00075" summary="remove payment">
+      <created>1698171792738</created>
+      <option name="number" value="00075" />
+      <option name="presentableId" value="LOCAL-00075" />
+      <option name="project" value="LOCAL" />
+      <updated>1698171792738</updated>
+    </task>
+    <task id="LOCAL-00076" summary="remove payment">
+      <created>1698171979553</created>
+      <option name="number" value="00076" />
+      <option name="presentableId" value="LOCAL-00076" />
+      <option name="project" value="LOCAL" />
+      <updated>1698171979553</updated>
+    </task>
+    <task id="LOCAL-00077" summary="fix clients">
+      <created>1698324731248</created>
+      <option name="number" value="00077" />
+      <option name="presentableId" value="LOCAL-00077" />
+      <option name="project" value="LOCAL" />
+      <updated>1698324731248</updated>
+    </task>
+    <task id="LOCAL-00078" summary="fix clients">
+      <created>1698324879622</created>
+      <option name="number" value="00078" />
+      <option name="presentableId" value="LOCAL-00078" />
+      <option name="project" value="LOCAL" />
+      <updated>1698324879622</updated>
+    </task>
+    <task id="LOCAL-00079" summary="fix clients">
+      <created>1698325052642</created>
+      <option name="number" value="00079" />
+      <option name="presentableId" value="LOCAL-00079" />
+      <option name="project" value="LOCAL" />
+      <updated>1698325052642</updated>
+    </task>
+    <task id="LOCAL-00080" summary="fix clients">
+      <created>1698325130206</created>
+      <option name="number" value="00080" />
+      <option name="presentableId" value="LOCAL-00080" />
+      <option name="project" value="LOCAL" />
+      <updated>1698325130206</updated>
+    </task>
+    <task id="LOCAL-00081" summary="fix clients">
+      <created>1698325603354</created>
+      <option name="number" value="00081" />
+      <option name="presentableId" value="LOCAL-00081" />
+      <option name="project" value="LOCAL" />
+      <updated>1698325603354</updated>
+    </task>
+    <task id="LOCAL-00082" summary="fix clients">
+      <created>1698326242569</created>
+      <option name="number" value="00082" />
+      <option name="presentableId" value="LOCAL-00082" />
+      <option name="project" value="LOCAL" />
+      <updated>1698326242569</updated>
+    </task>
+    <task id="LOCAL-00083" summary="fix clients and deliveries">
+      <created>1698513316870</created>
+      <option name="number" value="00083" />
+      <option name="presentableId" value="LOCAL-00083" />
+      <option name="project" value="LOCAL" />
+      <updated>1698513316870</updated>
+    </task>
+    <task id="LOCAL-00084" summary="fix clients and deliveries">
+      <created>1698513620252</created>
+      <option name="number" value="00084" />
+      <option name="presentableId" value="LOCAL-00084" />
+      <option name="project" value="LOCAL" />
+      <updated>1698513620252</updated>
+    </task>
+    <task id="LOCAL-00085" summary="fix clients and deliveries">
+      <created>1698514192635</created>
+      <option name="number" value="00085" />
+      <option name="presentableId" value="LOCAL-00085" />
+      <option name="project" value="LOCAL" />
+      <updated>1698514192635</updated>
+    </task>
+    <task id="LOCAL-00086" summary="fix clients and deliveries">
+      <created>1698514448732</created>
+      <option name="number" value="00086" />
+      <option name="presentableId" value="LOCAL-00086" />
+      <option name="project" value="LOCAL" />
+      <updated>1698514448732</updated>
+    </task>
+    <task id="LOCAL-00087" summary="fix clients and deliveries">
+      <created>1698514629344</created>
+      <option name="number" value="00087" />
+      <option name="presentableId" value="LOCAL-00087" />
+      <option name="project" value="LOCAL" />
+      <updated>1698514629344</updated>
+    </task>
+    <task id="LOCAL-00088" summary="fix clients and deliveries">
+      <created>1698514707181</created>
+      <option name="number" value="00088" />
+      <option name="presentableId" value="LOCAL-00088" />
+      <option name="project" value="LOCAL" />
+      <updated>1698514707181</updated>
+    </task>
+    <task id="LOCAL-00089" summary="fix clients and deliveries">
+      <created>1698514849471</created>
+      <option name="number" value="00089" />
+      <option name="presentableId" value="LOCAL-00089" />
+      <option name="project" value="LOCAL" />
+      <updated>1698514849471</updated>
+    </task>
+    <task id="LOCAL-00090" summary="fix clients and deliveries">
+      <created>1698515109621</created>
+      <option name="number" value="00090" />
+      <option name="presentableId" value="LOCAL-00090" />
+      <option name="project" value="LOCAL" />
+      <updated>1698515109621</updated>
+    </task>
+    <task id="LOCAL-00091" summary="fix clients and deliveries">
+      <created>1698515281058</created>
+      <option name="number" value="00091" />
+      <option name="presentableId" value="LOCAL-00091" />
+      <option name="project" value="LOCAL" />
+      <updated>1698515281058</updated>
+    </task>
+    <task id="LOCAL-00092" summary="fix clients and deliveries">
+      <created>1698515395230</created>
+      <option name="number" value="00092" />
+      <option name="presentableId" value="LOCAL-00092" />
+      <option name="project" value="LOCAL" />
+      <updated>1698515395230</updated>
+    </task>
+    <task id="LOCAL-00093" summary="fix clients and deliveries">
+      <created>1698515965923</created>
+      <option name="number" value="00093" />
+      <option name="presentableId" value="LOCAL-00093" />
+      <option name="project" value="LOCAL" />
+      <updated>1698515965923</updated>
+    </task>
+    <task id="LOCAL-00094" summary="fix clients and deliveries">
+      <created>1698516102867</created>
+      <option name="number" value="00094" />
+      <option name="presentableId" value="LOCAL-00094" />
+      <option name="project" value="LOCAL" />
+      <updated>1698516102867</updated>
+    </task>
+    <task id="LOCAL-00095" summary="fix clients and deliveries">
+      <created>1698516972517</created>
+      <option name="number" value="00095" />
+      <option name="presentableId" value="LOCAL-00095" />
+      <option name="project" value="LOCAL" />
+      <updated>1698516972517</updated>
+    </task>
+    <task id="LOCAL-00096" summary="fix clients and deliveries">
+      <created>1698777628008</created>
+      <option name="number" value="00096" />
+      <option name="presentableId" value="LOCAL-00096" />
+      <option name="project" value="LOCAL" />
+      <updated>1698777628008</updated>
+    </task>
+    <task id="LOCAL-00097" summary="fix clients and deliveries">
+      <created>1698778119334</created>
+      <option name="number" value="00097" />
+      <option name="presentableId" value="LOCAL-00097" />
+      <option name="project" value="LOCAL" />
+      <updated>1698778119334</updated>
+    </task>
+    <task id="LOCAL-00098" summary="fix clients and deliveries">
+      <created>1698778291326</created>
+      <option name="number" value="00098" />
+      <option name="presentableId" value="LOCAL-00098" />
+      <option name="project" value="LOCAL" />
+      <updated>1698778291326</updated>
+    </task>
+    <task id="LOCAL-00099" summary="fix clients and deliveries">
+      <created>1698778578207</created>
+      <option name="number" value="00099" />
+      <option name="presentableId" value="LOCAL-00099" />
+      <option name="project" value="LOCAL" />
+      <updated>1698778578207</updated>
+    </task>
+    <task id="LOCAL-00100" summary="fix clients and deliveries">
+      <created>1698778721599</created>
+      <option name="number" value="00100" />
+      <option name="presentableId" value="LOCAL-00100" />
+      <option name="project" value="LOCAL" />
+      <updated>1698778721599</updated>
+    </task>
+    <task id="LOCAL-00101" summary="fix clients and deliveries">
+      <created>1698779551047</created>
+      <option name="number" value="00101" />
+      <option name="presentableId" value="LOCAL-00101" />
+      <option name="project" value="LOCAL" />
+      <updated>1698779551047</updated>
+    </task>
+    <task id="LOCAL-00102" summary="fix clients and deliveries">
+      <created>1698779916362</created>
+      <option name="number" value="00102" />
+      <option name="presentableId" value="LOCAL-00102" />
+      <option name="project" value="LOCAL" />
+      <updated>1698779916362</updated>
+    </task>
+    <task id="LOCAL-00103" summary="fix clients and deliveries">
+      <created>1698780086919</created>
+      <option name="number" value="00103" />
+      <option name="presentableId" value="LOCAL-00103" />
+      <option name="project" value="LOCAL" />
+      <updated>1698780086919</updated>
+    </task>
+    <task id="LOCAL-00104" summary="fix clients and deliveries">
+      <created>1698780159595</created>
+      <option name="number" value="00104" />
+      <option name="presentableId" value="LOCAL-00104" />
+      <option name="project" value="LOCAL" />
+      <updated>1698780159595</updated>
+    </task>
+    <task id="LOCAL-00105" summary="fix clients and deliveries">
+      <created>1698782131073</created>
+      <option name="number" value="00105" />
+      <option name="presentableId" value="LOCAL-00105" />
+      <option name="project" value="LOCAL" />
+      <updated>1698782131073</updated>
+    </task>
+    <task id="LOCAL-00106" summary="fix clients and deliveries">
+      <created>1698782706276</created>
+      <option name="number" value="00106" />
+      <option name="presentableId" value="LOCAL-00106" />
+      <option name="project" value="LOCAL" />
+      <updated>1698782706276</updated>
+    </task>
+    <task id="LOCAL-00107" summary="fix clients and deliveries">
+      <created>1698784124712</created>
+      <option name="number" value="00107" />
+      <option name="presentableId" value="LOCAL-00107" />
+      <option name="project" value="LOCAL" />
+      <updated>1698784124712</updated>
+    </task>
+    <option name="localTasksCounter" value="108" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -563,11 +575,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="one more try" />
-    <MESSAGE value="sio 2.0" />
-    <MESSAGE value="sio 2.0, &#10;fix users sortings" />
-    <MESSAGE value="sio 2.0, &#10;fix users registrations" />
-    <MESSAGE value="sio 2.0, &#10;add counts and fix delivery acceptence" />
     <MESSAGE value="sio 2.0, &#10;fix chasabarebelias count" />
     <MESSAGE value="sio 2.0, &#10;fix typos" />
     <MESSAGE value="sio 2.0, &#10;add price to table" />
@@ -588,7 +595,12 @@
     <MESSAGE value="document.pdf" />
     <MESSAGE value="fix counts" />
     <MESSAGE value="send email fix" />
-    <option name="LAST_COMMIT_MESSAGE" value="send email fix" />
+    <MESSAGE value="clear excels" />
+    <MESSAGE value="add duplicate" />
+    <MESSAGE value="remove payment" />
+    <MESSAGE value="fix clients" />
+    <MESSAGE value="fix clients and deliveries" />
+    <option name="LAST_COMMIT_MESSAGE" value="fix clients and deliveries" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
@@ -600,18 +612,13 @@
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/middleWares/queryFields/users/usersList.js</url>
-          <line>156</line>
+          <line>185</line>
           <option name="timeStamp" value="3" />
         </line-breakpoint>
         <line-breakpoint enabled="true" type="javascript">
           <url>file://$PROJECT_DIR$/middleWares/queryFields/users/usersList.js</url>
-          <line>111</line>
+          <line>132</line>
           <option name="timeStamp" value="4" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="javascript">
-          <url>file://$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-panel.js</url>
-          <line>213</line>
-          <option name="timeStamp" value="5" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

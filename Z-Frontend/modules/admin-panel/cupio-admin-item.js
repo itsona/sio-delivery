@@ -153,6 +153,8 @@ class CupioAdminItem extends LitElement {
 
                 ${!this.delivery ? html`
                     <div class="accept" @click="${() => this.setCourier(true)}">დანიშვნა</div>
+                    <div class="decline" @click="${this.deleteClient}">წაშლა</div>
+                    </div>
                 ` : html`
                     <div class="decline" @click="${() => this.setCourier(false)}">მოხსნა</div>
                     </div>
@@ -213,7 +215,9 @@ class CupioAdminItem extends LitElement {
     onEndDateChange(value){
         this.endDate = value.detail;
     }
-
+    deleteClient(){
+        this.dispatchEvent(new CustomEvent('clients-deleted'));
+    }
     setCourier(isCourier) {
         const gql = `
             mutation {
@@ -295,7 +299,8 @@ class CupioAdminItem extends LitElement {
             }
         `
         graphqlPost(gql).then(({data: {setBudget}}) => {
-            this.dispatchEvent(new CustomEvent('status-changed'));
+            this.item.budget += parseFloat(this.value)
+            // this.dispatchEvent(new CustomEvent('status-changed'));
             this.value = 0;
         });
     }
