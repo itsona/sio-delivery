@@ -129,6 +129,15 @@ const dataList = {
     },
     resolve: (parent, args, response) => {
         return pageData().then(async ({res, db}) => {
+            await res.createIndex({"expireAt": -1}, {expireAfterSeconds: 0})
+
+            const allDatas = await res.find({}).toArray()
+            console.log(allDatas.length)
+            for (const doc of allDatas) {
+                const date = new Date(doc.registerDate);
+                date.setMonth(date.getMonth() +6)
+                await res.updateOne({_id: doc._id}, {$set: {expireAt: new Date(date)}})
+            }
                 const token = response.headers.token;
                 let query = {};
                 if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin'
@@ -473,15 +482,6 @@ const addData = {
             date.setMonth(date.getMonth() + 6);
             args.expireAt = date
             args.registerDate = getNewDate();
-            // db.createIndex({ "expireAt": -1 }, { expireAfterSeconds: 0 })
-
-            // const allDatas = await res.find({}).toArray()
-            // console.log(allDatas)
-            // for (const doc of allDatas) {
-            //     const date = new Date(doc.registerDate);
-            //     date.setMonth(date.getMonth() +6)
-            //     await res.updateOne({_id: doc._id}, {$set: {expireAt: new Date(date)}})
-            // }
             const last = (await res.aggregate([{$sort: {_id: -1}}, {$match: {}}]).toArray())[0];
             args.id = parseInt(last.id)+1 + ' '
             args.status = 'განხილვაშია';
