@@ -80,7 +80,7 @@ class CupioClientsDetails extends LitElement {
 
     onValueChange(event, key) {
         const value = event.detail;
-        this.users= this.clients.filter((item)=> (item.email + item.name).includes(value))
+        this.dispatchEvent(new CustomEvent('filter-changed', {detail: value}))
     }
 
     setClient(user){

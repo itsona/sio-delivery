@@ -171,7 +171,10 @@ class CupioDetails extends LitElement {
                             .clients="${this.users}"
                             .listShow="${this.listShow}"
                             @click="${this._onClick}"
-                            @client-changed="${this.setClient}"></cupio-clients-details>
+                            @client-changed="${this.setClient}"
+                            @filter-changed="${this.setFilter}"
+                    
+                    ></cupio-clients-details>
                 ` : ''}
                 <select id="service" name="service" @change="${this._handleStatusChange}">
                     <option value="სტანდარტი">სტანდარტი</option>
@@ -290,6 +293,10 @@ class CupioDetails extends LitElement {
     connectedCallback() {
         super.connectedCallback();
         this.loadData();
+    }
+
+    setFilter(event){
+        this.loadUsers(event.detail)
     }
 
     init() {
@@ -437,11 +444,16 @@ class CupioDetails extends LitElement {
         }).catch(() => alert('!!! ხარვეზი იყო თავიდან სცადეთ !!!'))
     }
 
-    loadUsers() {
+    loadUsers(searchText) {
         if (!this.panel) return;
         const gql = `
                 {
-                  usersDetails(status: "client"){
+              usersDetails(
+              status: "client",
+                  skip: 0,
+                  limit: 20,
+                  searchText: "${searchText || ''}",              
+              ){
                     name
                     email
                   }
