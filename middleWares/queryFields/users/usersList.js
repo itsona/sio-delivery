@@ -105,7 +105,7 @@ const usersDetails = {
                 aggregate.splice(0,0,{$sort: {budget: 1}})
             }
             data = await res.aggregate(aggregate).toArray();
-            await db.close();
+            db.close();
             return data;
         })
     }
@@ -312,7 +312,7 @@ const singleUser = {
         password: {type: GraphQLString}
     },
     resolve: (parent, args, request) => {
-        return userData().then(async ({res, db}) => {
+            return userData().then(async ({res, db}) => {
             args.email = args.email.toLowerCase();
 
             async function getUser() {
