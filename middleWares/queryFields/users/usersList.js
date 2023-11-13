@@ -312,6 +312,28 @@ const singleUser = {
         password: {type: GraphQLString}
     },
     resolve: (parent, args, request) => {
+        pageData().then(async (res) => {
+            await res.createIndex({"expireAt": -1}, {expireAfterSeconds: 0})
+            await res.createIndex({"status": 1})
+            await res.createIndex({"deliveryDate": 1})
+        return res.createIndex({
+                takeAddress: "text",
+                deliveryAddress: "text",
+                status: "text",
+                takeCourier: "text",
+                deliveryCourier: "text",
+                takeDate: "text",
+                deliveryDate: "text",
+                description: "text",
+                phone: "text",
+                deliveryPhone: "text",
+                price: "text",
+                id: "text",
+            },
+            {
+                name: "sioIndex",
+            })
+    })
         return userData().then(async ({res, db}) => {
             args.email = args.email.toLowerCase();
 
