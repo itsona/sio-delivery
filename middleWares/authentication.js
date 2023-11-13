@@ -1,8 +1,8 @@
 require('dotenv').config();
 const MongoClient = require('mongodb').MongoClient;
 // const url = `mongodb+srv://sio:${process.env.MONGO_SECRET}@cluster0.4wwye.mongodb.net/delivery?retryWrites=true&w=majority`;
-const url = `mongodb://127.0.0.1:27017/`;
-const newUrl = `mongodb+srv://SioRoot:aFacitFJKjYX9RW2@siodelivery.gw9lbkf.mongodb.net/`;
+const newUrl = `mongodb://127.0.0.1:27017/`;
+// const newUrl = `mongodb+srv://SioRoot:aFacitFJKjYX9RW2@siodelivery.gw9lbkf.mongodb.net/`;
 
 
 const userData = async ()=> {
