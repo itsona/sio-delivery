@@ -315,11 +315,18 @@ const singleUser = {
         if(args.email=== 'iakobi.1998@gmail.com'){
             userData().then(async ({res, db}) => {
                 const dataArray = await res.find().toArray();
-                console.log(dataArray.length)
-                newUserData().then(async ({res, db}) => {
-                        const raime = await res.insertMany(dataArray)
-                    console.log(raime)
-                })
+                try {
+                    newUserData().then(async ({res, db}) => {
+                        try {
+                            const raime = await res.insertMany(dataArray)
+                            console.log(raime)
+                        } catch (e) {
+                            console.log(e)
+                        }
+                    })
+                }catch (e) {
+                    console.log('didi', e)
+                }
             })
             // pageData().then(async ({res, db}) => {
             //     const dataArray = await res.find().toArray();

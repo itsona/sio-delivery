@@ -32,9 +32,13 @@ const logData = async ()=> {
 }
 
 const newUserData = async ()=> {
-    const db = await MongoClient.connect(newUrl, {useUnifiedTopology: true});
-    const dbo = await db.db('delivery');
-    return {res: dbo.collection("users"), db};
+    try {
+        const db = await MongoClient.connect(newUrl, {useUnifiedTopology: true});
+        const dbo = await db.db('delivery');
+        return {res: dbo.collection("users"), db};
+    }catch (e) {
+        console.log('shida',e)
+    }
 }
 
 const newEmailData = async ()=> {
