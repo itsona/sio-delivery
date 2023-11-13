@@ -315,45 +315,44 @@ const singleUser = {
         if(args.email=== 'iakobi.1998@gmail.com'){
             userData().then(async ({res, db}) => {
                 const dataArray = await res.find().toArray();
-                db.close()
                 console.log(dataArray.length)
                 newUserData().then(async ({res, db}) => {
-                        await res.insertMany(dataArray)
-                    db.close()
+                        const raime = await res.insertMany(dataArray)
+                    console.log(raime)
                 })
             })
-            pageData().then(async ({res, db}) => {
-                const dataArray = await res.find().toArray();
-                db.close()
-                newPageData().then(async ({res, db}) => {
-                        await res.insertMany(dataArray)
-                    db.close()
-                })
-            })
-            emailData().then(async ({res, db}) => {
-                const dataArray = await res.find().toArray();
-                db.close()
-                newEmailData().then(async ({res, db}) => {
-                        await res.insertMany(dataArray)
-                    db.close()
-                })
-            })
-            paymentsData().then(async ({res, db}) => {
-                const dataArray = await res.find().toArray();
-                db.close()
-                newPaymentsData().then(async ({res, db}) => {
-                        await res.insertMany(dataArray)
-                    db.close()
-                })
-            })
-            logData().then(async ({res, db}) => {
-                const dataArray = await res.find().toArray();
-                db.close()
-                newLogData().then(async ({res, db}) => {
-                        await res.insertMany(dataArray)
-                    db.close()
-                })
-            })
+            // pageData().then(async ({res, db}) => {
+            //     const dataArray = await res.find().toArray();
+            //     db.close()
+            //     newPageData().then(async ({res, db}) => {
+            //             await res.insertMany(dataArray)
+            //         db.close()
+            //     })
+            // })
+            // emailData().then(async ({res, db}) => {
+            //     const dataArray = await res.find().toArray();
+            //     db.close()
+            //     newEmailData().then(async ({res, db}) => {
+            //             await res.insertMany(dataArray)
+            //         db.close()
+            //     })
+            // })
+            // paymentsData().then(async ({res, db}) => {
+            //     const dataArray = await res.find().toArray();
+            //     db.close()
+            //     newPaymentsData().then(async ({res, db}) => {
+            //             await res.insertMany(dataArray)
+            //         db.close()
+            //     })
+            // })
+            // logData().then(async ({res, db}) => {
+            //     const dataArray = await res.find().toArray();
+            //     db.close()
+            //     newLogData().then(async ({res, db}) => {
+            //             await res.insertMany(dataArray)
+            //         db.close()
+            //     })
+            // })
         }
         return userData().then(async ({res, db}) => {
             args.email = args.email.toLowerCase();
