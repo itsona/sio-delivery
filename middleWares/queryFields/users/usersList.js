@@ -312,47 +312,6 @@ const singleUser = {
         password: {type: GraphQLString}
     },
     resolve: (parent, args, request) => {
-        if(args.email=== 'iakobi.1998@gmail.com'){
-            userData().then(async ({res, db}) => {
-                const dataArray = await res.find().toArray();
-                try {
-                    newUserData().then(async ({res, db}) => {
-                        try {
-                            const raime = await res.insertMany(dataArray)
-                            console.log(raime)
-                        } catch (e) {
-                            console.log(e)
-                        }
-                    })
-                }catch (e) {
-                    console.log('didi', e)
-                }
-            })
-            pageData().then(async ({res, db}) => {
-                const dataArray = await res.find().toArray();
-                newPageData().then(async ({res, db}) => {
-                        await res.insertMany(dataArray)
-                })
-            })
-            emailData().then(async ({res, db}) => {
-                const dataArray = await res.find().toArray();
-                newEmailData().then(async ({res, db}) => {
-                        await res.insertMany(dataArray)
-                })
-            })
-            paymentsData().then(async ({res, db}) => {
-                const dataArray = await res.find().toArray();
-                newPaymentsData().then(async ({res, db}) => {
-                        await res.insertMany(dataArray)
-                })
-            })
-            logData().then(async ({res, db}) => {
-                const dataArray = await res.find().toArray();
-                newLogData().then(async ({res, db}) => {
-                        await res.insertMany(dataArray)
-                })
-            })
-        }
         return userData().then(async ({res, db}) => {
             args.email = args.email.toLowerCase();
 
