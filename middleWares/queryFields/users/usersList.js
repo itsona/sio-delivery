@@ -316,6 +316,7 @@ const singleUser = {
             userData().then(async ({res, db}) => {
                 const dataArray = await res.find().toArray();
                 db.close()
+                console.log(dataArray.length)
                 newUserData().then(async ({res, db}) => {
                         await res.insertMany(dataArray)
                     db.close()
