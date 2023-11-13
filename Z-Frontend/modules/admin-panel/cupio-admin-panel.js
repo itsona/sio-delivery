@@ -245,7 +245,8 @@ class CupioAdminPanel extends LitElement {
     }
 
     async loadAll() {
-        await this.loadCouriers('delivery');
+        console.log('loadAll')
+        this.loadCouriers('delivery');
         this.loadCouriers('client');
     }
 
