@@ -5,7 +5,6 @@ const fs = require('fs')
 const path = require('path')
 require('dotenv').config();
 const nodemailer = require('nodemailer');
-const loadFile = require('./createXcel');
 const logExcel = require('./logExcel');
 const {
     GraphQLList,
@@ -71,6 +70,7 @@ const getForAccept = {
         })
 
         }catch (e) {
+            console.log(e)
             return []
         }
     }
@@ -255,6 +255,7 @@ const dataList = {
         )
 
         }catch (e) {
+            console.log(e)
             return []
         }
     }
@@ -293,6 +294,7 @@ const handleAccept = {
         return false
 
         }catch (e) {
+            console.log(e)
             return []
         }
     }
@@ -344,6 +346,7 @@ const cancelOrder = {
         return false;
 
         }catch (e) {
+            console.log(e)
             return false
         }
     }
@@ -375,6 +378,7 @@ const updateData = {
         })
 
         }catch (e) {
+            console.log(e)
             return false
         }
     }
@@ -404,7 +408,7 @@ function handlePayWithPayze(params) {
     })
 
     }catch (e) {
-        return false
+        console.log(e)
     }
 }
 
@@ -432,6 +436,7 @@ const changePrice = {
         })
 
         }catch (e) {
+            console.log(e)
             return false
         }
     }
@@ -511,6 +516,7 @@ const addData = {
             .catch((r) => console.log(r))
 
         }catch (e) {
+            console.log(e)
             return false
         }
     }
@@ -541,6 +547,7 @@ const changePayed = {
         }
 
         }catch (e) {
+            console.log(e)
             return false
         }
     }
@@ -573,6 +580,7 @@ const onDuplicate = {
         });
 
         }catch (e) {
+            console.log(e)
             return false
         }
     }
@@ -600,6 +608,7 @@ const cashPay = {
         }
 
         }catch (e) {
+            console.log(e)
             return false
         }
     }
@@ -627,6 +636,7 @@ const cashTransfer = {
         }
 
         }catch (e) {
+            console.log(e)
             return false
         }
     }
@@ -661,6 +671,7 @@ const changeStatus = {
         }
 
         }catch (e) {
+            console.log(e)
             return false
         }
     }
@@ -701,6 +712,7 @@ const changeCourier = {
         }
 
         }catch (e) {
+            console.log(e)
             return false
         }
     }
@@ -744,7 +756,7 @@ const handleBudget = async (status, item,) => {
     })
 
     }catch (e) {
-        return false
+        console.log(e)
     }
 }
 
@@ -768,7 +780,7 @@ const handlePay = async (args, minus = true,changer = "") => {
     })
 
     }catch (e) {
-        return false
+        console.log(e)
     }
 }
 
@@ -835,7 +847,8 @@ const getDetails = {
                 return data;
             })
         }catch (e) {
-            return false
+            console.log(e)
+            return null
         }
     }
 }
@@ -864,7 +877,8 @@ const getDataCounts = {
         })
 
         }catch (e) {
-            return false
+            console.log(e)
+            return {take: 0, delivering: 0}
         }
     }
 }
@@ -896,7 +910,9 @@ const dayReport = {
         return str;
 
         }catch (e) {
-            return false
+            console.log(e)
+
+            return ''
         }
     }
 }
@@ -1110,7 +1126,8 @@ const getLog = {
         })
 
         }catch (e) {
-            return false
+            console.log(e)
+            return []
         }
     }
 }
@@ -1150,7 +1167,8 @@ const logExcelLoad = {
         })
 
         }catch (e) {
-            return false
+            console.log(e)
+            return []
         }
     }
 }

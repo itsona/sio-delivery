@@ -69,6 +69,7 @@ const usersList = {
                 return data;
             })
         }catch (e) {
+            console.log(e)
             return []
         }
         // return [];
@@ -114,6 +115,7 @@ const usersDetails = {
         })
 
         }catch (e) {
+            console.log(e)
             return []
         }
     }
@@ -141,6 +143,7 @@ const setCourier = {
         return false
 
         }catch (e) {
+            console.log(e)
             return false
         }
     }
@@ -166,6 +169,8 @@ const deleteClient = {
         return false
 
         }catch (e) {
+            console.log(e)
+
             return false
         }
     }
@@ -204,6 +209,7 @@ const setBudget = {
         return false
 
         }catch (e) {
+            console.log(e)
             return false
         }
     }
@@ -237,7 +243,9 @@ const setRates = {
         return false
 
         }catch (e) {
-            return []
+            console.log(e)
+
+            return false
         }
     }
 }
@@ -263,6 +271,7 @@ const setRatesForAll = {
         return false
 
         }catch (e) {
+            console.log(e)
             return false
         }
 
@@ -281,7 +290,9 @@ const payWithPayze = {
         return response
 
         }catch (e) {
-            return null
+            console.log(e)
+
+            return ''
         }
     }
 }
@@ -325,7 +336,7 @@ function callPayWithPayze(token,price){
         })
 
     }catch (e) {
-        return null
+        console.log(e)
     }
 }
 
@@ -378,7 +389,9 @@ const singleUser = {
         })
 
          }catch (e) {
-             return []
+             console.log(e)
+
+             return ''
          }
     }
 }
@@ -412,7 +425,8 @@ const userInfo = {
         })
 
         }catch (e) {
-            return []
+            console.log(e)
+            return {}
         }
     }
 }
@@ -456,7 +470,8 @@ const loadBudget = {
         })
 
         }catch (e) {
-            return []
+            console.log(e)
+            return 0
         }
     }
 }
@@ -490,6 +505,7 @@ const resetPassword = {
         })
 
         }catch (e) {
+            console.log(e)
             return 'no-email'
         }
     }
@@ -520,7 +536,9 @@ const recoveryPassword = {
         })
 
         }catch (e) {
-            return []
+            console.log(e)
+
+            return 'failed'
         }
     }
 }
@@ -561,7 +579,8 @@ const addUser = {
         })
 
         }catch (e) {
-            return []
+            console.log(e)
+            return ''
         }
     }
 }
@@ -633,7 +652,8 @@ const FbLogin = {
         return raime;
 
         }catch (e) {
-            return []
+            console.log(e)
+            return ''
         }
     }
 }
@@ -725,7 +745,9 @@ const modifyUser = {
         });
 
         }catch (e) {
-            return []
+            console.log(e)
+
+            return 'failed'
         }
     }
 }
@@ -738,7 +760,7 @@ const handleEmailChange = async (email, oldEmail) => {
     })
 
     }catch (e) {
-        return []
+        console.log(e)
     }
 }
 
