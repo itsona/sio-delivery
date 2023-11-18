@@ -14,7 +14,6 @@ const {
 } = require('graphql');
 const {stringify} = require("nodemon/lib/utils");
 const axios = require("axios");
-const {newUserData, newPageData, newEmailData, paymentsData, newPaymentsData, newLogData, logData} = require("../../authentication");
 // const axios = require("axios");
 
 const userData = require('../../authentication').userData;
@@ -63,11 +62,15 @@ const usersList = {
     type: GraphQLList(UserType),
     description: 'List of All users',
     resolve: async (parent, args, request) => {
-        return userData().then(async ({res, db}) => {
-            const data = await res.find({}).toArray();
-            db.close();
-            return data;
-        })
+        try {
+            return userData().then(async ({res, db}) => {
+                const data = await res.find({}).toArray();
+                db.close();
+                return data;
+            })
+        }catch (e) {
+            return []
+        }
         // return [];
     }
 }
@@ -83,6 +86,7 @@ const usersDetails = {
         sort: {type: GraphQLBoolean}
     },
     resolve: async (parent, args) => {
+        try {
         const query = {};
         if (args.status) query.status = args.status;
         if(args.searchText){
@@ -108,6 +112,10 @@ const usersDetails = {
             db.close();
             return data;
         })
+
+        }catch (e) {
+            return []
+        }
     }
 }
 const setCourier = {
@@ -118,6 +126,7 @@ const setCourier = {
         client: {type: GraphQLString},
     },
     resolve: async (parent, args, request) => {
+        try {
         const token = request.headers.token;
         const query = {
             email: args.client,
@@ -130,6 +139,10 @@ const setCourier = {
             return true;
         })
         return false
+
+        }catch (e) {
+            return false
+        }
     }
 }
 const deleteClient = {
@@ -139,6 +152,7 @@ const deleteClient = {
         email: {type: GraphQLString},
     },
     resolve: async (parent, args, request) => {
+        try {
         const token = request.headers.token;
         const query = {
             email: args.email,
@@ -150,6 +164,10 @@ const deleteClient = {
             return true;
         })
         return false
+
+        }catch (e) {
+            return false
+        }
     }
 }
 
@@ -163,6 +181,7 @@ const setBudget = {
         time: {type: GraphQLString},
     },
     resolve: async (parent, args, request) => {
+        try {
         const token = request.headers.token;
         const query = {
             email: args.client,
@@ -183,6 +202,10 @@ const setBudget = {
             return true;
         })
         return false
+
+        }catch (e) {
+            return false
+        }
     }
 }
 
@@ -197,6 +220,7 @@ const setRates = {
         client: {type: GraphQLString},
     },
     resolve: async (parent, args, request) => {
+        try {
         const token = request.headers.token;
         const query = {
             email: args.client,
@@ -211,6 +235,10 @@ const setRates = {
             return true;
         })
         return false
+
+        }catch (e) {
+            return []
+        }
     }
 }
 const setRatesForAll = {
@@ -221,6 +249,7 @@ const setRatesForAll = {
         standard: {type: GraphQLFloat},
     },
     resolve: async (parent, args, request) => {
+        try {
         const token = request.headers.token;
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
         const rates = Config.rates;
@@ -233,6 +262,10 @@ const setRatesForAll = {
         })
         return false
 
+        }catch (e) {
+            return false
+        }
+
     }
 }
 const payWithPayze = {
@@ -242,13 +275,18 @@ const payWithPayze = {
         amount: {type: GraphQLFloat},
     },
     resolve: async (parent, args, request) => {
+        try {
         const token = request.headers.token;
         const response = await callPayWithPayze(token, args.amount)
         return response
 
+        }catch (e) {
+            return null
+        }
     }
 }
 function callPayWithPayze(token,price){
+    try {
     const client = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).email
     const payToken = jwt.sign({payed: true}, process.env.ACCESS_TOKEN_SECRET)
     return axios.post('https://payze.io/api/v1', {
@@ -285,6 +323,10 @@ function callPayWithPayze(token,price){
             }
             console.log(error.config);
         })
+
+    }catch (e) {
+        return null
+    }
 }
 
 
@@ -312,6 +354,7 @@ const singleUser = {
         password: {type: GraphQLString}
     },
     resolve: (parent, args, request) => {
+         try {
             return userData().then(async ({res, db}) => {
             args.email = args.email.toLowerCase();
 
@@ -333,6 +376,10 @@ const singleUser = {
 
             return getUser();
         })
+
+         }catch (e) {
+             return []
+         }
     }
 }
 
@@ -343,6 +390,7 @@ const userInfo = {
         email: {type: GraphQLString}
     },
     resolve: (parent, args, request) => {
+        try {
         const query = {};
         const token = request.headers.token;
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin' || !args.email) {
@@ -362,6 +410,10 @@ const userInfo = {
 
             return getUser();
         })
+
+        }catch (e) {
+            return []
+        }
     }
 }
 
@@ -373,6 +425,7 @@ const loadBudget = {
         toDate: {type: GraphQLString},
     },
     resolve: (parent, args, request) => {
+        try {
         const token = request.headers.token;
         return userData().then(({res, db}) => {
             async function getUser() {
@@ -401,6 +454,10 @@ const loadBudget = {
 
             return getUser();
         })
+
+        }catch (e) {
+            return []
+        }
     }
 }
 
@@ -411,6 +468,7 @@ const resetPassword = {
         email: {type: GraphQLNonNull(GraphQLString)}
     },
     resolve: (parent, args) => {
+        try {
         return emailData().then(({res, db}) => {
             return res.countDocuments({email: args.email}).then(contains => {
 
@@ -431,6 +489,9 @@ const resetPassword = {
             })
         })
 
+        }catch (e) {
+            return 'no-email'
+        }
     }
 }
 
@@ -442,6 +503,7 @@ const recoveryPassword = {
         token: {type: GraphQLNonNull(GraphQLString)}
     },
     resolve: (parent, args, request) => {
+        try {
         return userData().then(({res, db}) => {
             async function getUser() {
                 let user = await res.updateOne({email: jwt.verify(args.token, process.env.ACCESS_TOKEN_SECRET).email},
@@ -456,6 +518,10 @@ const recoveryPassword = {
 
             return getUser();
         })
+
+        }catch (e) {
+            return []
+        }
     }
 }
 
@@ -473,6 +539,7 @@ const addUser = {
         passwordRepeat: {type: GraphQLNonNull(GraphQLString)},
     },
     resolve: (parent, args) => {
+        try {
         if (args.password !== args.passwordRepeat) return 'notMatch'
         if (!validateEmail(args.email)) return 'noValidation';
         args.email = args.email.toLowerCase();
@@ -492,6 +559,10 @@ const addUser = {
                 } else return 'contains';
             })
         })
+
+        }catch (e) {
+            return []
+        }
     }
 }
 
@@ -505,6 +576,7 @@ const FbLogin = {
         channel: {type: GraphQLNonNull(GraphQLString)},
     },
     resolve: async (parent, args) => {
+        try {
         args.email = args.email.toLowerCase();
         let url;
         if (args.channel === 'google') {
@@ -559,6 +631,10 @@ const FbLogin = {
         })
         const raime = await pr;
         return raime;
+
+        }catch (e) {
+            return []
+        }
     }
 }
 
@@ -590,6 +666,7 @@ const modifyUser = {
         status: {type: GraphQLString},
     },
     resolve: (parent, args, request) => {
+        try {
         if (!args.email || !args.name || !args.address || !args.phone) return 'nonNUll'
         const token = request.headers.token;
         return userData().then(({res, db}) => {
@@ -646,14 +723,23 @@ const modifyUser = {
 
             return updateUser();
         });
+
+        }catch (e) {
+            return []
+        }
     }
 }
 
 const handleEmailChange = async (email, oldEmail) => {
+    try {
     pageData().then(async ({res, db}) => {
         await res.updateMany({client: oldEmail}, {$set: {client: email}}, {safe: true});
         db.close();
     })
+
+    }catch (e) {
+        return []
+    }
 }
 
 
