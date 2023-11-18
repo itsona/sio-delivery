@@ -57,6 +57,7 @@ const getForAccept = {
     description: 'List of All data',
 
     resolve: (parent, args, response) => {
+        try {
         return pageData().then(async ({res, db}) => {
             const token = response.headers.token;
             const courier = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).email;
@@ -68,6 +69,10 @@ const getForAccept = {
             db.close();
             return data;
         })
+
+        }catch (e) {
+            return []
+        }
     }
 }
 
@@ -80,37 +85,7 @@ const loadExcel = {
     description: 'List of All data',
 
     resolve: async (parent, args, response) => {
-        return pageData().then(async ({res, db}) => {
-            const token = response.headers.token;
-            if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
-            const query = {}
-            if (args.fromDate) {
-                if (!query.registerDate) query.registerDate = {};
-                query.registerDate['$gte'] = args.fromDate;
-            }
-            if (args.toDate) {
-                if (!query.registerDate) query.registerDate = {};
-                query.registerDate['$lte'] = args.toDate;
-            }
-            // const data = await res.find(query,
-            //     {accepted: 1,courierChanged: 1, oldPayed: 1, payed: 1, counted: 1}
-            //     ).toArray()
-            const data = await res.aggregate([
-                {$match: query},
-                {
-                    $project: {_id: 0, accepted: 0, courierChanged: 0, oldPayed: 0, counted: 0}
-                }]).toArray()
-
-            const filePath = './middleWares/excel-from-js.xlsx';
-            try {
-                fs.unlinkSync(path.resolve(filePath))
-            } catch (e) {
-                console.log(e)
-            }
-            loadFile(data)
-            db.close();
-            return true;
-        })
+        return []
     }
 }
 const dataList = {
@@ -128,6 +103,7 @@ const dataList = {
         toDate: {type: GraphQLString},
     },
     resolve: (parent, args, response) => {
+        try {
         return pageData().then(async ({res, db}) => {
                 const token = response.headers.token;
                 let query = {};
@@ -277,6 +253,10 @@ const dataList = {
 
             }
         )
+
+        }catch (e) {
+            return []
+        }
     }
 }
 
@@ -290,6 +270,7 @@ const handleAccept = {
         status: {type: GraphQLString},
     },
     resolve: async (parent, args, response) => {
+        try {
         const token = response.headers.token;
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'delivery') {
             const updated = {accepted: args.accepted};
@@ -310,6 +291,10 @@ const handleAccept = {
             }));
         }
         return false
+
+        }catch (e) {
+            return []
+        }
     }
 }
 
@@ -320,6 +305,7 @@ const cancelOrder = {
         id: {type: GraphQLString},
     },
     resolve: async (parent, args, response) => {
+        try {
         const token = response.headers.token;
         const query = {id: args.id}
         const data = {}
@@ -356,6 +342,10 @@ const cancelOrder = {
             });
         }
         return false;
+
+        }catch (e) {
+            return false
+        }
     }
 }
 
@@ -373,6 +363,7 @@ const updateData = {
         id: {type: GraphQLString},
     },
     resolve: (parent, args, response) => {
+        try {
         const token = response.headers.token;
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') {
             return false;
@@ -382,10 +373,15 @@ const updateData = {
             await db.close();
             return true;
         })
+
+        }catch (e) {
+            return false
+        }
     }
 }
 
 function handlePayWithPayze(params) {
+    try {
     const paramsForCall = {
         client: params.client,
         price: parseFloat(params.price)
@@ -407,6 +403,9 @@ function handlePayWithPayze(params) {
         await db.close()
     })
 
+    }catch (e) {
+        return false
+    }
 }
 
 const changePrice = {
@@ -416,6 +415,7 @@ const changePrice = {
         id: {type: GraphQLString},
     },
     resolve: (parent, args, response) => {
+        try {
         const token = response.headers.token;
         return pageData().then(async ({res, db}) => {
             if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') {
@@ -430,6 +430,10 @@ const changePrice = {
             await db.close();
             return true;
         })
+
+        }catch (e) {
+            return false
+        }
     }
 }
 const addData = {
@@ -448,6 +452,7 @@ const addData = {
         deliveryPhone: {type: GraphQLString},
     },
     resolve: (parent, args, response) => {
+        try {
         const token = response.headers.token;
         return pageData().then(async ({res, db}) => {
             if (!args.deliveryAddress || !args.takeAddress || !args.service
@@ -504,6 +509,10 @@ const addData = {
         })
 
             .catch((r) => console.log(r))
+
+        }catch (e) {
+            return false
+        }
     }
 }
 
@@ -516,6 +525,7 @@ const changePayed = {
     },
 
     resolve: async (parent, args, response) => {
+        try {
         const token = response.headers.token;
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
 
@@ -529,6 +539,10 @@ const changePayed = {
         } catch (e) {
 
         }
+
+        }catch (e) {
+            return false
+        }
     }
 }
 const onDuplicate = {
@@ -538,6 +552,7 @@ const onDuplicate = {
     },
 
     resolve: async (parent, args, response) => {
+        try {
         const token = response.headers.token;
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
         const query = {id: args.id}
@@ -556,6 +571,10 @@ const onDuplicate = {
                 return false
             })
         });
+
+        }catch (e) {
+            return false
+        }
     }
 }
 const cashPay = {
@@ -566,6 +585,7 @@ const cashPay = {
     },
 
     resolve: async (parent, args, response) => {
+        try {
         const token = response.headers.token;
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin' &&
             jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'delivery') return;
@@ -578,6 +598,10 @@ const cashPay = {
         } catch (e) {
 
         }
+
+        }catch (e) {
+            return false
+        }
     }
 }
 const cashTransfer = {
@@ -588,6 +612,7 @@ const cashTransfer = {
     },
 
     resolve: async (parent, args, response) => {
+        try {
         const token = response.headers.token;
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin' &&
             jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'delivery') return;
@@ -600,6 +625,10 @@ const cashTransfer = {
         } catch (e) {
 
         }
+
+        }catch (e) {
+            return false
+        }
     }
 }
 
@@ -611,6 +640,7 @@ const changeStatus = {
     },
 
     resolve: async (parent, args, response) => {
+        try {
         const token = response.headers.token;
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status === 'client') return;
         const {res, db} = await pageData();
@@ -629,6 +659,10 @@ const changeStatus = {
         } catch (e) {
             return false;
         }
+
+        }catch (e) {
+            return false
+        }
     }
 }
 const changeCourier = {
@@ -638,6 +672,7 @@ const changeCourier = {
         id: {type: GraphQLNonNull(GraphQLString)},
     },
     resolve: async (parent, args, response) => {
+        try {
         const token = response.headers.token;
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return;
         const {res, db} = await pageData();
@@ -664,10 +699,15 @@ const changeCourier = {
         } catch (e) {
             return false;
         }
+
+        }catch (e) {
+            return false
+        }
     }
 }
 
 const handleBudget = async (status, item,) => {
+    try {
     let minus = false;
     if (status === 'ასაღები') {
         if (item.status !== 'აღებული' && item.status !== 'ჩასაბარებელი') return;
@@ -702,9 +742,14 @@ const handleBudget = async (status, item,) => {
         )
         await db.close();
     })
+
+    }catch (e) {
+        return false
+    }
 }
 
 const handlePay = async (args, minus = true,changer = "") => {
+    try {
     let newVal = 0;
     let user = {}
     await userData().then(async ({res, db}) => {
@@ -721,6 +766,10 @@ const handlePay = async (args, minus = true,changer = "") => {
         }, {safe: true})
         await db.close()
     })
+
+    }catch (e) {
+        return false
+    }
 }
 
 const getRate = (service, rates) => {
@@ -779,11 +828,15 @@ const getDetails = {
         id: {type: GraphQLNonNull(GraphQLString)}
     },
     resolve: (parent, args) => {
-        return pageData().then(async ({res, db}) => {
-            const data = await res.findOne({id: args.id});
-            await db.close();
-            return data;
-        })
+        try {
+            return pageData().then(async ({res, db}) => {
+                const data = await res.findOne({id: args.id});
+                await db.close();
+                return data;
+            })
+        }catch (e) {
+            return false
+        }
     }
 }
 
@@ -802,18 +855,24 @@ const getDataCounts = {
         courier: {type: GraphQLNonNull(GraphQLString)}
     },
     resolve: (parent, args) => {
+        try {
         return pageData().then(async ({res, db}) => {
             const take = await res.find({takeCourier: args.courier, status: 'ასაღები'}).toArray();
             const delivering = await res.find({deliveryCourier: args.courier, status: 'აღებული'}).toArray()
             await db.close();
             return {take: take.length, delivering: delivering.length};
         })
+
+        }catch (e) {
+            return false
+        }
     }
 }
 
 const dayReport = {
     type: GraphQLString,
     resolve: async (parent, args, response) => {
+        try {
         const token = response.headers.token;
         if (jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).status !== 'admin') return '';
         const {res, db} = await pageData();
@@ -835,6 +894,10 @@ const dayReport = {
         const str = `დღის განმავლობაში შემოსულია ${length} შეკვეთა`
         await db.close();
         return str;
+
+        }catch (e) {
+            return false
+        }
     }
 }
 
@@ -1033,6 +1096,7 @@ const getLog = {
         client: {type: GraphQLString},
     },
     resolve: async (parent, args, response) => {
+        try {
         const token = response.headers.token;
         const query = {};
         if (args.client) {
@@ -1044,6 +1108,10 @@ const getLog = {
             await db.close();
             return data;
         })
+
+        }catch (e) {
+            return false
+        }
     }
 }
 
@@ -1055,6 +1123,7 @@ const logExcelLoad = {
         toDate: {type: GraphQLString},
     },
     resolve: async (parent, args, response) => {
+        try {
         const token = response.headers.token;
         const query = {};
         if (args.fromDate) {
@@ -1079,6 +1148,10 @@ const logExcelLoad = {
             await logExcel(data)
             return [true];
         })
+
+        }catch (e) {
+            return false
+        }
     }
 }
 module.exports = ({
