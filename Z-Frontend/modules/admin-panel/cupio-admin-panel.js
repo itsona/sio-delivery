@@ -241,7 +241,6 @@ class CupioAdminPanel extends LitElement {
     filter(event){
         this.skip = 0
         this.searchText = event.detail
-        console.log('filter')
         this.loadCouriers('client')
     }
 

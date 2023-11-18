@@ -415,7 +415,7 @@ const userInfo = {
             async function getUser() {
                 let user = await res.findOne(query);
                 db.close();
-                if (user != null) {
+                if (user) {
                     return user;
                 }
                 return {};

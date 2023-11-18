@@ -4,8 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="updates 3.0.0">
+    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="add again timeouts">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/mixins/graphql.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/mixins/graphql.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-panel.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-panel.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/main/view/cupio-main-view.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/main/view/cupio-main-view.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/middleWares/queryFields/data/dataList.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/queryFields/data/dataList.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/middleWares/queryFields/users/usersList.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/queryFields/users/usersList.js" afterDir="false" />
     </list>
@@ -197,34 +200,6 @@
       <workItem from="1698777430083" duration="5987000" />
       <workItem from="1699170067711" duration="11463000" />
       <workItem from="1699732614171" duration="172000" />
-    </task>
-    <task id="LOCAL-00059" summary="sio 2.0.1, &#10;add status button and fix payze">
-      <created>1647719826649</created>
-      <option name="number" value="00059" />
-      <option name="presentableId" value="LOCAL-00059" />
-      <option name="project" value="LOCAL" />
-      <updated>1647719826649</updated>
-    </task>
-    <task id="LOCAL-00060" summary="brah">
-      <created>1648369742617</created>
-      <option name="number" value="00060" />
-      <option name="presentableId" value="LOCAL-00060" />
-      <option name="project" value="LOCAL" />
-      <updated>1648369742617</updated>
-    </task>
-    <task id="LOCAL-00061" summary="add moder page">
-      <created>1648372392245</created>
-      <option name="number" value="00061" />
-      <option name="presentableId" value="LOCAL-00061" />
-      <option name="project" value="LOCAL" />
-      <updated>1648372392245</updated>
-    </task>
-    <task id="LOCAL-00062" summary="add document send and preview">
-      <created>1649623271571</created>
-      <option name="number" value="00062" />
-      <option name="presentableId" value="LOCAL-00062" />
-      <option name="project" value="LOCAL" />
-      <updated>1649623271571</updated>
     </task>
     <task id="LOCAL-00063" summary="add document signature">
       <created>1656569555105</created>
@@ -541,7 +516,35 @@
       <option name="project" value="LOCAL" />
       <updated>1698784124712</updated>
     </task>
-    <option name="localTasksCounter" value="108" />
+    <task id="LOCAL-00108" summary="updates 3.0.0">
+      <created>1700326837037</created>
+      <option name="number" value="00108" />
+      <option name="presentableId" value="LOCAL-00108" />
+      <option name="project" value="LOCAL" />
+      <updated>1700326837037</updated>
+    </task>
+    <task id="LOCAL-00109" summary="remove timeouts">
+      <created>1700327127546</created>
+      <option name="number" value="00109" />
+      <option name="presentableId" value="LOCAL-00109" />
+      <option name="project" value="LOCAL" />
+      <updated>1700327127546</updated>
+    </task>
+    <task id="LOCAL-00110" summary="remove timeouts">
+      <created>1700327140128</created>
+      <option name="number" value="00110" />
+      <option name="presentableId" value="LOCAL-00110" />
+      <option name="project" value="LOCAL" />
+      <updated>1700327140128</updated>
+    </task>
+    <task id="LOCAL-00111" summary="add again timeouts">
+      <created>1700327256551</created>
+      <option name="number" value="00111" />
+      <option name="presentableId" value="LOCAL-00111" />
+      <option name="project" value="LOCAL" />
+      <updated>1700327256552</updated>
+    </task>
+    <option name="localTasksCounter" value="112" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -569,9 +572,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="sio 2.0, &#10;fix chasabarebelias count" />
-    <MESSAGE value="sio 2.0, &#10;fix typos" />
-    <MESSAGE value="sio 2.0, &#10;add price to table" />
     <MESSAGE value="sio 2.0, &#10;add payed" />
     <MESSAGE value="sio 2.0, &#10;add payed icon to tables" />
     <MESSAGE value="sio 2.0, &#10;add logs" />
@@ -594,7 +594,10 @@
     <MESSAGE value="remove payment" />
     <MESSAGE value="fix clients" />
     <MESSAGE value="fix clients and deliveries" />
-    <option name="LAST_COMMIT_MESSAGE" value="fix clients and deliveries" />
+    <MESSAGE value="updates 3.0.0" />
+    <MESSAGE value="remove timeouts" />
+    <MESSAGE value="add again timeouts" />
+    <option name="LAST_COMMIT_MESSAGE" value="add again timeouts" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

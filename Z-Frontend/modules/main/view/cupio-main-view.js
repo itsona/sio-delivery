@@ -104,6 +104,7 @@ class CupioMainView extends LitElement {
                 <div class="drawer" @click="${() => this.closed = false}" ?closed="${this.closed}">
                     <img src="/Z-Frontend/images/icons/search.svg">
                 </div>
+
                 <cupio-main-container
                         id="container"
                         .searchValues="${this.searchValues}"
