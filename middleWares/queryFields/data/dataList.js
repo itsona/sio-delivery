@@ -483,7 +483,7 @@ const addData = {
             date.setMonth(date.getMonth() + 6);
             args.expireAt = date
             args.registerDate = getNewDate();
-            const last = (await res.aggregate([{$sort: {_id: -1}}, {$match: {}}, {$limit: 1}]).toArray())[0];
+            const last = (await res.aggregate([{$sort: {_id: -1}}, {$match: {}}]).toArray())[0];
             args.id = parseInt(last.id)+1 + ' '
             args.status = 'განხილვაშია';
             const query = {};
