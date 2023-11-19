@@ -97,7 +97,7 @@ export const handleRequest = async (redirect) => {
             redirectUrl = ('/delivery')
             break;
         case 'admin':
-            redirectUrl = ('/admin')
+            redirectUrl = ('/panel')
             break;
         default:
             redirectUrl = ('/companyDetails')
