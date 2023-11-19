@@ -79,22 +79,34 @@ export const handleRequest = async (redirect) => {
                 email
             }
         }`
-    if(sessionStorage.getItem('user')){
-        userInfo = JSON.parse(sessionStorage.getItem('user'))
-    }else{
+
+    if(!Object.keys(userInfo || {}).length){
         const data = await graphqlPost(gql);
         userInfo = data.data.userInfo;
-        if(userInfo){
-            sessionStorage.setItem('user',JSON.stringify(userInfo))
-        }
     }
     if(userInfo.email === 'info@siodelivery.ge') window.localStorage.setItem('isEmployee', 'true');
     else window.localStorage.removeItem('isEmployee')
     if (!redirect) return userInfo.status
-    if (userInfo.status === 'client') redirectTo('/client');
-    if (userInfo.status === 'delivery') redirectTo('/delivery');
-    if (userInfo.status === 'admin') redirectTo('/panel');
-    if (!userInfo.status) redirectTo('/companyDetails')
+    // window.location.pathname !== '/login'
+    let redirectUrl;
+    switch (userInfo.status) {
+        case 'client':
+            redirectUrl = ('/client')
+            break;
+        case 'delivery':
+            redirectUrl = ('/delivery')
+            break;
+        case 'admin':
+            redirectUrl = ('/admin')
+            break;
+        default:
+            redirectUrl = ('/companyDetails')
+            break
+    }
+    if(redirectUrl !== window.location.pathname){
+        setTimeout(()=> redirectTo(redirectUrl), 200)
+
+    }
     return userInfo.status
 }
 
