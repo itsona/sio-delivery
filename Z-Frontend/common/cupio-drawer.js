@@ -535,7 +535,9 @@ class CupioDrawer extends LitElement {
               }
             }
             `
-        this.graphqlPost(gql).then(({data: {usersDetails}}) => {
+        console.log(this.couriers)
+        this.graphqlPost(gql, false).then(({data: {usersDetails}}) => {
+            console.log(usersDetails)
             this.couriers = usersDetails;
         })
     }
@@ -651,7 +653,7 @@ class CupioDrawer extends LitElement {
 
     async graphqlPost(gql){
         this.disabled = true;
-        const resp = await graphqlPost(gql);
+        const resp = await graphqlPost(gql, false);
         this.disabled = false;
         return resp;
     }

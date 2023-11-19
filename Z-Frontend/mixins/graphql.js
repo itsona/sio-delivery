@@ -5,7 +5,10 @@ const ServiceUrl = '/';
 const debouncedFetch = createDebouncedFetch(100); // Debounce with a 500ms delay
 const debouncedFunctions = {};
 let userInfo = {}
-export const graphqlPost = async (gqlString) => {
+export const graphqlPost = async (gqlString, debounced = true) => {
+    if(!debounced){
+        return fetchFunction(gqlString)
+    }
     if(debouncedFunctions[gqlString] && debouncedFunctions[gqlString].data){
         return debouncedFunctions[gqlString].data
     }
