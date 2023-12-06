@@ -438,9 +438,13 @@ class CupioDetails extends LitElement {
             }
         `
         graphqlPost(gql).then((r) => {
-            alert('წარმატებით დაემატა')
-            this.canSend = true;
-            window.location.reload();
+            if(r.data.addData) {
+                alert('წარმატებით დაემატა')
+                this.canSend = true;
+                window.location.reload();
+            }else {
+                alert('!!! ხარვეზი იყო თავიდან სცადეთ !!!')
+            }
         }).catch(() => alert('!!! ხარვეზი იყო თავიდან სცადეთ !!!'))
     }
 

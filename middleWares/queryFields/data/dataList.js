@@ -503,17 +503,15 @@ const addData = {
                 args.client = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).email;
                 args.clientName = jwt.verify(token, process.env.ACCESS_TOKEN_SECRET).name;
             }
-            return res.insertOne(args, {safe: true}).then(async () => {
+            await res.insertOne(args, {safe: true})
                 await handlePay(args)
                 await db.close();
                 return true;
-            }).catch(() => {
-                db.close();
-                return false;
-            });
         })
-
-            .catch((r) => console.log(r))
+            .catch((r) => {
+                console.log(r)
+                return false
+            })
 
         }catch (e) {
             console.log(e)
@@ -570,13 +568,13 @@ const onDuplicate = {
             items.forEach(async (item)=> {
             await res.updateOne(item, {$set: {status: 'გაუქმებულია'}}, {safe: true}).then(async () => {
                 await handlePay(item, false)
-                await db.close();
                 return true
             })
                 return true
             }).catch(() => {
                 return false
             })
+            await db.close();
         });
 
         }catch (e) {
