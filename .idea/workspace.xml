@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="damn it">
+    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="mongodb double check">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/middleWares/authentication.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/authentication.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,15 +45,16 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/Iakobi/sio/sio-delivery&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\Users\\Iakobi\\AppData\\Local\\JetBrains\\WebStorm 2021.2.3\\plugins\\JavaScriptLanguage\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "C:/Users/Iakobi/sio/sio-delivery",
+    "nodejs_package_manager_path": "npm",
+    "settings.editor.selected.configurable": "editing.templates",
+    "ts.external.directory.path": "C:\\Users\\Iakobi\\AppData\\Local\\JetBrains\\WebStorm 2021.2.3\\plugins\\JavaScriptLanguage\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
       <recent name="C:\Users\Iakobi\sio\sio-delivery\Z-Frontend\images" />
@@ -200,13 +202,7 @@
       <workItem from="1700852234855" duration="2086000" />
       <workItem from="1701158207847" duration="240000" />
       <workItem from="1701840147534" duration="2430000" />
-    </task>
-    <task id="LOCAL-00069" summary="fix counts">
-      <created>1684664950240</created>
-      <option name="number" value="00069" />
-      <option name="presentableId" value="LOCAL-00069" />
-      <option name="project" value="LOCAL" />
-      <updated>1684664950240</updated>
+      <workItem from="1708703968960" duration="851000" />
     </task>
     <task id="LOCAL-00070" summary="send email fix">
       <created>1684665613841</created>
@@ -544,7 +540,14 @@
       <option name="project" value="LOCAL" />
       <updated>1701841986812</updated>
     </task>
-    <option name="localTasksCounter" value="118" />
+    <task id="LOCAL-00118" summary="mongodb double check">
+      <created>1708704042366</created>
+      <option name="number" value="00118" />
+      <option name="presentableId" value="LOCAL-00118" />
+      <option name="project" value="LOCAL" />
+      <updated>1708704042367</updated>
+    </task>
+    <option name="localTasksCounter" value="119" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -572,7 +575,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="sio 2.0, &#10;add payed icon to tables" />
     <MESSAGE value="sio 2.0, &#10;add logs" />
     <MESSAGE value="sio 2.0.1," />
     <MESSAGE value="sio 2.0, &#10;fix date format from backend" />
@@ -597,7 +599,8 @@
     <MESSAGE value="remove timeouts" />
     <MESSAGE value="add again timeouts" />
     <MESSAGE value="damn it" />
-    <option name="LAST_COMMIT_MESSAGE" value="damn it" />
+    <MESSAGE value="mongodb double check" />
+    <option name="LAST_COMMIT_MESSAGE" value="mongodb double check" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
