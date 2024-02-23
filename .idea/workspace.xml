@@ -4,9 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="mongodb double check">
+    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="test">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/middleWares/authentication.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/authentication.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Z-Frontend/mixins/graphql.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/mixins/graphql.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -202,21 +202,7 @@
       <workItem from="1700852234855" duration="2086000" />
       <workItem from="1701158207847" duration="240000" />
       <workItem from="1701840147534" duration="2430000" />
-      <workItem from="1708703968960" duration="851000" />
-    </task>
-    <task id="LOCAL-00070" summary="send email fix">
-      <created>1684665613841</created>
-      <option name="number" value="00070" />
-      <option name="presentableId" value="LOCAL-00070" />
-      <option name="project" value="LOCAL" />
-      <updated>1684665613841</updated>
-    </task>
-    <task id="LOCAL-00071" summary="clear excels">
-      <created>1688630410409</created>
-      <option name="number" value="00071" />
-      <option name="presentableId" value="LOCAL-00071" />
-      <option name="project" value="LOCAL" />
-      <updated>1688630410410</updated>
+      <workItem from="1708703968960" duration="2149000" />
     </task>
     <task id="LOCAL-00072" summary="clear excels">
       <created>1688630421207</created>
@@ -547,7 +533,21 @@
       <option name="project" value="LOCAL" />
       <updated>1708704042367</updated>
     </task>
-    <option name="localTasksCounter" value="119" />
+    <task id="LOCAL-00119" summary="test">
+      <created>1708704837879</created>
+      <option name="number" value="00119" />
+      <option name="presentableId" value="LOCAL-00119" />
+      <option name="project" value="LOCAL" />
+      <updated>1708704837879</updated>
+    </task>
+    <task id="LOCAL-00120" summary="test">
+      <created>1708704986139</created>
+      <option name="number" value="00120" />
+      <option name="presentableId" value="LOCAL-00120" />
+      <option name="project" value="LOCAL" />
+      <updated>1708704986139</updated>
+    </task>
+    <option name="localTasksCounter" value="121" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -575,7 +575,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="sio 2.0, &#10;add logs" />
     <MESSAGE value="sio 2.0.1," />
     <MESSAGE value="sio 2.0, &#10;fix date format from backend" />
     <MESSAGE value="sio 2.0, &#10;add" />
@@ -600,7 +599,8 @@
     <MESSAGE value="add again timeouts" />
     <MESSAGE value="damn it" />
     <MESSAGE value="mongodb double check" />
-    <option name="LAST_COMMIT_MESSAGE" value="mongodb double check" />
+    <MESSAGE value="test" />
+    <option name="LAST_COMMIT_MESSAGE" value="test" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>
