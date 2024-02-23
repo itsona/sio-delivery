@@ -4,13 +4,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="add again timeouts">
+    <list default="true" id="cff3e6ed-834e-4404-a128-b3f90e0ba318" name="Default Changelist" comment="damn it">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/mixins/graphql.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/mixins/graphql.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-panel.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/admin-panel/cupio-admin-panel.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Z-Frontend/modules/main/view/cupio-main-view.js" beforeDir="false" afterPath="$PROJECT_DIR$/Z-Frontend/modules/main/view/cupio-main-view.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/middleWares/queryFields/data/dataList.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/queryFields/data/dataList.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/middleWares/queryFields/users/usersList.js" beforeDir="false" afterPath="$PROJECT_DIR$/middleWares/queryFields/users/usersList.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -200,48 +195,11 @@
       <workItem from="1698777430083" duration="5987000" />
       <workItem from="1699170067711" duration="11463000" />
       <workItem from="1699732614171" duration="172000" />
-    </task>
-    <task id="LOCAL-00063" summary="add document signature">
-      <created>1656569555105</created>
-      <option name="number" value="00063" />
-      <option name="presentableId" value="LOCAL-00063" />
-      <option name="project" value="LOCAL" />
-      <updated>1656569555106</updated>
-    </task>
-    <task id="LOCAL-00064" summary="add logs to failed transactions">
-      <created>1672250297982</created>
-      <option name="number" value="00064" />
-      <option name="presentableId" value="LOCAL-00064" />
-      <option name="project" value="LOCAL" />
-      <updated>1672250297982</updated>
-    </task>
-    <task id="LOCAL-00065" summary="add easter warning">
-      <created>1681544316254</created>
-      <option name="number" value="00065" />
-      <option name="presentableId" value="LOCAL-00065" />
-      <option name="project" value="LOCAL" />
-      <updated>1681544316254</updated>
-    </task>
-    <task id="LOCAL-00066" summary="document.pdf">
-      <created>1684596104087</created>
-      <option name="number" value="00066" />
-      <option name="presentableId" value="LOCAL-00066" />
-      <option name="project" value="LOCAL" />
-      <updated>1684596104087</updated>
-    </task>
-    <task id="LOCAL-00067" summary="document.pdf">
-      <created>1684596206343</created>
-      <option name="number" value="00067" />
-      <option name="presentableId" value="LOCAL-00067" />
-      <option name="project" value="LOCAL" />
-      <updated>1684596206343</updated>
-    </task>
-    <task id="LOCAL-00068" summary="document.pdf">
-      <created>1684596252412</created>
-      <option name="number" value="00068" />
-      <option name="presentableId" value="LOCAL-00068" />
-      <option name="project" value="LOCAL" />
-      <updated>1684596252412</updated>
+      <workItem from="1700385550427" duration="183000" />
+      <workItem from="1700396003068" duration="3612000" />
+      <workItem from="1700852234855" duration="2086000" />
+      <workItem from="1701158207847" duration="240000" />
+      <workItem from="1701840147534" duration="2430000" />
     </task>
     <task id="LOCAL-00069" summary="fix counts">
       <created>1684664950240</created>
@@ -544,7 +502,49 @@
       <option name="project" value="LOCAL" />
       <updated>1700327256552</updated>
     </task>
-    <option name="localTasksCounter" value="112" />
+    <task id="LOCAL-00112" summary="add again timeouts">
+      <created>1700336208664</created>
+      <option name="number" value="00112" />
+      <option name="presentableId" value="LOCAL-00112" />
+      <option name="project" value="LOCAL" />
+      <updated>1700336208664</updated>
+    </task>
+    <task id="LOCAL-00113" summary="add again timeouts">
+      <created>1700337003281</created>
+      <option name="number" value="00113" />
+      <option name="presentableId" value="LOCAL-00113" />
+      <option name="project" value="LOCAL" />
+      <updated>1700337003281</updated>
+    </task>
+    <task id="LOCAL-00114" summary="add again timeouts">
+      <created>1700397611067</created>
+      <option name="number" value="00114" />
+      <option name="presentableId" value="LOCAL-00114" />
+      <option name="project" value="LOCAL" />
+      <updated>1700397611081</updated>
+    </task>
+    <task id="LOCAL-00115" summary="add again timeouts">
+      <created>1700397987876</created>
+      <option name="number" value="00115" />
+      <option name="presentableId" value="LOCAL-00115" />
+      <option name="project" value="LOCAL" />
+      <updated>1700397987876</updated>
+    </task>
+    <task id="LOCAL-00116" summary="add again timeouts">
+      <created>1700398953484</created>
+      <option name="number" value="00116" />
+      <option name="presentableId" value="LOCAL-00116" />
+      <option name="project" value="LOCAL" />
+      <updated>1700398953485</updated>
+    </task>
+    <task id="LOCAL-00117" summary="damn it">
+      <created>1701841986811</created>
+      <option name="number" value="00117" />
+      <option name="presentableId" value="LOCAL-00117" />
+      <option name="project" value="LOCAL" />
+      <updated>1701841986812</updated>
+    </task>
+    <option name="localTasksCounter" value="118" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -572,7 +572,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="sio 2.0, &#10;add payed" />
     <MESSAGE value="sio 2.0, &#10;add payed icon to tables" />
     <MESSAGE value="sio 2.0, &#10;add logs" />
     <MESSAGE value="sio 2.0.1," />
@@ -597,7 +596,8 @@
     <MESSAGE value="updates 3.0.0" />
     <MESSAGE value="remove timeouts" />
     <MESSAGE value="add again timeouts" />
-    <option name="LAST_COMMIT_MESSAGE" value="add again timeouts" />
+    <MESSAGE value="damn it" />
+    <option name="LAST_COMMIT_MESSAGE" value="damn it" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

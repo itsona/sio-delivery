@@ -1,7 +1,7 @@
 import {redirectTo} from "./redirectTo";
 
-// const ServiceUrl = 'http://localhost:5000/';
-const ServiceUrl = '/';
+const ServiceUrl = 'http://localhost:5000/';
+// const ServiceUrl = '/';
 const debouncedFetch = createDebouncedFetch(100); // Debounce with a 500ms delay
 const debouncedFunctions = {};
 let userInfo = {}
